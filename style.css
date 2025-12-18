@@ -7,7 +7,7 @@ body {
 /* Hero section */
 .hero {
     height: 100vh;
-    background-image: url("kuih.jpg"); /* YOUR PHOTO */
+    background-image: url("KuihMuihImage/hero.jpg"); /* YOUR PHOTO */
     background-size: cover;
     background-position: center;
     display: flex;
