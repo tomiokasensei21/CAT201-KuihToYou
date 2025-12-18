@@ -1,32 +1,45 @@
 /* This styles the whole page */
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: #fdf6e3;
+    font-family: Arial, sans-serif;
 }
 
-/* Header section */
-header {
-    background-color: #d35400;
+/* Hero section */
+.hero {
+    height: 100vh;
+    background-image: url("kuih.jpg"); /* YOUR PHOTO */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Dark overlay + text */
+.hero-content {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 40px;
+    text-align: center;
     color: white;
-    text-align: center;
-    padding: 20px;
-    
+    border-radius: 10px;
 }
 
-/* Section content */
-section {
-    padding: 30px;
-    text-align: center;
+.hero-content h1 {
+    font-size: 48px;
+    margin-bottom: 10px;
 }
 
-/* Button styling */
+.hero-content p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+/* Button */
 button {
     background-color: #27ae60;
-    border: none;
     color: white;
-    padding: 12px 20px;
+    border: none;
+    padding: 12px 25px;
     font-size: 16px;
     border-radius: 5px;
     cursor: pointer;
