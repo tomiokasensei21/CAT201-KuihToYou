@@ -2,49 +2,90 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
+    background-color: #f6f8f5;
 }
 
-/* Hero section */
-.hero {
-    height: 100vh;
-    background-image: url("KuihMuihImage/hero.jpg"); /* YOUR PHOTO */
-    background-size: cover;
-    background-position: center;
+/* NAVBAR */
+.navbar {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    padding: 15px 40px;
+    background-color: white;
 }
 
-/* Dark overlay + text */
-.hero-content {
-    background-color: rgba(0, 0, 0, 0.6);
-    padding: 40px;
-    text-align: center;
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2f6b2f;
+}
+
+.navbar nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+.nav-btn {
+    background-color: #c62828;
     color: white;
-    border-radius: 10px;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
 }
 
-.hero-content h1 {
-    font-size: 48px;
-    margin-bottom: 10px;
+/* HERO SECTION */
+.hero {
+    padding: 50px;
+    background: linear-gradient(to right, #e8f3e8, #f6f8f5);
 }
 
-.hero-content p {
-    font-size: 18px;
+.hero-box {
+    background-color: white;
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+/* TEXT SIDE */
+.hero-text {
+    flex: 1;
+}
+
+.tag {
+    color: orange;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.hero-text h1 {
+    font-size: 40px;
+    color: #2f6b2f;
+    margin: 10px 0;
+}
+
+.hero-text p {
+    font-size: 16px;
+    color: #555;
     margin-bottom: 20px;
 }
 
-/* Button */
-button {
-    background-color: #27ae60;
+.order-btn {
+    background-color: #c62828;
     color: white;
     border: none;
     padding: 12px 25px;
     font-size: 16px;
-    border-radius: 5px;
+    border-radius: 25px;
     cursor: pointer;
 }
 
-button:hover {
-    background-color: #1e8449;
+/* IMAGE SIDE */
+.hero-image img {
+    width: 350px;
+    border-radius: 15px;
 }
