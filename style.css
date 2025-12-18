@@ -1,0 +1,36 @@
+/* This styles the whole page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fdf6e3;
+}
+
+/* Header section */
+header {
+    background-color: #d35400;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Section content */
+section {
+    padding: 30px;
+    text-align: center;
+}
+
+/* Button styling */
+button {
+    background-color: #27ae60;
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #1e8449;
+}
