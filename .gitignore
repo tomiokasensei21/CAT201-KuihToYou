@@ -1,0 +1,18 @@
+# Ignore Java compiled files (the "trash" files generated when you run code)
+*.class
+bin/
+
+# Ignore VS Code specific settings (these are unique to your computer)
+.vscode/
+*.code-workspace
+
+# Ignore IntelliJ or other IDE files
+.idea/
+*.iml
+
+# Ignore OS-specific files (to prevent Mac/Windows conflicts)
+.DS_Store
+Thumbs.db
+
+# Ignore temporary data or logs
+*.log
