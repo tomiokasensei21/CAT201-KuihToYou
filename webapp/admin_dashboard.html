@@ -35,10 +35,18 @@
 </div>
 
 <script>
-    let kuihList = [
-        { id: 1, name: "Kuih Lapis", price: "0.60", stock: 50 },
-        { id: 2, name: "Seri Muka", price: "0.70", stock: 30 }
-    ];
+    let kuihList = [];
+
+    // 1. LOAD DATA FROM TXT FILE ON START
+    async function loadData() {
+        try {
+            const response = await fetch('admin-api'); // Calls doGet in AdminServlet
+            kuihList = await response.json();
+            renderTable();
+        } catch (error) {
+            console.error("Error loading data:", error);
+        }
+    }
 
     function renderTable() {
         const tableBody = document.getElementById('kuihTableBody');
@@ -58,7 +66,7 @@
         });
     }
 
-    // --- VALIDATION LOGIC ---
+    // --- VALIDATION LOGIC (Stays the same) ---
     function validateInput(name, price, stock) {
         if (!name || !price || !stock) {
             Swal.showValidationMessage('All fields are required!');
@@ -69,12 +77,13 @@
             return false;
         }
         if (isNaN(stock) || Number(stock) < 0 || !Number.isInteger(Number(stock))) {
-            Swal.showValidationMessage('Stock must be a valid whole number (0 or more)!');
+            Swal.showValidationMessage('Stock must be a valid whole number!');
             return false;
         }
         return true;
     }
 
+    // 2. ADD KUIH (Now sends to Servlet)
     async function addKuih() {
         const { value: formValues } = await Swal.fire({
             title: 'Add New Kuih',
@@ -88,21 +97,26 @@
                 const name = document.getElementById('swal-name').value;
                 const price = document.getElementById('swal-price').value;
                 const stock = document.getElementById('swal-stock').value;
-
                 if (validateInput(name, price, stock)) {
-                    return { name, price, stock: Number(stock) };
+                    return { name, price, stock };
                 }
             }
         });
 
         if (formValues) {
-            const newId = kuihList.length > 0 ? kuihList[kuihList.length - 1].id + 1 : 1;
-            kuihList.push({ id: newId, ...formValues });
-            renderTable();
-            Swal.fire('Success!', 'New Kuih added with stock.', 'success');
+            const params = new URLSearchParams();
+            params.append('action', 'add');
+            params.append('name', formValues.name);
+            params.append('price', formValues.price);
+            params.append('stock', formValues.stock);
+
+            await fetch('admin-api', { method: 'POST', body: params });
+            loadData(); // Reload table from TXT file
+            Swal.fire('Success!', 'New Kuih saved to text file.', 'success');
         }
     }
 
+    // 3. EDIT KUIH (Now sends to Servlet)
     async function editKuih(index) {
         const item = kuihList[index];
         const { value: formValues } = await Swal.fire({
@@ -117,37 +131,49 @@
                 const name = document.getElementById('swal-name').value;
                 const price = document.getElementById('swal-price').value;
                 const stock = document.getElementById('swal-stock').value;
-
                 if (validateInput(name, price, stock)) {
-                    return { name, price, stock: Number(stock) };
+                    return { id: item.id, name, price, stock };
                 }
             }
         });
 
         if (formValues) {
-            kuihList[index] = { ...kuihList[index], ...formValues };
-            renderTable();
-            Swal.fire('Updated!', 'Stock and details updated.', 'success');
+            const params = new URLSearchParams();
+            params.append('action', 'update');
+            params.append('id', formValues.id);
+            params.append('name', formValues.name);
+            params.append('price', formValues.price);
+            params.append('stock', formValues.stock);
+
+            await fetch('admin-api', { method: 'POST', body: params });
+            loadData();
+            Swal.fire('Updated!', 'Stock and details updated in file.', 'success');
         }
     }
 
+    // 4. DELETE KUIH (Now sends to Servlet)
     function deleteKuih(index) {
+        const item = kuihList[index];
         Swal.fire({
             title: 'Are you sure?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete!'
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-                kuihList.splice(index, 1);
-                renderTable();
-                Swal.fire('Deleted!', '', 'success');
+                const params = new URLSearchParams();
+                params.append('action', 'delete');
+                params.append('id', item.id);
+
+                await fetch('admin-api', { method: 'POST', body: params });
+                loadData();
+                Swal.fire('Deleted!', 'Item removed from text file.', 'success');
             }
         });
     }
 
-    renderTable();
+    // Initial load when page opens
+    loadData();
 </script>
-
 </body>
 </html>
