@@ -25,7 +25,28 @@
         .btn-logout:hover { background: #c0392b; }
     </style>
 </head>
-<body>
+<body style="display: none;"> <script>
+    async function loadData() {
+        try {
+            const response = await fetch('admin-api');
+
+            if (response.status === 401 || response.status === 403) {
+                // If unauthorized, don't show the page, go to login
+                window.location.href = 'login.html';
+                return;
+            }
+
+            kuihList = await response.json();
+
+            // ONLY show the body if we get a successful response
+            document.body.style.display = "block";
+            renderTable();
+        } catch (error) {
+            window.location.href = 'login.html';
+        }
+    }
+    loadData();
+</script>
 
 <div class="admin-header">
     <h2>Kuih To You | Admin Panel</h2>

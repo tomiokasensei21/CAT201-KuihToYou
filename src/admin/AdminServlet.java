@@ -4,7 +4,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import model.Kuih;
-import util.DataHandler; // This is the utility class we discussed
+import util.DataHandler;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,12 +12,25 @@ import java.util.List;
 @WebServlet("/admin-api")
 public class AdminServlet extends HttpServlet {
 
+    // Helper method to check if the user is a logged-in admin
+    private boolean isAuthorized(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        // This checks if a session exists AND if the "userRole" attribute is "admin"
+        return (session != null && "admin".equals(session.getAttribute("userRole")));
+    }
+
     // 1. READ: This sends the list to your table when the page loads
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Get the list from your .txt file via DataHandler
+        // --- SECURITY CHECK START ---
+        if (!isAuthorized(request)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Send 401 Error
+            response.getWriter().write("{\"error\": \"Unauthorized access. Please login as admin.\"}");
+            return;
+        }
+        // --- SECURITY CHECK END ---
+
         List<Kuih> list = util.DataHandler.readFromFile();
 
-        // Manually construct the JSON string
         StringBuilder json = new StringBuilder();
         json.append("[");
         for (int i = 0; i < list.size(); i++) {
@@ -34,7 +47,6 @@ public class AdminServlet extends HttpServlet {
         }
         json.append("]");
 
-        // Send it back to your HTML dashboard
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(json.toString());
@@ -42,6 +54,13 @@ public class AdminServlet extends HttpServlet {
 
     // 2. CREATE, UPDATE, DELETE: This handles all changes
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // --- SECURITY CHECK START ---
+        if (!isAuthorized(request)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
+        // --- SECURITY CHECK END ---
+
         String action = request.getParameter("action");
         List<Kuih> list = DataHandler.readFromFile();
 
@@ -54,7 +73,6 @@ public class AdminServlet extends HttpServlet {
                 double price = Double.parseDouble(priceStr);
                 int stock = Integer.parseInt(stockStr);
 
-                // FIX: Use list.get(list.size() - 1) instead of getLast() for older Java versions
                 int newId = list.isEmpty() ? 1 : list.get(list.size() - 1).getId() + 1;
                 list.add(new Kuih(newId, name, price, stock));
             }
@@ -77,7 +95,6 @@ public class AdminServlet extends HttpServlet {
             }
         }
 
-        // Save the updated list back to the .txt file
         DataHandler.saveToFile(list);
     }
 }
