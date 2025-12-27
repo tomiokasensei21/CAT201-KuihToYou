@@ -6,6 +6,14 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        .admin-header {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
         .admin-container { padding: 50px; font-family: sans-serif; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
         th, td { padding: 15px; border: 1px solid #ddd; text-align: left; }
@@ -13,12 +21,22 @@
         .btn-add { background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
         .btn-edit { background: #2980b9; color: white; padding: 5px 10px; border: none; border-radius: 3px; margin-right: 5px; }
         .btn-delete { background: #c0392b; color: white; padding: 5px 10px; border: none; border-radius: 3px; }
+        .btn-logout { background: #e74c3c; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        .btn-logout:hover { background: #c0392b; }
     </style>
 </head>
 <body>
 
+<div class="admin-header">
+    <h2>Kuih To You | Admin Panel</h2>
+    <div>
+        <span>Welcome, Administrator | </span>
+        <a href="logout" class="btn-logout">Logout</a>
+    </div>
+</div>
+
 <div class="admin-container">
-    <h1>Admin Panel: Manage Kuih Menu</h1>
+    <h1>Manage Kuih Menu</h1>
     <button class="btn-add" onclick="addKuih()">+ Add New Kuih</button>
 
     <table>
@@ -27,7 +45,8 @@
             <th>ID</th>
             <th>Name</th>
             <th>Price (RM)</th>
-            <th>Stock (Units)</th> <th>Actions</th>
+            <th>Stock (Units)</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody id="kuihTableBody"></tbody>
@@ -37,10 +56,9 @@
 <script>
     let kuihList = [];
 
-    // 1. LOAD DATA FROM TXT FILE ON START
     async function loadData() {
         try {
-            const response = await fetch('admin-api'); // Calls doGet in AdminServlet
+            const response = await fetch('admin-api');
             kuihList = await response.json();
             renderTable();
         } catch (error) {
@@ -48,9 +66,16 @@
         }
     }
 
+    // MERGED: Added Empty State check
     function renderTable() {
         const tableBody = document.getElementById('kuihTableBody');
         tableBody.innerHTML = "";
+
+        if (kuihList.length === 0) {
+            tableBody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding: 30px; color: #7f8c8d;'>No kuih found in database. Add some tradition!</td></tr>";
+            return;
+        }
+
         kuihList.forEach((item, index) => {
             tableBody.innerHTML += `
                 <tr>
@@ -66,7 +91,6 @@
         });
     }
 
-    // --- VALIDATION LOGIC (Stays the same) ---
     function validateInput(name, price, stock) {
         if (!name || !price || !stock) {
             Swal.showValidationMessage('All fields are required!');
@@ -83,13 +107,12 @@
         return true;
     }
 
-    // 2. ADD KUIH (Now sends to Servlet)
     async function addKuih() {
         const { value: formValues } = await Swal.fire({
             title: 'Add New Kuih',
             html:
                 '<input id="swal-name" class="swal2-input" placeholder="Kuih Name">' +
-                '<input id="swal-price" type="number" class="swal2-input" placeholder="Price (RM)">' +
+                '<input id="swal-price" type="number" step="0.01" class="swal2-input" placeholder="Price (RM)">' +
                 '<input id="swal-stock" type="number" class="swal2-input" placeholder="Initial Stock">',
             focusConfirm: false,
             showCancelButton: true,
@@ -111,19 +134,18 @@
             params.append('stock', formValues.stock);
 
             await fetch('admin-api', { method: 'POST', body: params });
-            loadData(); // Reload table from TXT file
+            loadData();
             Swal.fire('Success!', 'New Kuih saved to text file.', 'success');
         }
     }
 
-    // 3. EDIT KUIH (Now sends to Servlet)
     async function editKuih(index) {
         const item = kuihList[index];
         const { value: formValues } = await Swal.fire({
             title: 'Edit Kuih & Stock',
             html:
                 `<input id="swal-name" class="swal2-input" value="${item.name}">` +
-                `<input id="swal-price" type="number" class="swal2-input" value="${item.price}">` +
+                `<input id="swal-price" type="number" step="0.01" class="swal2-input" value="${item.price}">` +
                 `<input id="swal-stock" type="number" class="swal2-input" value="${item.stock}">`,
             focusConfirm: false,
             showCancelButton: true,
@@ -151,13 +173,15 @@
         }
     }
 
-    // 4. DELETE KUIH (Now sends to Servlet)
     function deleteKuih(index) {
         const item = kuihList[index];
         Swal.fire({
             title: 'Are you sure?',
+            text: `You are about to delete ${item.name}`,
             icon: 'warning',
             showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
             confirmButtonText: 'Yes, delete!'
         }).then(async (result) => {
             if (result.isConfirmed) {
@@ -172,7 +196,6 @@
         });
     }
 
-    // Initial load when page opens
     loadData();
 </script>
 </body>
