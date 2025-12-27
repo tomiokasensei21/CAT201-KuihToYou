@@ -31,7 +31,7 @@
     <h2>Kuih To You | Admin Panel</h2>
     <div>
         <span>Welcome, Administrator | </span>
-        <a href="logout" class="btn-logout">Logout</a>
+        <a href="javascript:void(0)" onclick="confirmLogout()" class="btn-logout" style="color: white; text-decoration: none; font-weight: bold;">Logout</a>
     </div>
 </div>
 
@@ -54,6 +54,25 @@
 </div>
 
 <script>
+    // MERGED: Logout Confirmation Logic
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will need to login again to manage the menu.",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#e67e22', // Match your theme color
+            cancelButtonColor: '#7f8c8d',
+            confirmButtonText: 'Yes, Logout',
+            cancelButtonText: 'Stay here'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If user clicks "Yes", they are sent to the Servlet
+                window.location.href = 'logout';
+            }
+        });
+    }
+
     let kuihList = [];
 
     async function loadData() {
