@@ -13,7 +13,7 @@
     <div class="logo">Kuih To You</div>
 
     <nav>
-        <a href="#">Menu</a>
+        <a href="menu.jsp">Menu</a>
         <a href="#">Catering</a>
         <a href="#">Rewards</a>
         <a href="#">Gift Sets</a>
@@ -33,7 +33,10 @@
                 Fresh Malaysian kuih made with authentic recipes
                 and delivered straight to your door.
             </p>
-            <button class="order-btn" onclick="handleOrderNow()">Order Now</button>
+            <form action="AddToCart" method="POST">
+                <input type="hidden" name="kuihId" value="K001">
+                <button type="submit" class =  "order-btn">Order Now</button>
+                <form>
         </div>
 
         <div class="hero-image">

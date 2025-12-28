@@ -37,7 +37,7 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("userRole", "customer");
                 // -----------------------------------------------
 
-                response.sendRedirect("index.html?user=" + user);
+                response.sendRedirect("menu.jsp");
             } else {
                 response.sendRedirect("login.html?error=empty_pass");
             }

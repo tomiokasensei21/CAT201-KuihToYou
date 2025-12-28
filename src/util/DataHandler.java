@@ -3,42 +3,49 @@ package util;
 import model.Kuih;
 import java.io.*;
 import java.util.*;
+import jakarta.servlet.ServletContext;
 
 public class DataHandler {
-    // TIP: Use a simple name. Tomcat looks in the 'bin' folder by default.
-    private static final String FILE_PATH = "C:/Users/LENOVO/IdeaProjects/CAT201-KuihToYou/data/kuih.txt";
+    // Changed file name to products.txt
+    private static final String FILE_NAME = "products.txt";
+    private static final String DATA_FOLDER = "data";
 
     // READ FROM TXT
-    public static List<Kuih> readFromFile() {
+    public static List<Kuih> readFromFile(ServletContext context) {
         List<Kuih> list = new ArrayList<>();
-        File file = new File(FILE_PATH);
+        // This creates a path relative to your webapp folder
+        String filePath = context.getRealPath("/") + DATA_FOLDER + File.separator + FILE_NAME;
+        File file = new File(filePath);
 
-        if (!file.exists()) return list; // Return empty list if file isn't there yet
+        if (!file.exists()) return list;
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length == 4) {
+                // Matching the 5-field merged Kuih model (ID, Name, Price, Image, Stock)
+                if (parts.length == 5) {
                     list.add(new Kuih(
-                            Integer.parseInt(parts[0]),
-                            parts[1],
-                            Double.parseDouble(parts[2]),
-                            Integer.parseInt(parts[3])
+                            parts[0].trim(),           // ID (String)
+                            parts[1].trim(),           // Name
+                            Double.parseDouble(parts[2].trim()), // Price
+                            parts[3].trim(),           // imageFile
+                            Integer.parseInt(parts[4].trim())    // Stock
                     ));
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }
         return list;
     }
 
     // SAVE TO TXT
-    public static void saveToFile(List<Kuih> list) {
-        try (PrintWriter out = new PrintWriter(new FileWriter(FILE_PATH))) {
+    public static void saveToFile(List<Kuih> list, ServletContext context) {
+        String filePath = context.getRealPath("/") + DATA_FOLDER + File.separator + FILE_NAME;
+        try (PrintWriter out = new PrintWriter(new FileWriter(filePath))) {
             for (Kuih k : list) {
-                out.println(k.getId() + "," + k.getName() + "," + k.getPrice() + "," + k.getStock());
+                out.println(k.getId() + "," + k.getName() + "," + k.getPrice() + "," + k.getImageFile() + "," + k.getStock());
             }
         } catch (IOException e) {
             e.printStackTrace();
