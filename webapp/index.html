@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kuih To You</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">Kuih To You</div>
+
+    <nav>
+        <a href="#">Menu</a>
+        <a href="#">Catering</a>
+        <a href="#">Rewards</a>
+        <a href="#">Gift Sets</a>
+        <a href="login.html" class="signin-link">Sign In</a>
+        <a href="signup.html" class="signup-link">Sign Up</a>
+        <button class="nav-btn">Delivery</button>
+    </nav>
+</header>
+
+<section class="hero">
+    <div class="hero-box">
+
+        <div class="hero-text">
+            <span class="tag">LIMITED TIME</span>
+            <h1>The Taste of Tradition</h1>
+            <p>
+                Fresh Malaysian kuih made with authentic recipes
+                and delivered straight to your door.
+            </p>
+            <button class="order-btn" onclick="handleOrderNow()">Order Now</button>
+        </div>
+
+        <div class="hero-image">
+            <img src="KuihMuihImage/hero.jpg" alt="Traditional Kuih">
+        </div>
+
+    </div>
+</section>
+
+<script>
+    // 1. Detect if user arrived here via logout
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('status') === 'loggedout') {
+        Swal.fire({
+            icon: 'success',
+            title: 'Logged Out',
+            text: 'You have been safely signed out. See you again!',
+            timer: 3000,
+            showConfirmButton: false
+        });
+
+        // Clean the URL (removes the ?status=loggedout from the bar)
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    // 2. Simple logic for Order Now
+    function handleOrderNow() {
+        // Since we are pushing to Member 2 soon, this button
+        // will take them to login first to ensure they have an account.
+        window.location.href = 'login.html';
+    }
+</script>
+
+</body>
+</html>
