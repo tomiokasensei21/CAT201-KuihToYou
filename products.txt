@@ -1,0 +1,11 @@
+K001,Cucur Badak,0.60,CoqBadak.jpg
+K002,Cucur Jawa,0.50,CoqJawa.jpeg
+K003,Onde-Onde (5 pcs),1.50,KuihOndeOnde.jpeg
+K004,Cucur Pisang (6 pcs),2.00,CoqPisang.jpg
+K005,Bahulu (15 pcs),10.00,KuihBahulu.jpeg
+K006,Kuih Cara,0.60,KuihCara.jpeg
+K007,Kuih Keria,0.70,KuihKeria.jpeg
+K008,Kuih Ketayap,1.00,KuihKetayap.jpeg
+K009,Kuih Koci,1.00,KuihKoci.jpeg
+K010,Kuih Nona Manis,0.60,KuihNonaManis.jpeg
+
