@@ -1,8 +1,0 @@
-1,Kuih Cara Manis,4.9,65
-2,Ketayap,4.9,50
-3,Onde-Onde,6.9,70
-4,Coq Keria,6.7,65
-5,Nona Manis,3.9,45
-6,Bahulu,7.5,48
-7,Kuih Koci,5.5,76
-8,Coq Jawa,3.8,56
