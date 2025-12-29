@@ -19,15 +19,15 @@ public class AddToCartServlet extends HttpServlet {
 
         // 1. SECURITY GATE: Check if user is logged in first
         HttpSession session = request.getSession();
-        // We check for "userRole" based on your AdminServlet authorization logic
         if (session.getAttribute("userRole") == null) {
-            // If not logged in, redirect to login page
             response.sendRedirect("login.html");
-            return; // Crucial: This stops the rest of the code from running
+            return;
         }
 
-        // 2. ONLY RUNS IF LOGGED IN: Capture the quantity
+        // 2. Capture the quantity and the redirection source
         String id = request.getParameter("kuihId");
+        String source = request.getParameter("source"); // Capture the page source
+
         int quantityToAdd = 1;
         try {
             String qtyStr = request.getParameter("quantity");
@@ -44,7 +44,7 @@ public class AddToCartServlet extends HttpServlet {
             cart = new ArrayList<>();
         }
 
-        // 4. Find the Kuih details using DataHandler
+        // 4. Find the Kuih details
         Kuih selectedKuih = findKuihById(id);
 
         // 5. Add to cart logic
@@ -63,15 +63,21 @@ public class AddToCartServlet extends HttpServlet {
             }
         }
 
-        // 6. Save and stay on menu
+        // 6. Save back to session
         session.setAttribute("cart", cart);
-        response.sendRedirect("menu.jsp?status=added");
+
+        // 7. SMART REDIRECT
+        if ("cart".equals(source)) {
+            // Stay in the cart if the '+' button was clicked there
+            response.sendRedirect("viewCart.jsp");
+        } else {
+            // Go back to the menu if adding from the main shop
+            response.sendRedirect("menu.jsp?status=added");
+        }
     }
 
     private Kuih findKuihById(String id) {
-        // Reads from products.txt using the context
         List<Kuih> allKuih = util.DataHandler.readFromFile(getServletContext());
-
         for (Kuih k : allKuih) {
             if (k.getId().equals(id)) {
                 return k;
