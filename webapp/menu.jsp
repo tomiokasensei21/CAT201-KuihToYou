@@ -11,8 +11,6 @@
         }
     }
 
-    // 2. FETCH KUIH DATA USING THE 'application' OBJECT
-    // This fixes the "Cannot resolve method getServletContext" error.
     List<Kuih> allKuih = DataHandler.readFromFile(application);
 %>
 
@@ -67,7 +65,7 @@
             // Only show Logout if userRole exists
             if (session.getAttribute("userRole") != null) {
         %>
-        <a href="Logout" style="color: #c32127; font-weight: bold;">Logout</a>
+        <a href="index.html" style="color: #c32127; font-weight: bold;">Logout</a>
         <% } else { %>
         <a href="login.html">Sign In</a>
         <% } %>
