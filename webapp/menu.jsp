@@ -63,6 +63,14 @@
     <nav>
         <a href="index.html">Home</a>
         <a href="viewCart.jsp" class="cart-link">🛒 View Cart (<%= totalCount %>)</a>
+        <%
+            // Only show Logout if userRole exists
+            if (session.getAttribute("userRole") != null) {
+        %>
+        <a href="Logout" style="color: #c32127; font-weight: bold;">Logout</a>
+        <% } else { %>
+        <a href="login.html">Sign In</a>
+        <% } %>
     </nav>
 </header>
 
@@ -85,7 +93,7 @@
                     <input type="number" name="quantity" id="qty-<%= k.getId() %>" value="1" min="1" readonly style="width: 40px; text-align: center;">
                     <button type="button" onclick="changeQty('<%= k.getId() %>', 1)">+</button>
                 </div>
-                <button type="submit" class="add-btn">ADD TO ORDER</button>
+                <button type="submit" class="add-btn">ADD TO CART</button>
             </form>
         </div>
     </div>

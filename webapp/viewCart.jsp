@@ -31,6 +31,14 @@
         <a href="viewCart.jsp" class="cart-link">
             🛒 View Cart <span>(<%= totalItems %>)</span>
         </a>
+        <%
+            // Only show Logout if userRole exists
+            if (session.getAttribute("userRole") != null) {
+        %>
+        <a href="Logout" style="color: #c32127; font-weight: bold;">Logout</a>
+        <% } else { %>
+        <a href="login.html">Sign In</a>
+        <% } %>
     </nav>
 </header>
 
