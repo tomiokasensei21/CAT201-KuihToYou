@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - Kuih To You</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .admin-header {
+            background: #2c3e50;
+            color: white;
+            padding: 15px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .admin-container { padding: 50px; font-family: sans-serif; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { padding: 15px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #e67e22; color: white; }
+        .btn-add { background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        .btn-edit { background: #2980b9; color: white; padding: 5px 10px; border: none; border-radius: 3px; margin-right: 5px; }
+        .btn-delete { background: #c0392b; color: white; padding: 5px 10px; border: none; border-radius: 3px; }
+        .btn-logout { background: #e74c3c; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        .btn-logout:hover { background: #c0392b; }
+    </style>
+</head>
+<body style="display: none;"> <script>
+    async function loadData() {
+        try {
+            const response = await fetch('admin-api');
+
+            if (response.status === 401 || response.status === 403) {
+                // If unauthorized, don't show the page, go to login
+                window.location.href = 'login.html';
+                return;
+            }
+
+            kuihList = await response.json();
+
+            // ONLY show the body if we get a successful response
+            document.body.style.display = "block";
+            renderTable();
+        } catch (error) {
+            window.location.href = 'login.html';
+        }
+    }
+    loadData();
+</script>
+
+<div class="admin-header">
+    <h2>Kuih To You | Admin Panel</h2>
+    <div>
+        <span>Welcome, Administrator | </span>
+        <a href="javascript:void(0)" onclick="confirmLogout()" class="btn-logout" style="color: white; text-decoration: none; font-weight: bold;">Logout</a>
+    </div>
+</div>
+
+<div class="admin-container">
+    <h1>Manage Kuih Menu</h1>
+    <button class="btn-add" onclick="addKuih()">+ Add New Kuih</button>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price (RM)</th>
+            <th>Stock (Units)</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="kuihTableBody"></tbody>
+    </table>
+</div>
+
+<script>
+    // MERGED: Logout Confirmation Logic
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You will need to login again to manage the menu.",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#e67e22', // Match your theme color
+            cancelButtonColor: '#7f8c8d',
+            confirmButtonText: 'Yes, Logout',
+            cancelButtonText: 'Stay here'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If user clicks "Yes", they are sent to the Servlet
+                window.location.href = 'logout';
+            }
+        });
+    }
+
+    let kuihList = [];
+
+    async function loadData() {
+        try {
+            const response = await fetch('admin-api');
+            kuihList = await response.json();
+            renderTable();
+        } catch (error) {
+            console.error("Error loading data:", error);
+        }
+    }
+
+    // MERGED: Added Empty State check
+    function renderTable() {
+        const tableBody = document.getElementById('kuihTableBody');
+        tableBody.innerHTML = "";
+
+        if (kuihList.length === 0) {
+            tableBody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding: 30px; color: #7f8c8d;'>No kuih found in database. Add some tradition!</td></tr>";
+            return;
+        }
+
+        kuihList.forEach((item, index) => {
+            tableBody.innerHTML += `
+                <tr>
+                    <td>${item.id}</td>
+                    <td>${item.name}</td>
+                    <td>${Number(item.price).toFixed(2)}</td>
+                    <td>${item.stock}</td>
+                    <td>
+                        <button class="btn-edit" onclick="editKuih(${index})">Edit</button>
+                        <button class="btn-delete" onclick="deleteKuih(${index})">Delete</button>
+                    </td>
+                </tr>`;
+        });
+    }
+
+    function validateInput(name, price, stock) {
+        if (!name || !price || !stock) {
+            Swal.showValidationMessage('All fields are required!');
+            return false;
+        }
+        if (isNaN(price) || Number(price) <= 0) {
+            Swal.showValidationMessage('Price must be a positive number!');
+            return false;
+        }
+        if (isNaN(stock) || Number(stock) < 0 || !Number.isInteger(Number(stock))) {
+            Swal.showValidationMessage('Stock must be a valid whole number!');
+            return false;
+        }
+        return true;
+    }
+
+    async function addKuih() {
+        const { value: formValues } = await Swal.fire({
+            title: 'Add New Kuih',
+            html:
+                '<input id="swal-name" class="swal2-input" placeholder="Kuih Name">' +
+                '<input id="swal-price" type="number" step="0.01" class="swal2-input" placeholder="Price (RM)">' +
+                '<input id="swal-stock" type="number" class="swal2-input" placeholder="Initial Stock">',
+            focusConfirm: false,
+            showCancelButton: true,
+            preConfirm: () => {
+                const name = document.getElementById('swal-name').value;
+                const price = document.getElementById('swal-price').value;
+                const stock = document.getElementById('swal-stock').value;
+                if (validateInput(name, price, stock)) {
+                    return { name, price, stock };
+                }
+            }
+        });
+
+        if (formValues) {
+            const params = new URLSearchParams();
+            params.append('action', 'add');
+            params.append('name', formValues.name);
+            params.append('price', formValues.price);
+            params.append('stock', formValues.stock);
+
+            await fetch('admin-api', { method: 'POST', body: params });
+            loadData();
+            Swal.fire('Success!', 'New Kuih saved to text file.', 'success');
+        }
+    }
+
+    async function editKuih(index) {
+        const item = kuihList[index];
+        const { value: formValues } = await Swal.fire({
+            title: 'Edit Kuih & Stock',
+            html:
+                `<input id="swal-name" class="swal2-input" value="${item.name}">` +
+                `<input id="swal-price" type="number" step="0.01" class="swal2-input" value="${item.price}">` +
+                `<input id="swal-stock" type="number" class="swal2-input" value="${item.stock}">`,
+            focusConfirm: false,
+            showCancelButton: true,
+            preConfirm: () => {
+                const name = document.getElementById('swal-name').value;
+                const price = document.getElementById('swal-price').value;
+                const stock = document.getElementById('swal-stock').value;
+                if (validateInput(name, price, stock)) {
+                    return { id: item.id, name, price, stock };
+                }
+            }
+        });
+
+        if (formValues) {
+            const params = new URLSearchParams();
+            params.append('action', 'update');
+            params.append('id', formValues.id);
+            params.append('name', formValues.name);
+            params.append('price', formValues.price);
+            params.append('stock', formValues.stock);
+
+            await fetch('admin-api', { method: 'POST', body: params });
+            loadData();
+            Swal.fire('Updated!', 'Stock and details updated in file.', 'success');
+        }
+    }
+
+    function deleteKuih(index) {
+        const item = kuihList[index];
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You are about to delete ${item.name}`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete!'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const params = new URLSearchParams();
+                params.append('action', 'delete');
+                params.append('id', item.id);
+
+                await fetch('admin-api', { method: 'POST', body: params });
+                loadData();
+                Swal.fire('Deleted!', 'Item removed from text file.', 'success');
+            }
+        });
+    }
+
+    loadData();
+</script>
+</body>
+</html>
