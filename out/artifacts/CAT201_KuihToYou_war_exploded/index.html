@@ -2,52 +2,110 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Kuih To You</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuih To You - Home</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
+    <style>
+        /* GLOBAL STYLES */
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #f9f9f9; }
 
+        /* HEADER */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; padding: 15px 20px;
+        }
+        .logo { font-size: 24px; font-weight: bold; color: #2e7d32; text-decoration: none; }
+
+        /* NAVIGATION */
+        .nav-links { display: flex; gap: 25px; }
+        .nav-links a {
+            text-decoration: none; color: #333; font-weight: 600; font-size: 14px; text-transform: uppercase;
+        }
+        .nav-links a:hover { color: #2e7d32; }
+
+        /* ACTIONS */
+        .nav-actions { display: flex; gap: 15px; align-items: center; }
+
+        .btn-pill {
+            padding: 10px 25px; border-radius: 50px; text-decoration: none;
+            font-weight: bold; font-size: 13px; transition: 0.3s; cursor: pointer; border: none;
+        }
+
+        /* Primary Button (Red) */
+        .btn-primary { background-color: #c62828; color: white; }
+        .btn-primary:hover { background-color: #a31f1f; }
+
+        /* Secondary Button (Outline) */
+        .btn-secondary { background-color: white; border: 2px solid #c62828; color: #c62828; }
+        .btn-admin { border: 1px solid #555; color: #555; padding: 8px 15px; font-size: 12px; }
+
+        /* HERO SECTION */
+        .hero-section { background-color: #e8f5e9; padding: 40px 20px; text-align: center; }
+        .hero-card {
+            max-width: 1100px; margin: 0 auto; background-color: white;
+            border-radius: 20px; overflow: hidden; display: flex;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .hero-text {
+            flex: 1; padding: 50px; display: flex; flex-direction: column;
+            justify-content: center; align-items: flex-start; text-align: left;
+        }
+        .hero-text h1 { font-size: 42px; color: #2e7d32; margin: 0 0 15px 0; }
+        .hero-text p { font-size: 18px; color: #555; margin-bottom: 25px; }
+
+        .hero-image {
+            flex: 1;
+            /* Make sure this path is correct! I used your folder name from the code snippet */
+            background-image: url('KuihMuihImage/hero.jpg');
+            background-size: cover; background-position: center; min-height: 400px;
+        }
+
+        footer { text-align: center; padding: 20px; color: #777; font-size: 12px; }
+    </style>
+</head>
 <body>
 
-<header class="navbar">
-    <div class="logo">Kuih To You</div>
+<header>
+    <div class="nav-container">
+        <a href="hello.html" class="logo">Kuih To You</a>
 
-    <nav>
-        <a href="menu.jsp">Menu</a>
-        <a href="#">Catering</a>
-        <a href="#">Rewards</a>
-        <a href="#">Gift Sets</a>
-        <a href="login.html" class="signin-link">Sign In</a>
-        <a href="signup.html" class="signup-link">Sign Up</a>
-        <button class="nav-btn">Delivery</button>
-    </nav>
+        <nav class="nav-links">
+            <a href="menu.jsp">Menu</a>
+        </nav>
+
+        <div class="nav-actions">
+            <a href="admin_login.html" class="btn-pill btn-admin">Admin</a>
+
+            <a href="login.html" style="text-decoration: none; color: #333; font-weight: 600; font-size: 14px;">Sign In</a>
+            <a href="signup.html" class="btn-pill btn-secondary">Sign Up</a>
+        </div>
+    </div>
 </header>
 
-<section class="hero">
-    <div class="hero-box">
-
+<section class="hero-section">
+    <div class="hero-card">
         <div class="hero-text">
-            <span class="tag">LIMITED TIME</span>
+            <span style="color: #ff9800; font-weight:bold; letter-spacing:1px; font-size: 12px;">LIMITED TIME</span>
             <h1>The Taste of Tradition</h1>
-            <p>
-                Fresh Malaysian kuih made with authentic recipes
-                and delivered straight to your door.
-            </p>
-            <form action="AddToCart" method="POST">
-                <input type="hidden" name="kuihId" value="K001">
-                <button type="submit" class =  "order-btn">Order Now</button>
-                <form>
-        </div>
+            <p>Fresh Malaysian kuih made with authentic recipes and delivered straight to your door.</p>
 
-        <div class="hero-image">
-            <img src="KuihMuihImage/hero.jpg" alt="Traditional Kuih">
+            <a href="menu.jsp" class="btn-pill btn-primary" style="padding: 15px 30px; font-size: 16px;">Order Now</a>
         </div>
-
+        <div class="hero-image"></div>
     </div>
 </section>
 
+<footer>
+    &copy; 2026 Kuih To You. CAT201 Project.
+</footer>
+
 <script>
-    // 1. Detect if user arrived here via logout
+    // YOUR ORIGINAL LOGOUT LOGIC (Do not remove)
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('status') === 'loggedout') {
         Swal.fire({
@@ -57,16 +115,7 @@
             timer: 3000,
             showConfirmButton: false
         });
-
-        // Clean the URL (removes the ?status=loggedout from the bar)
         window.history.replaceState({}, document.title, window.location.pathname);
-    }
-
-    // 2. Simple logic for Order Now
-    function handleOrderNow() {
-        // Since we are pushing to Member 2 soon, this button
-        // will take them to login first to ensure they have an account.
-        window.location.href = 'login.html';
     }
 </script>
 
