@@ -14,30 +14,35 @@ public class LoginServlet extends HttpServlet {
         String user = request.getParameter("username");
         String pass = request.getParameter("password");
 
-        // 1. Strict Admin Check
+        // 1. Capture the redirect source from the hidden input
+        String redirectSource = request.getParameter("redirectSource");
+
+        // 2. Strict Admin Check
         if ("admin".equals(user)) {
             if ("admin123".equals(pass)) {
-                // --- SECURITY FIX: CREATE THE ADMIN SESSION ---
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
-                session.setAttribute("userRole", "admin"); // This matches the check in AdminServlet
-                // ----------------------------------------------
+                session.setAttribute("userRole", "admin");
 
                 response.sendRedirect("admin_dashboard.html");
             } else {
                 response.sendRedirect("login.html?error=admin_fail");
             }
         }
-        // 2. Flexible Customer Check
+        // 3. Flexible Customer Check
         else {
             if (pass != null && pass.length() > 0) {
-                // --- SECURITY FIX: CREATE A CUSTOMER SESSION ---
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
                 session.setAttribute("userRole", "customer");
-                // -----------------------------------------------
 
-                response.sendRedirect("menu.jsp");
+                // DYNAMIC REDIRECT: Use the source from the hidden field
+                if (redirectSource != null && !redirectSource.isEmpty()) {
+                    response.sendRedirect(redirectSource);
+                } else {
+                    // Default fallback if no source is provided
+                    response.sendRedirect("menu.jsp");
+                }
             } else {
                 response.sendRedirect("login.html?error=empty_pass");
             }

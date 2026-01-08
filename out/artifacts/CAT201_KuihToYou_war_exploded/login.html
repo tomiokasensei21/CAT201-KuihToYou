@@ -5,7 +5,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #fdf2e9; display: flex; justify-content: center; padding-top: 50px; }
-        .card { background: white; padding: 2rem; border-radius: 15px; shadow: 0 10px 25px rgba(0,0,0,0.1); width: 350px; }
+        .card { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 350px; }
         input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
         button { width: 100%; padding: 12px; background: #e67e22; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
     </style>
@@ -13,7 +13,9 @@
 <body>
 <div class="card">
     <h2 style="text-align: center; color: #d35400;">Sign In</h2>
-    <form action="login-action" method="POST">
+    <form action="LoginServlet" method="POST">
+        <input type="hidden" id="redirectSource" name="redirectSource" value="menu.jsp">
+
         <input type="text" name="username" placeholder="Username / Email" required>
         <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Login</button>
@@ -22,6 +24,17 @@
 </div>
 
 <script>
+    // 2. RETRIEVE REDIRECT SOURCE
+    window.onload = function() {
+        const savedPage = sessionStorage.getItem('redirectAfterLogin');
+        if (savedPage) {
+            document.getElementById('redirectSource').value = savedPage;
+            // Clear it after loading to prevent accidental redirects later
+            sessionStorage.removeItem('redirectAfterLogin');
+        }
+    };
+
+    // 3. ERROR ALERTS (Unchanged)
     const params = new URLSearchParams(window.location.search);
     if (params.get('error') === 'admin_fail') {
         Swal.fire('Access Denied', 'Incorrect Admin Password!', 'error');

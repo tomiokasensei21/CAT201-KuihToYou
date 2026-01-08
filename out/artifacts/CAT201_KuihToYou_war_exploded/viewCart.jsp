@@ -1,16 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
-<%@ page import="model.CartItem" %>
-<%@ page import="model.Kuih" %>
+<%@ page import="java.util.List, model.CartItem, model.Kuih" %>
 
 <%
-    // 1. Calculate the total quantity from the session
+    // 1. Calculate the total quantity for the header
     int totalItems = 0;
     List<CartItem> cartList = (List<CartItem>) session.getAttribute("cart");
-
     if (cartList != null) {
         for (CartItem item : cartList) {
-            totalItems += item.getQuantity(); // Sums every piece added
+            totalItems += item.getQuantity();
         }
     }
 %>
@@ -18,122 +15,176 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Your Shopping Cart - Kuih To You</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Your Cart - Kuih To You</title>
+    <style>
+        /* GLOBAL & HEADER STYLES */
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #f9f9f9; color: #333; }
+
+        header {
+            background-color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; padding: 15px 20px;
+        }
+        .logo { font-size: 24px; font-weight: bold; color: #2e7d32; text-decoration: none; }
+        .nav-links a { text-decoration: none; color: #333; font-weight: 600; font-size: 14px; margin-left: 20px; text-transform: uppercase; }
+
+        /* UPDATED CART LAYOUT: WIDER BOXES */
+        .cart-wrapper {
+            display: flex; gap: 40px; max-width: 1200px;
+            margin: 40px auto; padding: 0 20px; align-items: flex-start;
+        }
+        .items-column { flex: 3; } /* More space for the large images */
+        .summary-column { flex: 2; position: sticky; top: 120px; } /* Larger sidebar */
+
+        /* KUIH-CARD WITH LARGER IMAGES */
+        .kuih-card {
+            background: white; border-radius: 12px; padding: 30px;
+            margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: grid; grid-template-columns: 220px 1fr auto; gap: 30px; align-items: center;
+        }
+
+        /* UPSCALED IMAGE: Matching all_menu gallery size */
+        .kuih-card img {
+            width: 220px; height: 220px;
+            object-fit: cover; border-radius: 12px;
+        }
+
+        .item-info h3 {
+            margin: 0; color: #2e7d32; font-size: 18px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        /* PILL QUANTITY SELECTOR (Upscaled) */
+        .qty-pill {
+            display: flex; align-items: center; border: 2px solid #ddd;
+            border-radius: 50px; width: fit-content; margin-top: 20px; padding: 8px 20px;
+        }
+        .qty-btn { background: none; border: none; font-size: 20px; color: #c62828; cursor: pointer; text-decoration: none; padding: 0 12px; }
+        .qty-val { font-weight: bold; margin: 0 15px; color: #333; font-size: 18px; }
+
+        /* TRASH BUTTON */
+        .trash-btn {
+            border: 2px solid #ddd; border-radius: 50%; width: 45px; height: 45px;
+            display: flex; align-items: center; justify-content: center;
+            color: #2e7d32; text-decoration: none; font-size: 20px; transition: 0.2s;
+        }
+        .trash-btn:hover { background: #f9f9f9; border-color: #2e7d32; }
+
+        /* LARGER SUMMARY BOX */
+        .summary-box { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .summary-box h3 { font-size: 26px; margin-top: 0; color: #2e7d32; }
+
+        .total-row {
+            display: flex; justify-content: space-between;
+            font-size: 30px; font-weight: bold; color: #c62828; margin: 25px 0;
+        }
+
+        .btn-checkout {
+            display: inline-block;   /* allow natural width */
+            width: 80%;             /* stop full width */
+            padding: 12px 30px;      /* control size */
+            background-color: #c62828;
+            color: white;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 18px;
+            text-decoration: none;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .btn-checkout:hover { background-color: #a31f1f; transform: scale(1.02); }
+    </style>
 </head>
 <body>
 
-<header class="navbar">
-    <div class="logo">Your Cart</div>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="menu.jsp">Menu</a>
-        <a href="viewCart.jsp" class="cart-link">
-            🛒 View Cart <span>(<%= totalItems %>)</span>
-        </a>
-        <%
-            // Only show Logout if userRole exists
-            if (session.getAttribute("userRole") != null) {
-        %>
-        <a href="index.html" style="color: #c32127; font-weight: bold;">Logout</a>
-        <% } else { %>
-        <a href="login.html">Sign In</a>
-        <% } %>
-    </nav>
+<header>
+    <div class="nav-container">
+        <a href="index.html" class="logo">Kuih To You</a>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="all_menu.jsp">Gallery</a>
+            <a href="viewCart.jsp">🛒 Cart (<%= totalItems %>)</a>
+        </nav>
+    </div>
 </header>
 
-<section class="cart-container" style="padding: 20px;">
-    <h2>Review Your Order</h2>
-
-    <table border="1" class="cart-table" style="width: 100%; border-collapse: collapse; text-align: left;">
-        <thead>
-        <tr style="background-color: #f2f2f2;">
-            <th>Product</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Subtotal</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
+<div class="cart-wrapper">
+    <div class="items-column">
+        <h2 style="color: #2e7d32; margin-bottom: 25px; font-size: 28px;">Review Your Cart</h2>
         <%
-            // Re-check for the table display logic
             double grandTotal = 0;
-
             if (cartList == null || cartList.isEmpty()) {
         %>
-        <tr>
-            <td colspan="5" style="text-align:center; padding: 20px;">Your cart is empty.</td>
-        </tr>
+        <div class="kuih-card" style="display: block; text-align: center; padding: 60px;">
+            <p style="font-size: 18px;">Your Cart is empty. Time to fill it with tradition!</p>
+            <a href="menu.jsp" style="color: #2e7d32; font-weight: bold; font-size: 18px;">Back to Browsing</a>
+        </div>
         <%
         } else {
             for (CartItem item : cartList) {
                 double subtotal = item.getKuih().getPrice() * item.getQuantity();
                 grandTotal += subtotal;
         %>
-        <tr>
-            <td style="padding: 10px;">
-                <img src="KuihMuihImage/<%= item.getKuih().getImageFile() %>" width="120" style="vertical-align: middle; margin-right: 15px; border-radius: 8px;">
-                <%= item.getKuih().getName() %>
-            </td>
-            <td>RM <%= String.format("%.2f", item.getKuih().getPrice()) %></td>
+        <div class="kuih-card">
+            <img src="KuihMuihImage/<%= item.getKuih().getImageFile() %>" alt="<%= item.getKuih().getName() %>">
 
-            <td>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <a href="RemoveFromCart?kuihId=<%= item.getKuih().getId() %>"
-                       style="text-decoration: none; padding: 2px 8px; border: 1px solid #ddd; border-radius: 4px; color: black;">-</a>
-
-                    <span><%= item.getQuantity() %></span>
-
-                    <form action="AddToCart" method="POST" style="margin: 0;">
+            <div class="item-info">
+                <h3><%= item.getKuih().getName().toUpperCase() %></h3>
+                <div class="qty-pill">
+                    <a href="RemoveFromCart?kuihId=<%= item.getKuih().getId() %>" class="qty-btn" style="color: #c62828;">-</a>
+                    <span class="qty-val"><%= item.getQuantity() %></span>
+                    <form action="AddToCart" method="POST" style="display:inline; margin:0;">
                         <input type="hidden" name="kuihId" value="<%= item.getKuih().getId() %>">
                         <input type="hidden" name="quantity" value="1">
                         <input type="hidden" name="source" value="cart">
-                        <button type="submit" style="padding: 2px 8px; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">+</button>
+                        <button type="submit" class="qty-btn" style="color: #2e7d32; margin-top: -4px;">+</button>
                     </form>
                 </div>
-            </td>
+            </div>
 
-            <td>RM <%= String.format("%.2f", subtotal) %></td>
-            <td>
+            <div style="display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; height: 100%; min-height: 220px;">
+                <span style="font-weight: bold; font-size: 22px; color: #333;">RM <%= String.format("%.2f", subtotal) %></span>
                 <a href="RemoveFromCart?kuihId=<%= item.getKuih().getId() %>&action=clearRow"
-                   style="color: red; text-decoration: none; font-size: 0.8rem;"
-                   onclick="return confirm('Remove all <%= item.getKuih().getName() %> from your cart?')">
-                    Remove Product
-                </a>
-            </td>
-        </tr>
+                   class="trash-btn" onclick="return confirm('Remove this item from your cart')">🗑️</a>
+            </div>
+        </div>
         <%
                 }
             }
         %>
-        </tbody>
-    </table>
+    </div>
 
-    <div class="cart-summary" style="margin-top: 20px; text-align: right;">
-        <h3>Total to Pay: RM <%= String.format("%.2f", grandTotal) %></h3>
+    <div class="summary-column">
+        <div class="summary-box">
+            <h3 style="color: #2e7d32; margin-top: 0; margin-bottom: 10px; width: 100%;">Order Summary</h3>
+            <p style="color: #666; font-size: 14px; margin-bottom: 0;"></p>
 
-        <div style="display: flex; justify-content: flex-end; gap: 10px;">
-            <button class="order-btn"
-                    style="background-color: #d9534f; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;"
-                    onclick="if(confirm('Are you sure you want to clear your entire cart?')) location.href='RemoveFromCart?action=clearCart'">
-                Clear Entire Cart
-            </button>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0; width: 60%;">
 
-            <button class="order-btn"
-                    style="background-color: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;"
-                    onclick="location.href='menu.jsp'">
-                Continue Ordering
-            </button>
+            <div class="total-row">
+                <span>Total</span>
+                <span>RM <%= String.format("%.2f", grandTotal) %></span>
+            </div>
 
-            <button class="order-btn"
-                    style="background-color: #c32127; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;"
-                    onclick="location.href='checkout-action'">
-                Confirm Order
-            </button>
+            <a href="checkout-action" class="btn-checkout">Confirm Order</a>
+
+            <div style="margin-top: 25px; display: flex; flex-direction: column; gap: 12px;">
+                <a href="menu.jsp" style="text-decoration: none; color: #666; font-size: 18px; font-weight: 600;">
+                    ← Continue Browsing
+                </a>
+                <a href="RemoveFromCart?action=clearCart"
+                   style="color: #c62828; font-size: 18px; text-decoration: none; font-weight: bold;"
+                   onclick="return confirm('Empty entire box?')">
+                    Empty Entire Cart
+                </a>
+            </div>
         </div>
     </div>
-</section>
+</div>
 
 </body>
 </html>
