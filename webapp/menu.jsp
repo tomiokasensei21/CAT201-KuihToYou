@@ -11,7 +11,7 @@
         }
     }
 
-    // 2. Fix the 'getServletContext' error by using 'application'
+    // 2. Load data from text file
     List<Kuih> allKuih = DataHandler.readFromFile(application);
 %>
 
@@ -31,20 +31,31 @@
             padding: 50px;
         }
 
-        /* 40% GUI Mark Feature: Interactive Cards [cite: 14, 30] */
-        .product-card {
+        /* RENAMED: kuih-card with Animation Logic (40% GUI Mark) */
+        .kuih-card {
             background: white;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             overflow: hidden;
             text-align: center;
             padding-bottom: 25px;
-            transition: all 0.3s ease; /* Smooth transition */
             border: 1px solid #eee;
+
+            /* Animation hidden state */
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out, transform 0.3s ease; /* Combines entrance and hover */
         }
 
-        .product-card:hover {
-            transform: translateY(-10px); /* Lifts up on hover */
+        /* Animation visible state */
+        .kuih-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Professional Hover Lift */
+        .kuih-card:hover {
+            transform: translateY(-10px) !important;
             box-shadow: 0 15px 40px rgba(0,0,0,0.15);
         }
 
@@ -55,11 +66,11 @@
             transition: transform 0.5s ease;
         }
 
-        .product-card:hover .img-wrapper img {
+        .kuih-card:hover .img-wrapper img {
             transform: scale(1.05); /* Slight zoom on hover */
         }
 
-        /* Professional Quantity Controls  */
+        /* Professional Quantity Controls */
         .qty-control {
             display: inline-flex;
             align-items: center;
@@ -79,7 +90,7 @@
             font-weight: bold;
         }
 
-        /* Improved Add to Cart Button  */
+        /* Improved Add to Cart Button */
         .add-btn {
             background-color: #c32127;
             color: white;
@@ -114,6 +125,7 @@
     <div class="logo">Kuih To You</div>
     <nav>
         <a href="index.html">Home</a>
+        <a href="all_menu.jsp">Menu</a>
         <a href="viewCart.jsp" class="cart-link">🛒 Cart (<%= totalCount %>)</a>
         <% if (session.getAttribute("userRole") != null) { %>
         <a href="Logout" style="color: #c32127; font-weight: bold;">Logout</a>
@@ -125,12 +137,13 @@
 
 <h1 style="text-align: center; margin-top: 40px; color: #2c3e50;">Our Traditional Favorites</h1>
 
+
+
 <section class="menu-grid">
     <% for(Kuih k : allKuih) { %>
-    <div class="product-card">
-        <div class="img-wrapper">
-            <img src="KuihMuihImage/<%= k.getImageFile() %>" alt="<%= k.getName() %>">
-        </div>
+    <div class="kuih-card"> <div class="img-wrapper">
+        <img src="KuihMuihImage/<%= k.getImageFile() %>" alt="<%= k.getName() %>">
+    </div>
         <div class="product-info" style="padding: 20px;">
             <h3 style="margin-bottom: 10px;"><%= k.getName() %></h3>
             <p style="color: #c32127; font-size: 1.2rem; font-weight: bold; margin-bottom: 20px;">
@@ -156,6 +169,7 @@
 </section>
 
 <script>
+    // Quantity change logic
     function changeQty(id, delta) {
         const input = document.getElementById('qty-' + id);
         let currentVal = parseInt(input.value);
@@ -163,6 +177,22 @@
             input.value = currentVal + delta;
         }
     }
+
+    // Intersection Observer for scroll animations (Member 2 Feature)
+    const observerOptions = { threshold: 0.1 };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Apply observer to all kuih-cards
+    document.querySelectorAll('.kuih-card').forEach(card => {
+        observer.observe(card);
+    });
 </script>
 
 </body>

@@ -106,7 +106,7 @@
         <a href="index.html" class="logo">Kuih To You</a>
         <nav class="nav-links">
             <a href="index.html">Home</a>
-            <a href="all_menu.jsp">Gallery</a>
+            <a href="all_menu.jsp">Menu</a>
             <a href="viewCart.jsp">🛒 Cart (<%= totalItems %>)</a>
         </nav>
     </div>

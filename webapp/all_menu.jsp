@@ -52,7 +52,7 @@
             margin: 0 auto;
         }
 
-        /* --- UPDATED CARD & HOVER STYLES (40% GUI Mark) --- */
+        /* --- UPDATED CARD & HOVER STYLES --- */
         .gallery-card {
             background: white; border-radius: 20px; overflow: hidden;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05); text-align: center;
@@ -141,7 +141,7 @@
 
 
 <script>
-    // SCROLL ENTRANCE ANIMATION (Member 2 Task)
+    // SCROLL ENTRANCE ANIMATION
     const observerOptions = { threshold: 0.1 };
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
