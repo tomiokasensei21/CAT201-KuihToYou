@@ -14,7 +14,7 @@ public class DataHandler {
     public static List<Kuih> readFromFile(ServletContext context) {
         List<Kuih> list = new ArrayList<>();
         // This creates a path relative to your webapp folder
-        String filePath = context.getRealPath("/") + DATA_FOLDER + File.separator + FILE_NAME;
+        String filePath = context.getRealPath("/data/products.txt");
         File file = new File(filePath);
 
         if (!file.exists()) return list;
