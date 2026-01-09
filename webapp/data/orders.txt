@@ -1,0 +1,27 @@
+=== NEW ORDER ===
+Date: Fri Jan 09 13:57:09 GST 2026
+Customer: Check2
+- Cucur Jawa (x1) : RM 0.50
+Total Amount: RM 0.50
+-----------------------------
+=== NEW ORDER ===
+Customer: Check2
+Date: Fri Jan 09 14:00:21 GST 2026
+- Onde-Onde (5 pcs) (x1) : RM 1.50
+- Cucur Badak (x1) : RM 0.60
+GRAND TOTAL: RM 2.10
+--------------------------------
+=== NEW ORDER ===
+Customer: Check2
+Date: Fri Jan 09 14:01:07 GST 2026
+- Cucur Jawa (x1) : RM 0.50
+- Bahulu (15 pcs) (x1) : RM 10.00
+GRAND TOTAL: RM 10.50
+--------------------------------
+=== NEW ORDER ===
+Customer: Check2
+Date: Fri Jan 09 14:33:00 GST 2026
+- Onde-Onde (5 pcs) (x2) : RM 3.00
+- Cucur Jawa (x2) : RM 1.00
+GRAND TOTAL: RM 4.00
+--------------------------------

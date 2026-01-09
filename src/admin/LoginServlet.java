@@ -4,6 +4,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import java.io.IOException;
+import util.UserManager; // Import the manager you just created
 
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
@@ -17,7 +18,7 @@ public class LoginServlet extends HttpServlet {
         // 1. Capture the redirect source from the hidden input
         String redirectSource = request.getParameter("redirectSource");
 
-        // 2. Strict Admin Check
+        // 2. Strict Admin Check (Hardcoded as per project requirements)
         if ("admin".equals(user)) {
             if ("admin123".equals(pass)) {
                 HttpSession session = request.getSession();
@@ -29,14 +30,15 @@ public class LoginServlet extends HttpServlet {
                 response.sendRedirect("login.html?error=admin_fail");
             }
         }
-        // 3. Flexible Customer Check
+        // 3. Customer Check using UserManager (Member 3 Logic)
         else {
-            if (pass != null && pass.length() > 0) {
+            // This now checks the users.txt file via the UserManager
+            if (UserManager.isValidUser(user, pass, getServletContext())) {
                 HttpSession session = request.getSession();
                 session.setAttribute("user", user);
                 session.setAttribute("userRole", "customer");
 
-                // DYNAMIC REDIRECT: Use the source from the hidden field
+                // DYNAMIC REDIRECT: Send user back to where they came from (e.g., Cart)
                 if (redirectSource != null && !redirectSource.isEmpty()) {
                     response.sendRedirect(redirectSource);
                 } else {
@@ -44,7 +46,8 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect("menu.jsp");
                 }
             } else {
-                response.sendRedirect("login.html?error=empty_pass");
+                // If the user/pass doesn't match a line in users.txt
+                response.sendRedirect("login.html?error=invalid_credentials");
             }
         }
     }

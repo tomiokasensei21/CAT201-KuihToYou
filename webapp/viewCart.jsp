@@ -10,6 +10,9 @@
             totalItems += item.getQuantity();
         }
     }
+
+    // MEMBER 3: Get user for greeting
+    String userName = (String) session.getAttribute("user");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,32 +32,28 @@
             justify-content: space-between; align-items: center; padding: 15px 20px;
         }
         .logo { font-size: 24px; font-weight: bold; color: #2e7d32; text-decoration: none; }
+        .nav-links { display: flex; align-items: center; }
         .nav-links a { text-decoration: none; color: #333; font-weight: 600; font-size: 14px; margin-left: 20px; text-transform: uppercase; }
 
-        /* UPDATED CART LAYOUT: WIDER BOXES */
+        /* New Style for Greeting in Cart Header */
+        .user-greeting { margin-left: 20px; color: #2e7d32; font-weight: bold; font-size: 14px; }
+
+        /* UPDATED CART LAYOUT */
         .cart-wrapper {
             display: flex; gap: 40px; max-width: 1200px;
             margin: 40px auto; padding: 0 20px; align-items: flex-start;
         }
-        .items-column { flex: 3; } /* More space for the large images */
-        .summary-column { flex: 2; position: sticky; top: 120px; } /* Larger sidebar */
+        .items-column { flex: 3; }
+        .summary-column { flex: 2; position: sticky; top: 120px; }
 
-        /* KUIH-CARD WITH LARGER IMAGES */
+        /* KUIH-CARD */
         .kuih-card {
             background: white; border-radius: 12px; padding: 30px;
             margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             display: grid; grid-template-columns: 220px 1fr auto; gap: 30px; align-items: center;
         }
-
-        .kuih-card img {
-            width: 220px; height: 220px;
-            object-fit: cover; border-radius: 12px;
-        }
-
-        .item-info h3 {
-            margin: 0; color: #2e7d32; font-size: 18px;
-            text-transform: uppercase; letter-spacing: 0.5px;
-        }
+        .kuih-card img { width: 220px; height: 220px; object-fit: cover; border-radius: 12px; }
+        .item-info h3 { margin: 0; color: #2e7d32; font-size: 18px; text-transform: uppercase; letter-spacing: 0.5px; }
 
         /* PILL QUANTITY SELECTOR */
         .qty-pill {
@@ -81,20 +80,18 @@
             font-size: 30px; font-weight: bold; color: #c62828; margin: 25px 0;
         }
 
-        .btn-checkout {   /* Checkout button */
-            display: inline-block;
-            width: 80%;
-            padding: 12px 30px;
+        .btn-checkout {
+            width: 100%;
+            padding: 15px;
             background-color: #c62828;
             color: white;
+            border: none;
             border-radius: 30px;
             font-weight: bold;
             font-size: 18px;
-            text-decoration: none;
-            text-align: center;
+            cursor: pointer;
             transition: 0.3s;
         }
-
         .btn-checkout:hover { background-color: #a31f1f; transform: scale(1.02); }
     </style>
 </head>
@@ -107,6 +104,14 @@
             <a href="index.html">Home</a>
             <a href="all_menu.jsp">Menu</a>
             <a href="viewCart.jsp">🛒 Cart (<%= totalItems %>)</a>
+
+            <%-- MEMBER 3: Greeting and Logout --%>
+            <% if (userName != null) { %>
+                <span class="user-greeting">Hi, <%= userName %>!</span>
+                <a href="logout-action" style="color: #c62828;">Logout</a>
+            <% } else { %>
+                <a href="login.html">Sign In</a>
+            <% } %>
         </nav>
     </div>
 </header>
@@ -120,7 +125,7 @@
         %>
         <div class="kuih-card" style="display: block; text-align: center; padding: 60px;">
             <p style="font-size: 18px;">Your Cart is empty. Time to fill it with tradition!</p>
-            <a href="menu.jsp" style="color: #2e7d32; font-weight: bold; font-size: 18px;">Back to Browsing</a>
+            <a href="all_menu.jsp" style="color: #2e7d32; font-weight: bold; font-size: 18px;">Back to Browsing</a>
         </div>
         <%
         } else {
@@ -160,19 +165,23 @@
     <div class="summary-column">
         <div class="summary-box">
             <h3 style="color: #2e7d32; margin-top: 0; margin-bottom: 10px; width: 100%;">Order Summary</h3>
-            <p style="color: #666; font-size: 14px; margin-bottom: 0;"></p>
 
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0; width: 60%;">
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
 
             <div class="total-row">
                 <span>Total</span>
                 <span>RM <%= String.format("%.2f", grandTotal) %></span>
             </div>
 
-            <a href="checkout-action" class="btn-checkout">Confirm Order</a>
+            <%-- MEMBER 3: Form submission to CheckoutServlet --%>
+            <form action="CheckoutServlet" method="POST">
+                <button type="submit" class="btn-checkout" <%= (cartList == null || cartList.isEmpty()) ? "disabled style='background: #ccc; cursor: not-allowed;'" : "" %>>
+                    Confirm Order
+                </button>
+            </form>
 
             <div style="margin-top: 25px; display: flex; flex-direction: column; gap: 12px;">
-                <a href="menu.jsp" style="text-decoration: none; color: #666; font-size: 18px; font-weight: 600;">
+                <a href="all_menu.jsp" style="text-decoration: none; color: #666; font-size: 18px; font-weight: 600;">
                     ← Continue Browsing
                 </a>
                 <a href="RemoveFromCart?action=clearCart"

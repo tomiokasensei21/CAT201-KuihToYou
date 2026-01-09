@@ -50,11 +50,13 @@
         <h2 style="color: #d35400;">Create Account</h2>
         <p>Join Kuih To You today!</p>
 
-        <input type="text" id="username" placeholder="Full Name" required>
-        <input type="email" id="email" placeholder="Email Address" required>
-        <input type="password" id="password" placeholder="Password (e.g. 123)" required>
+        <form action="signup-action" method="POST" id="signupForm">
+            <input type="text" name="username" id="username" placeholder="Full Name" required>
+            <input type="email" name="email" id="email" placeholder="Email Address" required>
+            <input type="password" name="password" id="password" placeholder="Password (e.g. 123)" required>
 
-        <button class="signup-btn" onclick="handleSignUp()">Sign Up</button>
+            <button type="submit" class="signup-btn">Sign Up</button>
+        </form>
 
         <p style="margin-top: 20px; font-size: 14px;">
             Already have an account? <a href="login.html" style="color: #e67e22;">Sign In</a>
@@ -63,26 +65,14 @@
 </div>
 
 <script>
-    function handleSignUp() {
+    // Optional: client-side check to prevent empty submissions before hitting the server
+    document.getElementById('signupForm').onsubmit = function(e) {
         const name = document.getElementById('username').value;
-        if(name === "") {
+        if(name.trim() === "") {
+            e.preventDefault(); // Stop form from sending
             Swal.fire('Error', 'Please enter your name', 'error');
-            return;
         }
-
-        // Show the User-Friendly Pop-up
-        Swal.fire({
-            title: 'Success!',
-            text: 'Account created for ' + name + '. You can now sign in!',
-            icon: 'success',
-            confirmButtonColor: '#e67e22',
-            confirmButtonText: 'Proceed to Login'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = 'login.html';
-            }
-        });
-    }
+    };
 </script>
 
 </body>

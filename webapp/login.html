@@ -24,23 +24,49 @@
 </div>
 
 <script>
-    // 2. RETRIEVE REDIRECT SOURCE
     window.onload = function() {
+        // 1. Handle dynamic redirection from Session Storage
         const savedPage = sessionStorage.getItem('redirectAfterLogin');
         if (savedPage) {
-            document.getElementById('redirectSource').value = savedPage;
-            // Clear it after loading to prevent accidental redirects later
+            const redirectInput = document.getElementById('redirectSource');
+            if (redirectInput) {
+                redirectInput.value = savedPage;
+            }
             sessionStorage.removeItem('redirectAfterLogin');
         }
-    };
 
-    // 3. ERROR ALERTS (Unchanged)
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('error') === 'admin_fail') {
-        Swal.fire('Access Denied', 'Incorrect Admin Password!', 'error');
-    } else if (params.get('error') === 'empty_pass') {
-        Swal.fire('Wait!', 'Please enter a password.', 'warning');
-    }
+        // 2. MEMBER 3: COMPLETE VALIDATION ALERTS
+        // Parse URL parameters to detect errors or successes
+        const params = new URLSearchParams(window.location.search);
+        const error = params.get('error');
+        const signup = params.get('signup');
+        const logout = params.get('logout');
+
+        // Logic to display appropriate SweetAlert based on URL parameters
+        if (logout === 'success') {
+            Swal.fire({
+                title: 'Logged Out',
+                text: 'You have been signed out safely.',
+                icon: 'success',
+                confirmButtonColor: '#e67e22'
+            });
+        } else if (signup === 'success') {
+            Swal.fire({
+                title: 'Welcome!',
+                text: 'Account created successfully! Please sign in.',
+                icon: 'success',
+                confirmButtonColor: '#e67e22'
+            });
+        } else if (error === 'admin_fail') {
+            Swal.fire('Access Denied', 'Incorrect Admin Password!', 'error');
+        } else if (error === 'invalid_credentials') {
+            Swal.fire('Login Failed', 'Invalid username or password.', 'error');
+        } else if (error === 'empty_fields') {
+            Swal.fire('Missing Info', 'Please fill in all fields.', 'warning');
+        } else if (error === 'must_login') {
+            Swal.fire('Hold on!', 'You must be logged in to checkout.', 'info');
+        }
+    };
 </script>
 </body>
 </html>

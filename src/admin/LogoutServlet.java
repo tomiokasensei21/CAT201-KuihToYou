@@ -1,22 +1,25 @@
 package admin;
 
-import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.*;
 import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.*;
 import java.io.IOException;
 
-@WebServlet("/logout")
+@WebServlet("/LogoutServlet")
 public class LogoutServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // 1. Get the current session if it exists
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // 1. Get the current session
         HttpSession session = request.getSession(false);
 
+        // 2. If a session exists, invalidate (delete) it
         if (session != null) {
-            // 2. Clear all session data (Admin or Customer)
             session.invalidate();
         }
 
-        // 3. Redirect to homepage with a status flag for the alert
-        response.sendRedirect("index.html?status=loggedout");
+        // 3. Redirect the user back to the login page with a logout message
+        response.sendRedirect("login.html?logout=success");
     }
 }
