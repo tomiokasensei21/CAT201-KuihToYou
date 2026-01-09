@@ -23,6 +23,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Menu - Kuih To You</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="style.css">
     <style>
         /* (Your existing CSS remains the same) */
@@ -57,7 +58,7 @@
     <div class="logo">Kuih To You</div>
     <nav>
         <a href="index.html">Home</a>
-        <a href="all_menu.jsp">Menu</a>
+        <a href="menu.jsp">Menu</a>
         <a href="viewCart.jsp" class="cart-link">🛒 Cart (<%= totalCount %>)</a>
 
         <%-- MEMBER 3: DYNAMIC NAVIGATION LOGIC --%>
@@ -119,6 +120,21 @@
     }, observerOptions);
 
     document.querySelectorAll('.kuih-card').forEach(card => { observer.observe(card); });
+
+    // CHECK FOR ORDER SUCCESS PARAMETER
+    document.addEventListener("DOMContentLoaded", function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('status') === 'order_success') {
+            Swal.fire({
+                title: 'Order Placed!',
+                text: 'Your delicious kuih order has been received.',
+                icon: 'success',
+                confirmButtonColor: '#2e7d32'
+            });
+            // Cleanup the URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    });
 </script>
 </body>
 </html>
