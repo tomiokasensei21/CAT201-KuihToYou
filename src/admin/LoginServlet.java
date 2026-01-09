@@ -4,51 +4,68 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import java.io.IOException;
-import util.UserManager; // Import the manager you just created
+import util.UserManager;
 
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String user = request.getParameter("username");
         String pass = request.getParameter("password");
-
-        // 1. Capture the redirect source from the hidden input
         String redirectSource = request.getParameter("redirectSource");
 
-        // 2. Strict Admin Check (Hardcoded as per project requirements)
+        // 1. Validation for empty fields
+        if (user == null || user.trim().isEmpty() || pass == null || pass.trim().isEmpty()) {
+            response.sendRedirect("login.html?error=empty_fields");
+            return;
+        }
+
+        // 2. Strict Admin Check
         if ("admin".equals(user)) {
             if ("admin123".equals(pass)) {
-                HttpSession session = request.getSession();
-                session.setAttribute("user", user);
-                session.setAttribute("userRole", "admin");
-
+                setupSession(request, user, "admin");
                 response.sendRedirect("admin_dashboard.html");
             } else {
                 response.sendRedirect("login.html?error=admin_fail");
             }
         }
-        // 3. Customer Check using UserManager (Member 3 Logic)
+        // 3. Customer Check using UserManager
         else {
-            // This now checks the users.txt file via the UserManager
             if (UserManager.isValidUser(user, pass, getServletContext())) {
-                HttpSession session = request.getSession();
-                session.setAttribute("user", user);
-                session.setAttribute("userRole", "customer");
+                setupSession(request, user, "customer");
 
-                // DYNAMIC REDIRECT: Send user back to where they came from (e.g., Cart)
-                if (redirectSource != null && !redirectSource.isEmpty()) {
+                // Handle Dynamic Redirection
+                if (redirectSource != null && !redirectSource.isEmpty() && !redirectSource.equals("null")) {
                     response.sendRedirect(redirectSource);
                 } else {
-                    // Default fallback if no source is provided
                     response.sendRedirect("menu.jsp");
                 }
             } else {
-                // If the user/pass doesn't match a line in users.txt
+                // Invalid credentials (user not found or wrong password)
                 response.sendRedirect("login.html?error=invalid_credentials");
             }
         }
+    }
+
+    /**
+     * Helper method to manage session security and attributes
+     */
+    private void setupSession(HttpServletRequest request, String username, String role) {
+        // Invalidate existing session to prevent session fixation attacks
+        HttpSession oldSession = request.getSession(false);
+        if (oldSession != null) {
+            oldSession.invalidate();
+        }
+
+        // Create new session
+        HttpSession newSession = request.getSession(true);
+        newSession.setAttribute("user", username);
+        newSession.setAttribute("userRole", role);
+
+        // Optional: Set session timeout (e.g., 30 minutes)
+        newSession.setMaxInactiveInterval(30 * 60);
     }
 }

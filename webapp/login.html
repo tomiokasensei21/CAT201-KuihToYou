@@ -1,72 +1,218 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - KuihToYou</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #fdf2e9; display: flex; justify-content: center; padding-top: 50px; }
-        .card { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 350px; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #e67e22; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        :root {
+            --primary-orange: #e67e22;
+            --dark-orange: #d35400;
+            --bg-cream: #fdf2e9;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-cream);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .brand-header h2 {
+            margin: 0;
+            color: var(--dark-orange);
+            font-size: 1.8rem;
+        }
+
+        .brand-header p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 2px rgba(230, 126, 34, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-orange);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: var(--dark-orange);
+        }
+
+        .footer-text {
+            text-align: center;
+            font-size: 0.9em;
+            margin-top: 1.5rem;
+            color: #34495e;
+        }
+
+        .footer-text a {
+            color: var(--primary-orange);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
+
 <div class="card">
-    <h2 style="text-align: center; color: #d35400;">Sign In</h2>
+    <div class="brand-header">
+        <h2>Sign In</h2>
+        <p>Welcome back to KuihToYou!</p>
+    </div>
+
     <form action="LoginServlet" method="POST">
         <input type="hidden" id="redirectSource" name="redirectSource" value="menu.jsp">
 
-        <input type="text" name="username" placeholder="Username / Email" required>
-        <input type="password" name="password" placeholder="Password" required>
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+
         <button type="submit">Login</button>
     </form>
-    <p style="text-align: center; font-size: 0.9em;">Don't have an account? <a href="signup.html">Register here</a></p>
+
+    <p class="footer-text">
+        Don't have an account? <a href="signup.html">Register here</a>
+    </p>
 </div>
 
 <script>
-    window.onload = function() {
-        // 1. Handle dynamic redirection from Session Storage
+    document.addEventListener('DOMContentLoaded', function() {
+        // 1. Dynamic Redirection Handling
         const savedPage = sessionStorage.getItem('redirectAfterLogin');
         if (savedPage) {
             const redirectInput = document.getElementById('redirectSource');
             if (redirectInput) {
                 redirectInput.value = savedPage;
             }
+            // Clear storage so it doesn't persist forever
             sessionStorage.removeItem('redirectAfterLogin');
         }
 
-        // 2. MEMBER 3: COMPLETE VALIDATION ALERTS
-        // Parse URL parameters to detect errors or successes
+        // 2. Alert Logic using URL Parameters
         const params = new URLSearchParams(window.location.search);
         const error = params.get('error');
         const signup = params.get('signup');
         const logout = params.get('logout');
 
-        // Logic to display appropriate SweetAlert based on URL parameters
+        const toastConfig = {
+            confirmButtonColor: '#e67e22',
+            iconColor: '#e67e22'
+        };
+
         if (logout === 'success') {
             Swal.fire({
+                ...toastConfig,
                 title: 'Logged Out',
                 text: 'You have been signed out safely.',
-                icon: 'success',
-                confirmButtonColor: '#e67e22'
+                icon: 'success'
             });
         } else if (signup === 'success') {
             Swal.fire({
+                ...toastConfig,
                 title: 'Welcome!',
                 text: 'Account created successfully! Please sign in.',
-                icon: 'success',
-                confirmButtonColor: '#e67e22'
+                icon: 'success'
             });
-        } else if (error === 'admin_fail') {
-            Swal.fire('Access Denied', 'Incorrect Admin Password!', 'error');
-        } else if (error === 'invalid_credentials') {
-            Swal.fire('Login Failed', 'Invalid username or password.', 'error');
-        } else if (error === 'empty_fields') {
-            Swal.fire('Missing Info', 'Please fill in all fields.', 'warning');
-        } else if (error === 'must_login') {
-            Swal.fire('Hold on!', 'You must be logged in to checkout.', 'info');
+        } else if (error) {
+            let title = 'Error';
+            let message = 'An unexpected error occurred.';
+            let icon = 'error';
+
+            switch(error) {
+                case 'admin_fail':
+                    title = 'Access Denied';
+                    message = 'Incorrect Admin Password!';
+                    break;
+                case 'invalid_credentials':
+                    title = 'Login Failed';
+                    message = 'Invalid username or password.';
+                    break;
+                case 'empty_fields':
+                    title = 'Missing Info';
+                    message = 'Please fill in all fields.';
+                    icon = 'warning';
+                    break;
+                case 'must_login':
+                    title = 'Hold on!';
+                    message = 'You must be logged in to checkout.';
+                    icon = 'info';
+                    break;
+            }
+
+            Swal.fire({
+                ...toastConfig,
+                title: title,
+                text: message,
+                icon: icon
+            });
         }
-    };
+    });
 </script>
+
 </body>
 </html>
