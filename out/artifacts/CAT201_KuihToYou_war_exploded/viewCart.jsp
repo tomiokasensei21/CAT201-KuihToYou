@@ -2,7 +2,7 @@
 <%@ page import="java.util.List, model.CartItem, model.Kuih" %>
 
 <%
-    // 1. Calculate the total quantity for the header
+    // Calculate the total quantity for the header
     int totalItems = 0;
     List<CartItem> cartList = (List<CartItem>) session.getAttribute("cart");
     if (cartList != null) {
@@ -17,7 +17,7 @@
     <meta charset="UTF-8">
     <title>Your Cart - Kuih To You</title>
     <style>
-        /* GLOBAL & HEADER STYLES */
+        /* HEADER STYLES */
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #f9f9f9; color: #333; }
 
         header {
@@ -46,7 +46,6 @@
             display: grid; grid-template-columns: 220px 1fr auto; gap: 30px; align-items: center;
         }
 
-        /* UPSCALED IMAGE: Matching all_menu gallery size */
         .kuih-card img {
             width: 220px; height: 220px;
             object-fit: cover; border-radius: 12px;
@@ -57,7 +56,7 @@
             text-transform: uppercase; letter-spacing: 0.5px;
         }
 
-        /* PILL QUANTITY SELECTOR (Upscaled) */
+        /* PILL QUANTITY SELECTOR */
         .qty-pill {
             display: flex; align-items: center; border: 2px solid #ddd;
             border-radius: 50px; width: fit-content; margin-top: 20px; padding: 8px 20px;
@@ -73,7 +72,7 @@
         }
         .trash-btn:hover { background: #f9f9f9; border-color: #2e7d32; }
 
-        /* LARGER SUMMARY BOX */
+        /* SUMMARY BOX */
         .summary-box { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .summary-box h3 { font-size: 26px; margin-top: 0; color: #2e7d32; }
 
@@ -82,10 +81,10 @@
             font-size: 30px; font-weight: bold; color: #c62828; margin: 25px 0;
         }
 
-        .btn-checkout {
-            display: inline-block;   /* allow natural width */
-            width: 80%;             /* stop full width */
-            padding: 12px 30px;      /* control size */
+        .btn-checkout {   /* Checkout button */
+            display: inline-block;
+            width: 80%;
+            padding: 12px 30px;
             background-color: #c62828;
             color: white;
             border-radius: 30px;

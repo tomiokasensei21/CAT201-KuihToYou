@@ -17,14 +17,14 @@ public class AddToCartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 1. SECURITY GATE: Check if user is logged in first
+        // Check if user is logged in first
         HttpSession session = request.getSession();
         if (session.getAttribute("userRole") == null) {
             response.sendRedirect("login.html");
             return;
         }
 
-        // 2. Capture the quantity and the redirection source
+        // Capture the quantity and the redirection source
         String id = request.getParameter("kuihId");
         String source = request.getParameter("source"); // Capture the page source
 
@@ -38,16 +38,16 @@ public class AddToCartServlet extends HttpServlet {
             quantityToAdd = 1;
         }
 
-        // 3. Manage the cart list in the session
+        // Manage the cart list in the session
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
         if (cart == null) {
             cart = new ArrayList<>();
         }
 
-        // 4. Find the Kuih details
+        // Kuih details
         Kuih selectedKuih = findKuihById(id);
 
-        // 5. Add to cart logic
+        // Add to cart logic
         if (selectedKuih != null) {
             boolean found = false;
             for (CartItem item : cart) {
@@ -63,10 +63,10 @@ public class AddToCartServlet extends HttpServlet {
             }
         }
 
-        // 6. Save back to session
+        // Save back to session
         session.setAttribute("cart", cart);
 
-        // 7. SMART REDIRECT
+        // Smart redirection
         if ("cart".equals(source)) {
             // Stay in the cart if the '+' button was clicked there
             response.sendRedirect("viewCart.jsp");

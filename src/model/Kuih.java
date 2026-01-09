@@ -4,8 +4,8 @@ public class Kuih {
     private String id;
     private String name;
     private double price;
-    private String imageFile; // From Member 2: Vital for the GUI
-    private int stock;        // From Member 3: Vital for inventory logic
+    private String imageFile;
+    private int stock;        // inventory logic
 
     public Kuih(String id, String name, double price, String imageFile, int stock) {
         this.id = id;
@@ -15,7 +15,7 @@ public class Kuih {
         this.stock = stock;
     }
 
-    // This is the "Bridge" to Member 4's text file
+    // Text File Bridge
     @Override
     public String toString() {
         return id + "," + name + "," + price + "," + imageFile + "," + stock;

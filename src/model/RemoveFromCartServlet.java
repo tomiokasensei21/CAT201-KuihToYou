@@ -24,12 +24,12 @@ public class RemoveFromCartServlet extends HttpServlet {
         String action = request.getParameter("action"); // 'clearRow' or 'clearCart'
 
         if (cart != null) {
-            // ACTION 1: Clear the entire cart
+            // Clear the entire cart
             if ("clearCart".equals(action)) {
                 cart.clear();
-                // Or use: session.removeAttribute("cart");
+
             }
-            // ACTION 2 & 3: Handle specific items
+            // Remove specific items
             else if (id != null) {
                 Iterator<CartItem> iterator = cart.iterator();
                 while (iterator.hasNext()) {
@@ -40,7 +40,7 @@ public class RemoveFromCartServlet extends HttpServlet {
                         if ("clearRow".equals(action)) {
                             iterator.remove();
                         }
-                        // Otherwise, just decrease quantity by 1
+                        // Otherwise,decrease quantity by 1
                         else {
                             item.setQuantity(item.getQuantity() - 1);
                             if (item.getQuantity() <= 0) {
@@ -54,6 +54,6 @@ public class RemoveFromCartServlet extends HttpServlet {
         }
 
         session.setAttribute("cart", cart);
-        response.sendRedirect("viewCart.jsp"); // Stay in the cart
+        response.sendRedirect("viewCart.jsp");
     }
 }

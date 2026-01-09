@@ -16,10 +16,10 @@ public class GetProductsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 1. Retrieve the list using your existing DataHandler
+        // Retrieve the list using existing DataHandler
         List<Kuih> allKuih = DataHandler.readFromFile(getServletContext());
 
-        // 2. Build the JSON string manually
+        // Build the JSON string manually
         StringBuilder json = new StringBuilder("[");
         for (int i = 0; i < allKuih.size(); i++) {
             Kuih k = allKuih.get(i);
@@ -36,7 +36,7 @@ public class GetProductsServlet extends HttpServlet {
         }
         json.append("]");
 
-        // 3. Set the correct headers so the browser knows this is JSON data
+        //  Set the correct headers so the browser knows this is JSON data
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(json.toString());

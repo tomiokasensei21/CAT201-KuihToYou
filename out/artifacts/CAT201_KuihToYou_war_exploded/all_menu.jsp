@@ -1,9 +1,9 @@
 <%@ page import="util.DataHandler, model.Kuih, model.CartItem, java.util.List" %>
 <%
-    // 1. Load the data
+    // Load the data
     List<Kuih> allKuih = DataHandler.readFromFile(application);
 
-    // 2. Calculate cart counter for the header
+    // Calculate cart counter for the header
     int totalCount = 0;
     List<CartItem> currentCart = (List<CartItem>) session.getAttribute("cart");
     if (currentCart != null) {
@@ -52,7 +52,7 @@
             margin: 0 auto;
         }
 
-        /* --- UPDATED CARD & HOVER STYLES --- */
+        /* --- HOVER STYLES --- */
         .gallery-card {
             background: white; border-radius: 20px; overflow: hidden;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05); text-align: center;

@@ -165,7 +165,7 @@
 
     // 2. DYNAMIC MENU LOADING
     document.addEventListener("DOMContentLoaded", function() {
-        fetch('GetProducts')
+        fetch('./GetProducts')
             .then(response => response.json())
             .then(data => {
                 const grid = document.getElementById('featured-grid');

@@ -6,7 +6,7 @@ import java.util.*;
 import jakarta.servlet.ServletContext;
 
 public class DataHandler {
-    // Changed file name to products.txt
+    // READ FILE NAME
     private static final String FILE_NAME = "products.txt";
     private static final String DATA_FOLDER = "data";
 
