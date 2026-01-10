@@ -50,3 +50,21 @@ Date: Sat Jan 10 09:33:16 GST 2026
 - Cucur Jawa (x1) : RM 0.50
 GRAND TOTAL: RM 0.50
 --------------------------------
+=== NEW ORDER ===
+Customer: Check2
+Date: Sat Jan 10 09:35:47 GST 2026
+- Cucur Jawa (x1) : RM 0.50
+GRAND TOTAL: RM 0.50
+--------------------------------
+=== NEW ORDER ===
+Customer: Check2
+Date: Sat Jan 10 09:45:00 GST 2026
+- Onde-Onde (5 pcs) (x1) : RM 1.50
+GRAND TOTAL: RM 1.50
+--------------------------------
+=== NEW ORDER ===
+Customer: Check2
+Date: Sat Jan 10 09:45:41 GST 2026
+- Onde-Onde (5 pcs) (x1) : RM 1.50
+GRAND TOTAL: RM 1.50
+--------------------------------

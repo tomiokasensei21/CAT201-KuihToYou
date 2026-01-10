@@ -40,7 +40,7 @@
         .btn-primary { background-color: #c62828; color: white; }
         .btn-secondary { background-color: white; border: 2px solid #c62828; color: #c62828; }
         .btn-admin { border: 1px solid #555; color: #555; padding: 8px 15px; font-size: 12px; }
-        .user-greeting { color: #2e7d32 !important; }
+        .user-greeting { color: #2e7d32 !important; font-weight: bold; }
 
         /* --- ENTRANCE ANIMATIONS --- */
         .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1); }
@@ -55,7 +55,16 @@
             justify-content: center; align-items: flex-start; text-align: left; }
         .hero-text h1 { font-size: 42px; color: #2e7d32; margin: 0 0 15px 0; }
         .hero-text p { font-size: 18px; color: #555; margin-bottom: 25px; }
-        .hero-image { flex: 1; background-image: url('KuihMuihImage/hero.jpg'); background-size: cover; background-position: center; min-height: 400px; transition: transform 0.8s ease; }
+
+        /* FIXED: Hero image using context path for reliability */
+        .hero-image {
+            flex: 1;
+            background-image: url('${pageContext.request.contextPath}/KuihMuihImage/hero.jpg');
+            background-size: cover;
+            background-position: center;
+            min-height: 400px;
+            transition: transform 0.8s ease;
+        }
         .hero-card:hover .hero-image { transform: scale(1.05); }
 
         /* FEATURED MENU */
@@ -76,7 +85,7 @@
 
 <header>
     <div class="nav-container">
-        <a href="index.jsp" class="logo">Kuih To You</a>
+        <a href="${pageContext.request.contextPath}/index.jsp" class="logo">Kuih To You</a>
         <div class="nav-actions">
             <a href="menu.jsp">Menu</a>
             <a href="admin_login.html" class="btn-pill btn-admin">Admin</a>
@@ -84,7 +93,7 @@
             <%-- DYNAMIC AUTH BUTTONS --%>
             <% if (userName != null) { %>
                 <span class="user-greeting">Hi, <%= userName %>!</span>
-                <a href="logout-action" style="color: #c62828; margin-left:10px;">Logout</a>
+                <a href="LogoutServlet" style="color: #c62828; margin-left:10px; font-weight: bold;">Logout</a>
             <% } else { %>
                 <a href="login.html">Sign In</a>
                 <a href="signup.html" class="btn-pill btn-secondary">Sign Up</a>
@@ -120,6 +129,9 @@
 </footer>
 
 <script>
+    // Define context path for JS usage
+    const contextPath = "${pageContext.request.contextPath}";
+
     // 1. SCROLL REVEAL LOGIC
     const observerOptions = { threshold: 0.15 };
     const observer = new IntersectionObserver((entries) => {
@@ -142,13 +154,17 @@
 
                 data.slice(0, 3).forEach(kuih => {
                     const imgFile = (kuih.image && kuih.image.trim() !== "") ? kuih.image : 'default.jpg';
-                    const imagePath = "KuihMuihImage/" + imgFile;
+
+                    // FIXED: Use the absolute context path for the image source
+                    const imagePath = contextPath + "/KuihMuihImage/" + imgFile;
+                    const fallbackPath = contextPath + "/KuihMuihImage/default.jpg";
+
                     const card = `
                         <div class="kuih-card reveal">
                             <div class="img-container">
-                                <img src="${imagePath}" alt="${kuih.name}" onerror="this.src='KuihMuihImage/default.jpg'">
+                                <img src="${'${imagePath}'}" alt="${'${kuih.name}'}" onerror="this.src='${'${fallbackPath}'}'">
                             </div>
-                            <h3>${kuih.name}</h3>
+                            <h3>${'${kuih.name}'}</h3>
                         </div>`;
                     grid.insertAdjacentHTML('beforeend', card);
                 });
@@ -162,33 +178,32 @@
 
         // 3. ORDER CONFIRMATION POPUP
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('status') === 'order_success' && <%= (orderItems != null) %>) {
+
+        <% if (orderItems != null) { %>
+        if (urlParams.get('status') === 'order_success') {
 
             let orderSummary = '';
-            <% if (orderItems != null) { %>
-                <% for (CartItem item : orderItems) { %>
-                    orderSummary += '<%= item.getKuih().getName() %> x <%= item.getQuantity() %> <br>';
-                <% } %>
-                orderSummary += '<hr>Total: RM <%= orderTotal %>';
+            <% for (CartItem item : orderItems) { %>
+                orderSummary += "<%= item.getKuih().getName() %> x <%= item.getQuantity() %> <br>";
             <% } %>
+            orderSummary += "<hr><b>Total: RM <%= String.format("%.2f", orderTotal) %></b>";
 
             Swal.fire({
-                title: 'Thank You, <%= orderUser %>!',
+                title: "Thank You, <%= (orderUser != null) ? orderUser : "Customer" %>!",
                 html: orderSummary + '<br><br>Your order has been successfully placed.',
                 icon: 'success',
                 confirmButtonColor: '#2e7d32'
             });
 
-            // Cleanup session so popup doesn't repeat
             <%
                 session.removeAttribute("orderItems");
                 session.removeAttribute("orderUser");
                 session.removeAttribute("orderTotal");
             %>
 
-            // Remove URL parameter
             window.history.replaceState({}, document.title, window.location.pathname);
         }
+        <% } %>
     });
 </script>
 
