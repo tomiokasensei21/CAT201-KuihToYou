@@ -93,10 +93,3 @@ Date: Sat Jan 10 09:57:14 GST 2026
 - Cucur Jawa (x1) : RM 0.50
 GRAND TOTAL: RM 0.50
 --------------------------------
-=== NEW ORDER ===
-Customer: s
-Date: Sat Jan 10 15:28:23 GMT+08:00 2026
-- Onde-Onde (5 pcs) (x1) : RM 1.50
-- Bahulu (15 pcs) (x4) : RM 40.00
-GRAND TOTAL: RM 41.50
---------------------------------
