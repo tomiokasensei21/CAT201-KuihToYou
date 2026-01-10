@@ -147,13 +147,44 @@
         .kuih-card h3 { font-family: 'Playfair Display', serif; margin: 25px 0 10px; font-size: 24px; }
 
         footer { text-align: center; padding: 60px 20px; color: #777; font-size: 14px; border-top: 1px solid rgba(74, 44, 42, 0.1); }
+
+        /* --- NEW LOGO STYLES --- */
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            gap: 12px; /* Space between image and text */
+        }
+
+        .logo-img {
+            height: 55px; /* Adjust height based on your preference */
+            width: 55px;
+            object-fit: cover;
+            border-radius: 50%; /* Crops the square image into a circle */
+            border: 2px solid white; /* Adds a clean border to pop against the orange */
+            background-color: #fff;
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
 
 <header>
     <div class="nav-container">
-        <a href="index.html" class="logo">KUIH TO YOU</a>
+
+        <a href="index.html" class="logo-wrapper">
+            <img src="KuihMuihImage/logokuihtoyou.jpg" alt="Kuih To You Logo" class="logo-img">
+            <span class="logo-text">KUIH TO YOU</span>
+        </a>
+
         <div class="nav-actions">
             <a href="all_menu.jsp">Menu</a>
             <a href="login.html">Sign In</a>
