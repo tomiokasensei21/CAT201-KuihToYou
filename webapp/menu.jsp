@@ -140,7 +140,7 @@
 
 <header>
     <div class="nav-container">
-        <a href="index.html" class="logo">KUIH TO YOU</a>
+        <a href="index.jsp" class="logo">KUIH TO YOU</a>
         <nav>
             <a href="index.jsp">Home</a>
             <a href="all_menu.jsp">Menu</a>

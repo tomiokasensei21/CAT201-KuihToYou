@@ -1,211 +1,209 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" import="java.util.List, model.CartItem" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" import="util.DataHandler, model.Kuih, model.CartItem, java.util.List" %>
 <%
-    // MEMBER 3: Check if a user session exists
-    String userName = (String) session.getAttribute("user");
+    // 1. BACKEND LOGIC: Load data
+    List<Kuih> allKuih = DataHandler.readFromFile(application);
 
-    // MEMBER 3: Get last order info (set in CheckoutServlet)
-    List<CartItem> orderItems = (List<CartItem>) session.getAttribute("orderItems");
-    String orderUser = (String) session.getAttribute("orderUser");
-    Double orderTotal = (Double) session.getAttribute("orderTotal");
+    // 2. BEST SELLERS FILTER
+    String[] bestSellerNames = {"Badak Berendam", "Kuih Bakar", "Kuih Keria", "Tepung Pelita", "Popia Big Mac"};
+
+    // 3. CART COUNTER
+    int totalCount = 0;
+    List<CartItem> currentCart = (List<CartItem>) session.getAttribute("cart");
+    if (currentCart != null) {
+        for(CartItem item : currentCart) {
+            totalCount += item.getQuantity();
+        }
+    }
+    String userName = (String) session.getAttribute("user");
 %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kuih To You - Home</title>
+    <title>Home - Kuih To You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* GLOBAL STYLES */
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #f9f9f9; overflow-x: hidden; }
+        :root {
+            --clay-orange: #b97c5a;
+            --clay-dark: #a06648;
+            --parchment-bg: #f3ece0;
+            --espresso: #4a2c2a;
+            --warm-white: #fffcf7;
+            --warm-shadow: rgba(74, 44, 42, 0.18);
+        }
 
-        /* HEADER */
+        body {
+            margin: 0; font-family: 'Lora', serif; background-color: var(--parchment-bg);
+            background-image: linear-gradient(rgba(243, 236, 224, 0.85), rgba(243, 236, 224, 0.85)),
+            url('${pageContext.request.contextPath}/KuihMuihImage/batik_pattern.jpg');
+            background-repeat: repeat; background-size: 380px; background-attachment: fixed;
+            color: var(--espresso); overflow-x: hidden;
+        }
+
         header {
-            background-color: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background-color: var(--clay-orange);
+            box-shadow: 0 4px 15px rgba(74, 44, 42, 0.25);
             position: sticky; top: 0; z-index: 1000;
         }
         .nav-container {
             max-width: 1200px; margin: 0 auto; display: flex;
-            justify-content: space-between; align-items: center; padding: 15px 20px;
+            justify-content: space-between; align-items: center; padding: 10px 25px;
         }
-        .logo { font-size: 24px; font-weight: bold; color: #2e7d32; text-decoration: none; }
+        .logo-wrapper { display: flex; align-items: center; text-decoration: none; gap: 12px; }
+        .logo-img { height: 50px; width: 50px; border-radius: 50%; border: 2px solid white; background: #fff; object-fit: cover; }
+        .logo-text { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: bold; color: white; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* NAVIGATION & ACTIONS */
-        .nav-actions { display: flex; gap: 15px; align-items: center; }
-        .nav-actions a, .nav-actions span { text-decoration: none; color: #333; font-weight: 600; font-size: 14px; }
+        .nav-actions { display: flex; gap: 20px; align-items: center; }
+        .nav-actions a, .nav-actions span { text-decoration: none; color: white !important; font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; }
 
-        .btn-pill { padding: 10px 25px; border-radius: 50px; text-decoration: none;
-            font-weight: bold; font-size: 13px; transition: 0.3s; cursor: pointer; border: none; }
-        .btn-primary { background-color: #c62828; color: white; }
-        .btn-secondary { background-color: white; border: 2px solid #c62828; color: #c62828; }
-        .btn-admin { border: 1px solid #555; color: #555; padding: 8px 15px; font-size: 12px; }
-        .user-greeting { color: #2e7d32 !important; font-weight: bold; }
-
-        /* --- ENTRANCE ANIMATIONS --- */
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-
-        /* HERO SECTION */
-        .hero-section { background-color: #e8f5e9; padding: 60px 20px; text-align: center; }
-        .hero-card { max-width: 1100px; margin: 0 auto; background-color: white; border-radius: 20px;
-            overflow: hidden; display: flex; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: transform 0.5s ease; }
-        .hero-card:hover { transform: scale(1.01); }
-        .hero-text { flex: 1; padding: 50px; display: flex; flex-direction: column;
-            justify-content: center; align-items: flex-start; text-align: left; }
-        .hero-text h1 { font-size: 42px; color: #2e7d32; margin: 0 0 15px 0; }
-        .hero-text p { font-size: 18px; color: #555; margin-bottom: 25px; }
-
-        /* FIXED: Hero image using context path for reliability */
-        .hero-image {
-            flex: 1;
-            background-image: url('${pageContext.request.contextPath}/KuihMuihImage/hero.jpg');
-            background-size: cover;
-            background-position: center;
-            min-height: 400px;
-            transition: transform 0.8s ease;
+        .hero-banner {
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${pageContext.request.contextPath}/KuihMuihImage/hero_landscape.jpg');
+            background-size: cover; background-position: center;
+            height: 550px; display: flex; align-items: center; justify-content: center; text-align: center;
         }
-        .hero-card:hover .hero-image { transform: scale(1.05); }
+        .hero-content { max-width: 800px; padding: 20px; color: white; display: flex; flex-direction: column; align-items: center; gap: 25px; }
+        .hero-content h1 { font-family: 'Playfair Display', serif; font-size: 56px; margin: 0; letter-spacing: 2px; text-shadow: 0 2px 10px rgba(0,0,0,0.4); line-height: 1.2; }
 
-        /* FEATURED MENU */
-        .featured-menu { padding: 80px 20px; max-width: 1200px; margin: 0 auto; text-align: center; }
-        .section-title { font-size: 32px; color: #2e7d32; margin-bottom: 40px; }
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; padding: 0 20px; }
-        .kuih-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05); transition: all 0.4s ease; text-align: center; padding-bottom: 20px; }
-        .kuih-card:hover { transform: translateY(-12px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
-        .kuih-card .img-container { width: 100%; height: 350px; overflow: hidden; }
-        .kuih-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-        .kuih-card:hover img { transform: scale(1.1); }
-        .kuih-card h3 { margin: 25px 0; color: #2e7d32; font-size: 24px; font-weight:700; }
+        /* --- CAROUSEL --- */
+        .featured-menu { padding: 80px 20px; max-width: 1300px; margin: 0 auto; text-align: center; }
+        .carousel-container { position: relative; margin: 40px auto; padding: 0 60px; }
+        .carousel-viewport { overflow: hidden; padding: 20px 0; }
+        .carousel-track { display: flex; gap: 30px; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1); will-change: transform; }
 
-        footer { text-align: center; padding: 40px 20px; color: #777; font-size: 13px; }
+        .carousel-nav {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: var(--clay-orange); color: white; border: none;
+            width: 45px; height: 45px; border-radius: 50%; cursor: pointer;
+            z-index: 10; font-size: 1.5rem; display: flex; align-items: center;
+            justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+        .carousel-nav:hover { background: var(--clay-dark); transform: translateY(-50%) scale(1.1); }
+        .carousel-nav.prev { left: 0; }
+        .carousel-nav.next { right: 0; }
+
+        .kuih-card {
+            background: var(--warm-white); border-radius: 20px; overflow: hidden;
+            box-shadow: 0 10px 25px var(--warm-shadow); text-align: center;
+            padding: 15px; padding-bottom: 25px; min-width: 320px; flex: 0 0 auto;
+        }
+        .kuih-card .img-container { width: 100%; height: 280px; overflow: hidden; border-radius: 12px; margin-bottom: 15px; }
+        .kuih-card img { width: 100%; height: 100%; object-fit: cover; }
+        .kuih-card h3 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--espresso); margin-bottom: 15px; }
+
+        .btn-solid-pop {
+            display: inline-block; background-color: var(--clay-orange); color: white !important;
+            padding: 12px 30px; font-size: 14px; font-weight: bold; text-decoration: none;
+            border-radius: 50px; letter-spacing: 1px; transition: 0.3s;
+        }
+        .btn-solid-pop:hover { background-color: var(--clay-dark); transform: scale(1.05); }
+
+        footer { text-align: center; padding: 60px 20px; color: #777; font-size: 14px; border-top: 1px solid rgba(74, 44, 42, 0.1); }
     </style>
 </head>
 <body>
 
 <header>
     <div class="nav-container">
-        <a href="${pageContext.request.contextPath}/index.jsp" class="logo">Kuih To You</a>
+        <a href="index.jsp" class="logo-wrapper">
+            <img src="${pageContext.request.contextPath}/KuihMuihImage/logokuihtoyou.jpg" alt="Logo" class="logo-img">
+            <span class="logo-text">KUIH TO YOU</span>
+        </a>
         <div class="nav-actions">
-            <a href="menu.jsp">Menu</a>
-            <a href="admin_login.html" class="btn-pill btn-admin">Admin</a>
-
-            <%-- DYNAMIC AUTH BUTTONS --%>
+            <a href="all_menu.jsp">Menu</a>
             <% if (userName != null) { %>
-                <span class="user-greeting">Hi, <%= userName %>!</span>
-                <a href="LogoutServlet" style="color: #c62828; margin-left:10px; font-weight: bold;">Logout</a>
+            <span style="color:white; font-weight:bold; margin-left:10px;">Hi, <%= userName %>!</span>
+            <a href="Logout" class="btn-pill" style="margin-left:10px;">Logout</a>
             <% } else { %>
-                <a href="login.html">Sign In</a>
-                <a href="signup.html" class="btn-pill btn-secondary">Sign Up</a>
+            <a href="login.html" style="margin-left:10px;">Sign In</a>
+            <a href="signup.html" class="btn-pill" style="margin-left:10px;">Sign Up</a>
             <% } %>
         </div>
     </div>
 </header>
 
-<section class="hero-section">
-    <div class="hero-card reveal">
-        <div class="hero-text">
-            <span style="color: #ff9800; font-weight:bold; letter-spacing:1px; font-size: 12px;">LIMITED TIME</span>
-            <h1>The Taste of Tradition</h1>
-            <p>Fresh Malaysian kuih made with authentic recipes and delivered straight to your door.</p>
-            <a href="menu.jsp" class="btn-pill btn-primary" style="padding: 15px 30px; font-size: 16px;">Order Now</a>
-        </div>
-        <div class="hero-image"></div>
+<section class="hero-banner">
+    <div class="hero-content">
+        <span style="font-weight:bold; letter-spacing:3px; font-size: 14px; text-transform: uppercase;">Handmade Tradition</span>
+        <h1>Earthy Flavors.<br>Authentic Taste.</h1>
+        <p>Experience Malaysian heritage with fresh, handmade kuih delivered to your doorstep.</p>
+        <a href="menu.jsp" class="btn-solid-pop" style="font-size: 16px; padding: 18px 50px;">ORDER NOW</a>
     </div>
 </section>
 
 <section class="featured-menu">
-    <h2 class="section-title reveal">Explore Our Traditional Kuih</h2>
-    <div id="featured-grid" class="menu-grid">
-        <p>Loading our fresh favorites...</p>
+    <h2 style="font-family: 'Playfair Display', serif; font-size: 38px; color: var(--espresso); margin-bottom: 30px;">Our Best Sellers</h2>
+
+    <div class="carousel-container">
+        <button class="carousel-nav prev" onclick="slideCarousel(-1)">&#10094;</button>
+        <button class="carousel-nav next" onclick="slideCarousel(1)">&#10095;</button>
+
+        <div class="carousel-viewport">
+            <div id="featured-grid" class="carousel-track">
+                <%
+                    for(Kuih k : allKuih) {
+                        boolean isBestSeller = false;
+                        for(String name : bestSellerNames) {
+                            if(k.getName().equalsIgnoreCase(name)) { isBestSeller = true; break; }
+                        }
+                        if(isBestSeller) {
+                %>
+                <div class="kuih-card">
+                    <div class="img-container">
+                        <img src="${pageContext.request.contextPath}/KuihMuihImage/<%= k.getImageFile() %>" alt="<%= k.getName() %>">
+                    </div>
+                    <h3><%= k.getName() %></h3>
+                    <a href="menu.jsp" class="btn-solid-pop">Order Now</a>
+                </div>
+                <% } } %>
+            </div>
+        </div>
     </div>
-    <div style="margin-top: 50px;" class="reveal">
-        <a href="menu.jsp" class="btn-pill btn-secondary" style="padding: 12px 40px;">View Full Menu</a>
+
+    <div style="margin-top: 40px;">
+        <a href="all_menu.jsp" class="btn-solid-pop">VIEW ALL MENU</a>
     </div>
 </section>
 
-<footer>
-    &copy; 2026 Kuih To You. CAT201 Project.
-</footer>
+
+
+<footer>&copy; 2026 Kuih To You. Inspired by Heritage.</footer>
 
 <script>
-    // Define context path for JS usage
-    const contextPath = "${pageContext.request.contextPath}";
+    let currentIndex = 0;
 
-    // 1. SCROLL REVEAL LOGIC
-    const observerOptions = { threshold: 0.15 };
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('active');
-            }
-        });
-    }, observerOptions);
+    // REFINED SLIDING LOGIC
+    function slideCarousel(direction) {
+        const track = document.getElementById('featured-grid');
+        const cards = document.querySelectorAll('.kuih-card');
+        const viewport = document.querySelector('.carousel-viewport');
 
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        if (cards.length === 0) return;
 
-    // 2. DYNAMIC MENU LOADING
-    document.addEventListener("DOMContentLoaded", function() {
-        fetch('./GetProducts')
-            .then(response => response.json())
-            .then(data => {
-                const grid = document.getElementById('featured-grid');
-                grid.innerHTML = '';
+        // FIXED: Explicitly calculate visible cards based on actual width
+        const cardWidth = cards[0].offsetWidth + 30; // 320px + 30px gap
+        const viewportWidth = viewport.offsetWidth;
+        const visibleCards = Math.floor(viewportWidth / cardWidth);
 
-                data.slice(0, 3).forEach(kuih => {
-                    const imgFile = (kuih.image && kuih.image.trim() !== "") ? kuih.image : 'default.jpg';
+        // Sliding is only enabled if there are more cards than space
+        const maxIndex = cards.length - visibleCards;
 
-                    // FIXED: Use the absolute context path for the image source
-                    const imagePath = contextPath + "/KuihMuihImage/" + imgFile;
-                    const fallbackPath = contextPath + "/KuihMuihImage/default.jpg";
-
-                    const card = `
-                        <div class="kuih-card reveal">
-                            <div class="img-container">
-                                <img src="${'${imagePath}'}" alt="${'${kuih.name}'}" onerror="this.src='${'${fallbackPath}'}'">
-                            </div>
-                            <h3>${'${kuih.name}'}</h3>
-                        </div>`;
-                    grid.insertAdjacentHTML('beforeend', card);
-                });
-
-                document.querySelectorAll('#featured-grid .reveal').forEach(el => observer.observe(el));
-            })
-            .catch(error => {
-                console.error('Error loading favorites:', error);
-                document.getElementById('featured-grid').innerHTML = '<p>Fresh favorites arriving soon!</p>';
-            });
-
-        // 3. ORDER CONFIRMATION POPUP
-        const urlParams = new URLSearchParams(window.location.search);
-
-        <% if (orderItems != null) { %>
-        if (urlParams.get('status') === 'order_success') {
-
-            let orderSummary = '';
-            <% for (CartItem item : orderItems) { %>
-                orderSummary += "<%= item.getKuih().getName() %> x <%= item.getQuantity() %> <br>";
-            <% } %>
-            orderSummary += "<hr><b>Total: RM <%= String.format("%.2f", orderTotal) %></b>";
-
-            Swal.fire({
-                title: "Thank You, <%= (orderUser != null) ? orderUser : "Customer" %>!",
-                html: orderSummary + '<br><br>Your order has been successfully placed.',
-                icon: 'success',
-                confirmButtonColor: '#2e7d32'
-            });
-
-            <%
-                session.removeAttribute("orderItems");
-                session.removeAttribute("orderUser");
-                session.removeAttribute("orderTotal");
-            %>
-
-            window.history.replaceState({}, document.title, window.location.pathname);
+        // If your screen fits all 4 cards, maxIndex will be 0 and it won't slide
+        if (maxIndex <= 0) {
+            console.log("All items fit on screen. Sliding disabled.");
+            return;
         }
-        <% } %>
-    });
-</script>
 
+        currentIndex += direction;
+
+        if (currentIndex < 0) currentIndex = 0;
+        if (currentIndex > maxIndex) currentIndex = maxIndex;
+
+        const offset = -(currentIndex * cardWidth);
+        track.style.transform = "translateX(" + offset + "px)";
+    }
+</script>
 </body>
 </html>

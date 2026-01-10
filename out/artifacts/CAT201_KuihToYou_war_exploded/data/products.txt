@@ -8,4 +8,11 @@ K007,Kuih Keria,0.70,KuihKeria.jpeg,45
 K008,Kuih Ketayap,1.00,KuihKetayap.jpeg,30
 K009,Kuih Koci,1.00,KuihKoci.jpeg,15
 K010,Kuih Nona Manis,0.60,KuihNonaManis.jpeg,20
-
+K011,Badak berendam,3.00,BadakBerendam.jpg,60
+K012,Pulut Inti,2.00,PulutInti.jpg,40
+K013,Popia,0.60,Popia.jpg,60
+K014,Popia Big Mac,1.00,Bigmac.jpg,80
+K015,Bingka Ubi,1.50,ubi.jpg,50
+K016,Tepung Pelita,1.50,tepungpelita.jpg,60
+K017,Kuih Bakar,6.00,bakar.jpg,40
+K018,Karipap,0.60,karipap.jpg,50

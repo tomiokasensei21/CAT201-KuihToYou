@@ -93,3 +93,11 @@ Date: Sat Jan 10 09:57:14 GST 2026
 - Cucur Jawa (x1) : RM 0.50
 GRAND TOTAL: RM 0.50
 --------------------------------
+=== NEW ORDER ===
+Customer: s
+Date: Sat Jan 10 20:26:26 GMT+08:00 2026
+- Popia Big Mac (x5) : RM 5.00
+- Kuih Bakar (x4) : RM 24.00
+- Tepung Pelita (x4) : RM 6.00
+GRAND TOTAL: RM 35.00
+--------------------------------
