@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* --- EARTH & CLAY DESIGN SYSTEM --- */
         :root {
             --clay-orange: #b97c5a;
             --clay-dark: #a06648;
@@ -18,109 +17,99 @@
         }
 
         body {
-            margin: 0;
-            font-family: 'Lora', serif;
-            /* Faded Batik Background */
-            background-color: var(--parchment-bg);
-            background-image:
-                    linear-gradient(rgba(243, 236, 224, 0.85), rgba(243, 236, 224, 0.85)),
-                    url('KuihMuihImage/batik_pattern.jpg');
-            background-repeat: repeat;
-            background-size: 350px;
-            background-attachment: fixed;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: var(--espresso);
+            margin: 0; font-family: 'Lora', serif; background-color: var(--parchment-bg);
+            background-image: linear-gradient(rgba(243, 236, 224, 0.85), rgba(243, 236, 224, 0.85)),
+            url('KuihMuihImage/batik_pattern.jpg');
+            background-repeat: repeat; background-size: 350px; background-attachment: fixed;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; color: var(--espresso);
         }
 
-        /* --- THEMED SIGNUP CARD --- */
         .signup-card {
             background: var(--warm-white);
-            padding: 3rem;
             border-radius: 20px;
             box-shadow: 0 15px 40px var(--warm-shadow);
             width: 100%;
             max-width: 400px;
+            overflow: hidden;
             border: 1px solid rgba(185, 124, 90, 0.1);
             text-align: center;
         }
 
+        .card-header-bar {
+            background-color: var(--clay-orange);
+            padding: 25px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .signup-logo { height: 50px; width: auto; transition: 0.3s; }
+        .signup-logo:hover { transform: scale(1.05); }
+
+        .form-content { padding: 0 3rem 2.5rem 3rem; }
+
         .signup-card h2 {
-            font-family: 'Playfair Display', serif;
-            margin: 0;
-            color: var(--espresso);
-            font-size: 2.2rem;
+            font-family: 'Playfair Display', serif; margin: 0;
+            color: var(--espresso); font-size: 2.2rem;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .signup-card p { color: #888; font-size: 0.95rem; margin: 10px 0 1.5rem 0; }
+
+        /* --- LABEL STYLING --- */
+        .form-group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .signup-card p {
-            color: #888;
-            font-size: 0.95rem;
-            margin: 10px 0 2.5rem 0;
-        }
-
-        /* FORM STYLING */
-        input {
-            width: 100%;
-            padding: 14px;
-            margin: 12px 0;
-            background-color: #fdfaf5;
-            border: 1.5px solid #efe5d9;
-            border-radius: 8px;
-            box-sizing: border-box;
-            transition: all 0.3s;
-            font-family: 'Lora', serif;
+            letter-spacing: 0.5px;
             color: var(--espresso);
-            font-size: 14px;
+        }
+
+        input {
+            width: 100%; padding: 14px; background-color: #fdfaf5;
+            border: 1.5px solid #efe5d9; border-radius: 8px; box-sizing: border-box;
+            transition: all 0.3s; font-family: 'Lora', serif; color: var(--espresso); font-size: 14px;
         }
 
         input:focus {
-            outline: none;
-            border-color: var(--clay-orange);
-            background-color: white;
-            box-shadow: 0 0 0 4px rgba(185, 124, 90, 0.1);
+            outline: none; border-color: var(--clay-orange);
+            background-color: white; box-shadow: 0 0 0 4px rgba(185, 124, 90, 0.1);
         }
 
-        /* CLAY ORANGE BUTTON */
         .signup-btn {
-            width: 100%;
-            padding: 16px;
-            background: var(--clay-orange);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.3s ease;
-            margin-top: 15px;
+            width: 100%; padding: 16px; background: var(--clay-orange);
+            color: white; border: none; border-radius: 50px;
+            cursor: pointer; font-weight: bold; font-size: 1rem;
+            text-transform: uppercase; letter-spacing: 2px;
+            transition: 0.3s ease; margin-top: 10px;
             box-shadow: 0 8px 20px rgba(185, 124, 90, 0.3);
         }
 
-        .signup-btn:hover {
-            background: var(--clay-dark);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(185, 124, 90, 0.4);
-        }
+        .signup-btn:hover { background: var(--clay-dark); transform: translateY(-3px); }
 
-        .footer-link {
-            margin-top: 2rem;
-            color: #777;
+        .redirect-text {
+            margin-top: 25px;
             font-size: 0.9rem;
+            color: #777;
         }
 
-        .footer-link a {
+        .signin-link {
             color: var(--clay-orange);
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
+            margin-left: 5px;
+            transition: 0.3s;
         }
 
-        .footer-link a:hover {
+        .signin-link:hover {
+            color: var(--clay-dark);
             text-decoration: underline;
         }
     </style>
@@ -128,62 +117,78 @@
 <body>
 
 <div class="signup-card">
-    <h2>Create Account</h2>
-    <p>Join Kuih To You Family Now.</p>
+    <div class="card-header-bar">
+        <a href="index.jsp">
+            <img src="KuihMuihImage/kuihtoyoulogo.png" alt="Logo" class="signup-logo">
+        </a>
+    </div>
 
-    <form action="SignupServlet" method="POST" id="signupForm">
-        <input type="text" name="username" id="username" placeholder="Username" required>
-        <input type="email" name="email" id="email" placeholder="Email Address" required>
-        <input type="password" name="password" id="password" placeholder="Password" required>
+    <div class="form-content">
+        <h2>Join Us</h2>
+        <p>Become a part of our Kuih family circle.</p>
 
-        <button type="submit" class="signup-btn">Sign Up</button>
-    </form>
+        <form action="SignupServlet" method="POST" id="signupForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" placeholder="e.g. KuihLover99" required>
+            </div>
 
-    <p class="footer-link">
-        Already have an account? <a href="login.html">Sign In</a>
-    </p>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" name="email" id="email" placeholder="name@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Create Password</label>
+                <input type="password" name="password" id="password" placeholder="At least 5 characters" required>
+            </div>
+
+            <button type="submit" class="signup-btn">Join the Family</button>
+        </form>
+
+        <div class="redirect-text">
+            Already have a seat? <a href="login.html" class="signin-link">Sign In</a>
+        </div>
+    </div>
 </div>
 
 <script>
     window.onload = function() {
-        // Updated Themed SweetAlert Config
         const params = new URLSearchParams(window.location.search);
         const error = params.get('error');
+        const attempt = params.get('attempt');
 
         const toastConfig = {
             confirmButtonColor: '#b97c5a',
             iconColor: '#b97c5a',
-            background: '#fcfaf7'
+            background: '#fcfaf7',
+            confirmButtonText: 'Understood'
         };
 
         if (error === 'name_taken') {
             Swal.fire({
                 ...toastConfig,
-                title: 'Username Taken',
-                text: 'This name is already registered. Please try another one.',
-                icon: 'warning'
-            });
-        } else if (error === 'empty_fields') {
-            Swal.fire({
-                ...toastConfig,
-                title: 'Missing Info',
-                text: 'Please fill in all fields before submitting.',
-                icon: 'error'
+                title: 'Name already loved!',
+                text: `The name "${attempt}" is already registered. Is that you?`,
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Sign In',
+                cancelButtonText: 'Try another name'
+            }).then((result) => {
+                if (result.isConfirmed) { window.location.href = 'login.html'; }
             });
         }
     };
 
-    // Client-side validation to prevent empty spaces
     document.getElementById('signupForm').onsubmit = function(e) {
-        const name = document.getElementById('username').value;
-        if(name.trim() === "") {
+        const pass = document.getElementById('password').value;
+        if (pass.length < 5) {
             e.preventDefault();
             Swal.fire({
-                title: 'Error',
-                text: 'Please enter a valid username',
-                icon: 'error',
-                confirmButtonColor: '#b97c5a',
-                background: '#fcfaf7'
+                title: 'Security first!',
+                text: 'Please use a password with at least 5 characters.',
+                icon: 'info',
+                confirmButtonColor: '#b97c5a'
             });
         }
     };

@@ -132,3 +132,130 @@ Date: Sat Jan 10 23:47:40 GMT+08:00 2026
 - Cucur Jawa (x1) : RM 0.50
 GRAND TOTAL: RM 0.50
 --------------------------------
+=== NEW ORDER ===
+Customer: oyi
+Date: Sun Jan 11 00:46:23 GMT+08:00 2026
+- Cucur Jawa (x2) : RM 1.00
+GRAND TOTAL: RM 1.00
+--------------------------------
+=== NEW ORDER ===
+Customer: oyi
+Date: Sun Jan 11 01:38:48 GMT+08:00 2026
+- Cucur Jawa (x1) : RM 0.50
+GRAND TOTAL: RM 0.50
+--------------------------------
+=== NEW ORDER ===
+Customer: Ali
+Date: Sun Jan 11 01:59:26 GMT+08:00 2026
+- Cucur Badak (x4) : RM 2.40
+- Cucur Jawa (x4) : RM 2.00
+GRAND TOTAL: RM 4.40
+--------------------------------
+=== NEW ORDER ===
+Customer: yuyu
+Date: Sun Jan 11 02:36:07 GMT+08:00 2026
+- Onde-Onde (5 pcs) (x5) : RM 7.50
+- Bahulu (15 pcs) (x1) : RM 10.00
+- Kuih Bakar (x1) : RM 6.00
+GRAND TOTAL: RM 23.50
+--------------------------------
+=== NEW ORDER ===
+Customer: oyi
+Date: Sun Jan 11 04:00:43 GMT+08:00 2026
+- Kuih Cara (5pcs) (x1) : RM 3.00
+- Cucur Jawa (5pcs) (x2) : RM 5.00
+- Bahulu (15 pcs) (x1) : RM 10.00
+GRAND TOTAL: RM 18.00
+--------------------------------
+=== NEW ORDER ===
+Customer: oyi
+Date: Sun Jan 11 04:27:55 GMT+08:00 2026
+- Cucur Jawa (5pcs) (x1) : RM 2.50
+GRAND TOTAL: RM 2.50
+--------------------------------
+=== NEW ORDER ===
+Customer: oyi
+Date: Sun Jan 11 04:33:20 GMT+08:00 2026
+- Cucur Jawa (5pcs) (x2) : RM 5.00
+GRAND TOTAL: RM 5.00
+--------------------------------
+=== NEW ORDER ===
+Customer: oyi
+Date: Sun Jan 11 04:40:44 GMT+08:00 2026
+- Cucur Jawa (5pcs) (x1) : RM 2.50
+GRAND TOTAL: RM 2.50
+--------------------------------
+=== NEW ORDER ===
+Customer: oyi
+Date: Sun Jan 11 04:41:56 GMT+08:00 2026
+- Cucur Jawa (5pcs) (x3) : RM 7.50
+GRAND TOTAL: RM 7.50
+--------------------------------
+=== NEW ORDER ===
+Customer: oyi
+Date: Sun Jan 11 04:42:10 GMT+08:00 2026
+- Onde-Onde (5pcs) (x1) : RM 1.50
+GRAND TOTAL: RM 1.50
+--------------------------------
+=== NEW ORDER ===
+Customer: yuyu
+Date: Sun Jan 11 05:32:39 GMT+08:00 2026
+- Cucur Jawa (5pcs) (x1) : RM 2.50
+GRAND TOTAL: RM 2.50
+--------------------------------
+=== NEW ORDER ===
+Customer: admin
+Date: Sun Jan 11 06:05:54 GMT+08:00 2026
+- Kuih Kapit (x1) : RM 5.90
+GRAND TOTAL: RM 5.90
+--------------------------------
+=== NEW ORDER ===
+Customer: admin
+Date: Sun Jan 11 06:31:01 GMT+08:00 2026
+Method: DELIVERY
+Phone: 011-00011000
+Address: 749AAA, ARENA MALL, PULAU PINANG
+- Cucur Jawa (5pcs) (x2) : RM 5.00
+Delivery Fee: RM 5.00
+GRAND TOTAL: RM 10.00
+--------------------------------
+=== NEW ORDER ===
+Customer: admin
+Date: Sun Jan 11 06:37:16 GMT+08:00 2026
+Method: DELIVERY
+Phone: 010101
+Address: hahhaha
+- Cucur Jawa (5pcs) (x1) : RM 2.50
+Delivery Fee: RM 5.00
+GRAND TOTAL: RM 7.50
+--------------------------------
+=== NEW ORDER ===
+Customer: admin
+Date: Sun Jan 11 06:40:20 GMT+08:00 2026
+Method: DELIVERY
+Phone: aa
+Address: aa
+- Cucur Jawa (5pcs) (x1) : RM 2.50
+Delivery Fee: RM 5.00
+GRAND TOTAL: RM 7.50
+--------------------------------
+=== NEW ORDER ===
+Customer: oyi
+Date: Sun Jan 11 06:48:17 GMT+08:00 2026
+Method: DELIVERY
+Phone: 00
+Address: aa
+- Cucur Jawa (5pcs) (x1) : RM 2.50
+Delivery Fee: RM 5.00
+GRAND TOTAL: RM 7.50
+--------------------------------
+=== NEW ORDER ===
+Customer: yuyu
+Date: Sun Jan 11 06:53:19 GMT+08:00 2026
+Method: DELIVERY
+Phone: aa
+Address: aa
+- Onde-Onde (5pcs) (x1) : RM 1.50
+Delivery Fee: RM 5.00
+GRAND TOTAL: RM 6.50
+--------------------------------

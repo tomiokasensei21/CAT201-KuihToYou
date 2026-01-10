@@ -15,21 +15,22 @@ public class Kuih {
         this.stock = stock;
     }
 
-    // Text File Bridge
+    // Text File Bridge - converts object to a CSV line for products.txt
     @Override
     public String toString() {
         return id + "," + name + "," + price + "," + imageFile + "," + stock;
     }
 
-    // Getters and Setters
+    // Getters
     public String getId() { return id; }
     public String getName() { return name; }
     public double getPrice() { return price; }
     public String getImageFile() { return imageFile; }
     public int getStock() { return stock; }
 
+    // Setters - Required for the Admin to "Update" existing items
     public void setName(String name) { this.name = name; }
     public void setPrice(double price) { this.price = price; }
     public void setStock(int stock) { this.stock = stock; }
+    public void setImageFile(String imageFile) { this.imageFile = imageFile; }
 }
-

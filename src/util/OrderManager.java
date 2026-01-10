@@ -6,18 +6,15 @@ import jakarta.servlet.ServletContext;
 import model.CartItem;
 
 public class OrderManager {
-    public static void saveOrder(String username, List<CartItem> cart, ServletContext context) {
-        // Use the context to find the 'data' folder in your deployment
+    // UPDATED: Added method, address, and phone parameters
+    public static void saveOrder(String username, String method, String address, String phone, List<CartItem> cart, ServletContext context) {
         String filePath = context.getRealPath("/data/orders.txt");
 
-        // Fallback for SmartTomcat path issues
         if (filePath == null) {
-            filePath = "orders.txt";
+            filePath = context.getRealPath("/") + "data" + File.separator + "orders.txt";
         }
 
         File file = new File(filePath);
-
-        // Ensure the data directory exists
         if (file.getParentFile() != null && !file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
         }
@@ -26,6 +23,13 @@ public class OrderManager {
             out.println("=== NEW ORDER ===");
             out.println("Customer: " + username);
             out.println("Date: " + new Date());
+
+            // NEW: Log Delivery Details
+            out.println("Method: " + (method != null ? method.toUpperCase() : "PICKUP"));
+            if ("delivery".equals(method)) {
+                out.println("Phone: " + phone);
+                out.println("Address: " + address);
+            }
 
             double grandTotal = 0;
             for (CartItem item : cart) {
@@ -38,13 +42,18 @@ public class OrderManager {
                 grandTotal += subtotal;
             }
 
+            // NEW: Add delivery fee to the grand total in the file
+            if ("delivery".equals(method)) {
+                out.println("Delivery Fee: RM 5.00");
+                grandTotal += 5.00;
+            }
+
             out.println("GRAND TOTAL: RM " + String.format("%.2f", grandTotal));
             out.println("--------------------------------");
             out.flush();
-            System.out.println("MEMBER 3 SUCCESS: Order saved to " + filePath);
+            System.out.println("SUCCESS: Order logged in " + filePath);
         } catch (IOException e) {
-            System.err.println("MEMBER 3 ERROR: " + e.getMessage());
-            e.printStackTrace();
+            System.err.println("ERROR: Could not save order history: " + e.getMessage());
         }
     }
 }

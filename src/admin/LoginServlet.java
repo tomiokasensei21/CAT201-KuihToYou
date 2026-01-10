@@ -15,7 +15,6 @@ public class LoginServlet extends HttpServlet {
 
         String user = request.getParameter("username");
         String pass = request.getParameter("password");
-        String redirectSource = request.getParameter("redirectSource");
 
         // 1. Validation for empty fields
         if (user == null || user.trim().isEmpty() || pass == null || pass.trim().isEmpty()) {
@@ -24,48 +23,42 @@ public class LoginServlet extends HttpServlet {
         }
 
         // 2. Strict Admin Check
-        if ("admin".equals(user)) {
+        // This is where the redirection to the Admin Dashboard happens
+        if ("admin".equalsIgnoreCase(user)) {
             if ("admin123".equals(pass)) {
                 setupSession(request, user, "admin");
-                response.sendRedirect("admin_dashboard.html");
+                // Consistent with your admin_dashboard.html filename
+                response.sendRedirect("index.jsp");
             } else {
-                response.sendRedirect("login.html?error=admin_fail");
+                response.sendRedirect("login.html?error=admin_fail&user=admin");
             }
+            return;
         }
-        // 3. Customer Check using UserManager
-        else {
-            if (UserManager.isValidUser(user, pass, getServletContext())) {
-                setupSession(request, user, "customer");
 
-                // Handle Dynamic Redirection
-                if (redirectSource != null && !redirectSource.isEmpty() && !redirectSource.equals("null")) {
-                    response.sendRedirect(redirectSource);
-                } else {
-                    response.sendRedirect("menu.jsp");
-                }
-            } else {
-                // Invalid credentials (user not found or wrong password)
-                response.sendRedirect("login.html?error=invalid_credentials");
-            }
+        // 3. Customer Check (Redirects to Storefront)
+        int status = UserManager.validateUser(user, pass, getServletContext());
+
+        if (status == 0) {
+            setupSession(request, user, "customer");
+            response.sendRedirect("index.jsp");
+        }
+        else if (status == 1) {
+            response.sendRedirect("login.html?error=no_user&attempt=" + user);
+        }
+        else if (status == 2) {
+            response.sendRedirect("login.html?error=wrong_pass&user=" + user);
         }
     }
 
-    /**
-     * Helper method to manage session security and attributes
-     */
     private void setupSession(HttpServletRequest request, String username, String role) {
-        // Invalidate existing session to prevent session fixation attacks
         HttpSession oldSession = request.getSession(false);
         if (oldSession != null) {
             oldSession.invalidate();
         }
 
-        // Create new session
         HttpSession newSession = request.getSession(true);
         newSession.setAttribute("user", username);
         newSession.setAttribute("userRole", role);
-
-        // Optional: Set session timeout (e.g., 30 minutes)
-        newSession.setMaxInactiveInterval(30 * 60);
+        newSession.setMaxInactiveInterval(30 * 60); // 30 minutes session
     }
 }

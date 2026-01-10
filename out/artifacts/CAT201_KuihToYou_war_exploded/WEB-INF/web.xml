@@ -33,7 +33,7 @@
 
     <servlet>
         <servlet-name>CheckoutServlet</servlet-name>
-        <servlet-class>admin.CheckoutServlet</servlet-class>
+        <servlet-class>model.CheckoutServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CheckoutServlet</servlet-name>

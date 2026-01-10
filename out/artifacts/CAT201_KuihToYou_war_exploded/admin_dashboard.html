@@ -6,124 +6,133 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* --- EARTH & CLAY DESIGN SYSTEM --- */
         :root {
             --clay-orange: #b97c5a;
             --clay-dark: #a06648;
             --parchment-bg: #f3ece0;
             --espresso: #4a2c2a;
             --warm-white: #fffcf7;
-            --warm-shadow: rgba(74, 44, 42, 0.12);
+            --warm-shadow: rgba(74, 44, 42, 0.18);
         }
 
-        /* GLOBAL STYLES WITH FADING BATIK */
         body {
-            margin: 0;
-            font-family: 'Lora', serif;
-            background-color: var(--parchment-bg);
-            background-image:
-                    linear-gradient(rgba(243, 236, 224, 0.94), rgba(243, 236, 224, 0.94)),
-                    url('KuihMuihImage/batik_pattern.jpg');
-            background-repeat: repeat;
-            background-size: 380px;
-            background-attachment: fixed;
+            margin: 0; font-family: 'Lora', serif; background-color: var(--parchment-bg);
+            background-image: linear-gradient(rgba(243, 236, 224, 0.85), rgba(243, 236, 224, 0.85)),
+            url('KuihMuihImage/batik_pattern.jpg');
+            background-repeat: repeat; background-size: 350px; background-attachment: fixed;
             color: var(--espresso);
         }
 
-        /* THEMED SOLID CLAY HEADER */
-        .admin-header {
+        /* --- HEADER --- */
+        header {
             background-color: var(--clay-orange);
-            color: white;
-            padding: 15px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(74, 44, 42, 0.2);
+            box-shadow: 0 4px 15px rgba(74, 44, 42, 0.25);
             position: sticky; top: 0; z-index: 1000;
         }
-        .admin-header h2 { font-family: 'Playfair Display', serif; margin: 0; letter-spacing: 1px; }
-
-        .admin-container { max-width: 1200px; margin: 0 auto; padding: 50px 20px; }
-
-        h1 { font-family: 'Playfair Display', serif; font-size: 36px; margin-bottom: 30px; }
-
-        /* --- THEMED DATA TABLE --- */
-        .table-wrapper {
-            background: var(--warm-white);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 10px 30px var(--warm-shadow);
-            border: 1px solid rgba(185, 124, 90, 0.1);
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; padding: 0 20px;
+            height: 70px;
         }
+        .logo-img { height: 45px; width: auto; }
 
-        table { width: 100%; border-collapse: collapse; background: transparent; }
-        th, td { padding: 18px; text-align: left; border-bottom: 1px solid #efe5d9; }
-
-        th {
-            background-color: transparent;
-            color: var(--clay-orange);
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            border-bottom: 2px solid var(--clay-orange);
+        .btn-pill {
+            text-decoration: none; color: white; border: 1.5px solid white;
+            padding: 8px 20px; border-radius: 50px; font-size: 12px; font-weight: bold;
+            text-transform: uppercase; transition: 0.3s;
         }
+        .btn-pill:hover { background: white; color: var(--clay-orange); }
 
-        td { font-size: 15px; color: var(--espresso); }
-        tr:last-child td { border-bottom: none; }
+        /* --- CONTENT --- */
+        .admin-container { max-width: 1100px; margin: 60px auto; padding: 0 20px; }
 
-        /* --- BUTTON STYLES --- */
+        .header-section {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px;
+        }
+        .header-section h1 { font-family: 'Playfair Display', serif; font-size: 42px; margin: 0; }
+
         .btn-add {
-            background: var(--clay-orange); color: white; padding: 12px 25px;
-            border: none; border-radius: 50px; cursor: pointer;
-            font-weight: bold; font-family: 'Lora', serif;
-            text-transform: uppercase; letter-spacing: 1px;
-            margin-bottom: 25px; transition: 0.3s;
-            box-shadow: 0 4px 12px rgba(185, 124, 90, 0.3);
+            background: var(--clay-orange); color: white; border: none;
+            padding: 14px 30px; border-radius: 50px; cursor: pointer;
+            font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(185, 124, 90, 0.3); transition: 0.3s;
         }
         .btn-add:hover { background: var(--clay-dark); transform: translateY(-2px); }
 
-        .btn-edit {
-            background: #e1f5fe; color: #0288d1; padding: 6px 15px;
-            border: 1px solid #0288d1; border-radius: 4px; cursor: pointer;
-            font-weight: 600; margin-right: 5px; transition: 0.2s;
+        .table-card {
+            background: var(--warm-white); border-radius: 20px;
+            padding: 30px; box-shadow: 0 10px 30px var(--warm-shadow);
         }
-        .btn-edit:hover { background: #0288d1; color: white; }
 
-        .btn-delete {
-            background: #ffebee; color: #c62828; padding: 6px 15px;
-            border: 1px solid #c62828; border-radius: 4px; cursor: pointer;
-            font-weight: 600; transition: 0.2s;
+        .search-bar {
+            width: 100%; padding: 15px 20px; border-radius: 50px;
+            border: 1px solid rgba(185, 124, 90, 0.2); background: #fdfaf5;
+            font-family: 'Lora'; font-size: 15px; margin-bottom: 25px;
+            box-sizing: border-box; outline: none;
         }
-        .btn-delete:hover { background: #c62828; color: white; }
 
-        .btn-logout {
-            background: rgba(255, 255, 255, 0.2); color: white; padding: 8px 20px;
-            text-decoration: none; border-radius: 50px; font-weight: bold;
-            border: 1.5px solid white; transition: 0.3s; font-size: 13px;
+        /* --- TABLE STYLING --- */
+        table { width: 100%; border-collapse: collapse; }
+        th {
+            text-align: left; padding: 15px; border-bottom: 2px solid var(--parchment-bg);
+            text-transform: uppercase; font-size: 11px; letter-spacing: 1.5px; color: #999;
         }
-        .btn-logout:hover { background: white; color: var(--clay-orange); }
+        td { padding: 15px; border-bottom: 1px solid var(--parchment-bg); }
+
+        .img-preview { width: 55px; height: 55px; border-radius: 12px; object-fit: cover; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+
+        .stock-badge { padding: 5px 12px; border-radius: 50px; font-size: 12px; font-weight: bold; display: inline-block; }
+        .stock-low { background: #fff1f0; color: #cf1322; border: 1px solid #ffa39e; }
+        .stock-normal { background: #f6ffed; color: #389e0d; border: 1px solid #b7eb8f; }
+
+        /* --- ACTION BUTTONS --- */
+        .action-btn {
+            padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: bold;
+            cursor: pointer; text-decoration: none; transition: 0.2s; border: none;
+            text-transform: uppercase; margin-right: 5px;
+        }
+        .edit-btn { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; }
+        .edit-btn:hover { background: #1890ff; color: white; }
+
+        .delete-btn { background: #fff1f0; color: #f5222d; border: 1px solid #ffa39e; }
+        .delete-btn:hover { background: #f5222d; color: white; }
+
+        /* --- FORM STYLING FOR SWAL --- */
+        .swal-form-group { text-align: left; margin-bottom: 15px; }
+        .swal-label { display: block; font-weight: bold; color: var(--espresso); margin-bottom: 5px; font-size: 14px; }
+        .swal-input-custom {
+            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;
+            font-family: 'Lora'; box-sizing: border-box; font-size: 16px;
+        }
     </style>
 </head>
-<body style="display: none;">
+<body>
 
-<div class="admin-header">
-    <h2>KUIH TO YOU | ADMIN PORTAL</h2>
-    <div>
-        <span style="font-weight: 600; font-size: 14px; margin-right: 15px;">Administrator</span>
-        <a href="javascript:void(0)" onclick="confirmLogout()" class="btn-logout">LOGOUT</a>
+<header>
+    <div class="nav-container">
+        <a href="index.jsp"><img src="KuihMuihImage/kuihtoyoulogo.png" alt="Logo" class="logo-img"></a>
+        <div class="nav-actions">
+            <a href="index.jsp" style="color:white; text-decoration:none; margin-right:20px; font-weight:600;">Storefront</a>
+            <a href="LogoutServlet" class="btn-pill">Logout</a>
+        </div>
     </div>
-</div>
+</header>
 
 <div class="admin-container">
-    <h1>Manage Inventory</h1>
-    <button class="btn-add" onclick="addKuih()">+ Add New Selection</button>
+    <div class="header-section">
+        <h1>Inventory Dashboard</h1>
+        <button class="btn-add" onclick="openKuihModal()">+ Add New Kuih</button>
+    </div>
 
-    <div class="table-wrapper">
+    <div class="table-card">
+        <input type="text" id="searchInput" class="search-bar" placeholder="Filter by kuih name..." onkeyup="filterTable()">
         <table>
             <thead>
             <tr>
-                <th>ID</th>
-                <th>Kuih Name</th>
-                <th>Price (RM)</th>
+                <th>Preview</th>
+                <th>Product Info</th>
+                <th>Price</th>
                 <th>Stock Level</th>
                 <th>Actions</th>
             </tr>
@@ -133,140 +142,115 @@
     </div>
 </div>
 
-
-
 <script>
-    // AUTHENTICATION & LOADING LOGIC
+    let kuihList = [];
+    let availableImages = [];
+
     async function loadData() {
         try {
             const response = await fetch('admin-api');
-            if (response.status === 401 || response.status === 403) {
-                window.location.href = 'login.html';
-                return;
-            }
-            kuihList = await response.json();
-            document.body.style.display = "block";
-            renderTable();
-        } catch (error) {
-            window.location.href = 'login.html';
-        }
+            const data = await response.json();
+            kuihList = data.products || [];
+            availableImages = data.images || [];
+            renderTable(kuihList);
+        } catch (e) { console.error(e); }
     }
 
-    let kuihList = [];
-
-    function renderTable() {
+    function renderTable(data) {
         const tableBody = document.getElementById('kuihTableBody');
-        tableBody.innerHTML = "";
-
-        if (kuihList.length === 0) {
-            tableBody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding: 40px; color: #888;'>The pantry is empty. Add some tradition!</td></tr>";
-            return;
-        }
-
-        kuihList.forEach((item, index) => {
-            tableBody.innerHTML += `
-                <tr>
-                    <td style="font-weight: bold; color: #888;">#${item.id}</td>
-                    <td style="font-weight: 600;">${item.name}</td>
-                    <td style="color: var(--clay-orange); font-weight: bold;">RM ${Number(item.price).toFixed(2)}</td>
-                    <td>
-                        <span style="padding: 4px 10px; border-radius: 20px; background: ${item.stock < 10 ? '#fff3e0' : '#e8f5e9'}; color: ${item.stock < 10 ? '#e65100' : '#2e7d32'}; font-size: 13px; font-weight: bold;">
-                            ${item.stock} Units
-                        </span>
-                    </td>
-                    <td>
-                        <button class="btn-edit" onclick="editKuih(${index})">Edit</button>
-                        <button class="btn-delete" onclick="deleteKuih(${index})">Delete</button>
-                    </td>
-                </tr>`;
-        });
+        tableBody.innerHTML = data.map(item => `
+            <tr>
+                <td><img src="KuihMuihImage/${item.image}" class="img-preview" onerror="this.src='KuihMuihImage/placeholder.jpg'"></td>
+                <td>
+                    <div style="font-weight: 600; font-size: 17px; color: var(--espresso);">${item.name}</div>
+                    <div style="font-size: 11px; color: #999; font-family: monospace;">${item.id}</div>
+                </td>
+                <td style="font-weight: bold; color: var(--clay-orange);">RM ${parseFloat(item.price).toFixed(2)}</td>
+                <td>
+                    <span class="stock-badge ${item.stock < 10 ? 'stock-low' : 'stock-normal'}">
+                        ${item.stock} Units
+                    </span>
+                </td>
+                <td>
+                    <button class="action-btn edit-btn" onclick="openKuihModal('${item.id}')">Edit</button>
+                    <button class="action-btn delete-btn" onclick="deleteKuih('${item.id}')">Delete</button>
+                </td>
+            </tr>
+        `).join('');
     }
 
-    // THEMED SWEETALERT LOGIC
-    function confirmLogout() {
-        Swal.fire({
-            title: 'Confirm Logout',
-            text: "Ready to leave the portal?",
-            icon: 'question',
+    // Professional Modal for both Add and Edit
+    async function openKuihModal(id = null) {
+        const isEdit = id !== null;
+        const k = isEdit ? kuihList.find(x => x.id === id) : { name: '', price: '', image: '', stock: '' };
+
+        const { value: formValues } = await Swal.fire({
+            title: `<span style="font-family:'Playfair Display'">${isEdit ? 'Update Kuih Details' : 'Add Heritage Kuih'}</span>`,
+            html: `
+                <div class="swal-form-group">
+                    <label class="swal-label">Product Name</label>
+                    <input id="swal-n" class="swal-input-custom" value="${k.name}" placeholder="e.g. Onde-Onde">
+                </div>
+                <div class="swal-form-group">
+                    <label class="swal-label">Price (RM)</label>
+                    <input id="swal-p" type="number" step="0.1" class="swal-input-custom" value="${k.price}" placeholder="0.00">
+                </div>
+                <div class="swal-form-group">
+                    <label class="swal-label">Select Image</label>
+                    <select id="swal-i" class="swal-input-custom">
+                        ${availableImages.map(img => `<option value="${img}" ${img === k.image ? 'selected' : ''}>${img}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="swal-form-group">
+                    <label class="swal-label">Stock Quantity</label>
+                    <input id="swal-s" type="number" class="swal-input-custom" value="${k.stock}" placeholder="0">
+                </div>
+            `,
+            focusConfirm: false,
             showCancelButton: true,
+            confirmButtonText: isEdit ? 'Save Changes' : 'Add to Inventory',
             confirmButtonColor: '#b97c5a',
-            cancelButtonColor: '#7f8c8d',
-            confirmButtonText: 'Yes, Logout',
-            background: '#fcfaf7'
-        }).then((result) => {
-            if (result.isConfirmed) { window.location.href = 'logout'; }
-        });
-    }
-
-    // CRUD FUNCTIONS
-    function validateInput(name, price, stock) {
-        if (!name || !price || !stock) { Swal.showValidationMessage('All fields are required!'); return false; }
-        if (isNaN(price) || Number(price) <= 0) { Swal.showValidationMessage('Price must be a positive number!'); return false; }
-        if (isNaN(stock) || Number(stock) < 0 || !Number.isInteger(Number(stock))) { Swal.showValidationMessage('Stock must be a valid whole number!'); return false; }
-        return true;
-    }
-
-    async function addKuih() {
-        const { value: formValues } = await Swal.fire({
-            title: 'Add New Kuih',
-            background: '#fcfaf7',
-            confirmButtonColor: '#b97c5a',
-            html:
-                '<input id="swal-name" class="swal2-input" placeholder="Kuih Name">' +
-                '<input id="swal-price" type="number" step="0.01" class="swal2-input" placeholder="Price (RM)">' +
-                '<input id="swal-stock" type="number" class="swal2-input" placeholder="Initial Stock">',
+            cancelButtonColor: '#4a2c2a',
             preConfirm: () => {
-                const name = document.getElementById('swal-name').value;
-                const price = document.getElementById('swal-price').value;
-                const stock = document.getElementById('swal-stock').value;
-                if (validateInput(name, price, stock)) return { name, price, stock };
+                const name = document.getElementById('swal-n').value;
+                const price = document.getElementById('swal-p').value;
+                const image = document.getElementById('swal-i').value;
+                const stock = document.getElementById('swal-s').value;
+                if (!name || !price || !stock) {
+                    Swal.showValidationMessage('Please fill in all fields');
+                }
+                return { id: id, name, price, image, stock };
             }
         });
-        if (formValues) executeAction('add', formValues);
+
+        if (formValues) {
+            send(isEdit ? 'update' : 'add', formValues);
+        }
     }
 
-    async function editKuih(index) {
-        const item = kuihList[index];
-        const { value: formValues } = await Swal.fire({
-            title: 'Edit Kuih Details',
-            background: '#fcfaf7',
-            confirmButtonColor: '#b97c5a',
-            html:
-                `<input id="swal-name" class="swal2-input" value="${item.name}">` +
-                `<input id="swal-price" type="number" step="0.01" class="swal2-input" value="${item.price}">` +
-                `<input id="swal-stock" type="number" class="swal2-input" value="${item.stock}">`,
-            preConfirm: () => {
-                const name = document.getElementById('swal-name').value;
-                const price = document.getElementById('swal-price').value;
-                const stock = document.getElementById('swal-stock').value;
-                if (validateInput(name, price, stock)) return { id: item.id, name, price, stock };
-            }
-        });
-        if (formValues) executeAction('update', formValues);
-    }
-
-    async function deleteKuih(index) {
-        const item = kuihList[index];
+    async function deleteKuih(id) {
         const result = await Swal.fire({
-            title: 'Delete Item?',
-            text: `Permanently remove ${item.name}?`,
+            title: 'Confirm Deletion?',
+            text: "This item will be removed from the catalog.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#c62828',
-            cancelButtonColor: '#7f8c8d',
-            confirmButtonText: 'Yes, Delete'
+            confirmButtonColor: '#cf1322',
+            cancelButtonColor: '#4a2c2a',
+            confirmButtonText: 'Yes, remove it'
         });
-        if (result.isConfirmed) executeAction('delete', { id: item.id });
+        if (result.isConfirmed) send('delete', { id });
     }
 
-    async function executeAction(action, data) {
-        const params = new URLSearchParams();
-        params.append('action', action);
-        for (const key in data) params.append(key, data[key]);
-
-        await fetch('admin-api', { method: 'POST', body: params });
+    async function send(action, data) {
+        const p = new URLSearchParams({ action, ...data });
+        await fetch('admin-api', { method: 'POST', body: p });
         loadData();
-        Swal.fire({ title: 'Success', icon: 'success', timer: 1500, showConfirmButton: false, background: '#fcfaf7' });
+        Swal.fire({ title: 'Success!', icon: 'success', timer: 1500, showConfirmButton: false });
+    }
+
+    function filterTable() {
+        const term = document.getElementById('searchInput').value.toLowerCase();
+        renderTable(kuihList.filter(k => k.name.toLowerCase().includes(term)));
     }
 
     loadData();

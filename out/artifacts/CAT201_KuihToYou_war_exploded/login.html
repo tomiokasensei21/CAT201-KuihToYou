@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* --- EARTH & CLAY DESIGN SYSTEM --- */
         :root {
             --clay-orange: #b97c5a;
             --clay-dark: #a06648;
@@ -18,122 +17,82 @@
         }
 
         body {
-            margin: 0;
-            font-family: 'Lora', serif;
-            /* Faded Batik Background */
-            background-color: var(--parchment-bg);
-            background-image:
-                    linear-gradient(rgba(243, 236, 224, 0.85), rgba(243, 236, 224, 0.85)),
-                    url('KuihMuihImage/batik_pattern.jpg');
-            background-repeat: repeat;
-            background-size: 350px;
-            background-attachment: fixed;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: var(--espresso);
+            margin: 0; font-family: 'Lora', serif; background-color: var(--parchment-bg);
+            background-image: linear-gradient(rgba(243, 236, 224, 0.85), rgba(243, 236, 224, 0.85)),
+            url('KuihMuihImage/batik_pattern.jpg');
+            background-repeat: repeat; background-size: 350px; background-attachment: fixed;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; color: var(--espresso);
         }
 
-        /* --- THEMED LOGIN CARD --- */
         .card {
             background: var(--warm-white);
-            padding: 3rem;
             border-radius: 20px;
             box-shadow: 0 15px 40px var(--warm-shadow);
             width: 100%;
             max-width: 400px;
+            overflow: hidden;
             border: 1px solid rgba(185, 124, 90, 0.1);
             text-align: center;
         }
 
+        .card-header-bar {
+            background-color: var(--clay-orange);
+            padding: 25px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .login-logo { height: 50px; width: auto; transition: 0.3s; }
+        .login-logo:hover { transform: scale(1.05); }
+
+        .form-content { padding: 0 3rem 2.5rem 3rem; }
+
         .brand-header h2 {
-            font-family: 'Playfair Display', serif;
-            margin: 0;
-            color: var(--espresso);
-            font-size: 2.2rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-family: 'Playfair Display', serif; margin: 0;
+            color: var(--espresso); font-size: 2.2rem;
+            text-transform: uppercase; letter-spacing: 1px;
         }
 
-        .brand-header p {
-            color: #888;
-            font-size: 0.95rem;
-            margin: 10px 0 2.5rem 0;
-        }
+        .brand-header p { color: #888; font-size: 0.95rem; margin: 10px 0 1.5rem 0; }
 
-        /* FORM STYLING */
-        .form-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 0.85rem;
-            color: var(--espresso);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .form-group { margin-bottom: 1rem; text-align: left; }
+        label { display: block; margin-bottom: 5px; font-size: 0.8rem; color: var(--espresso); font-weight: 600; text-transform: uppercase; }
 
         input {
-            width: 100%;
-            padding: 14px;
-            background-color: #fdfaf5;
-            border: 1.5px solid #efe5d9;
-            border-radius: 8px;
-            box-sizing: border-box;
-            transition: all 0.3s;
-            font-family: 'Lora', serif;
-            color: var(--espresso);
+            width: 100%; padding: 14px; background-color: #fdfaf5;
+            border: 1.5px solid #efe5d9; border-radius: 8px; box-sizing: border-box;
+            font-family: 'Lora', serif; transition: 0.3s; font-size: 14px;
         }
+        input:focus { outline: none; border-color: var(--clay-orange); background-color: white; box-shadow: 0 0 0 4px rgba(185, 124, 90, 0.1); }
 
-        input:focus {
-            outline: none;
-            border-color: var(--clay-orange);
-            background-color: white;
-            box-shadow: 0 0 0 4px rgba(185, 124, 90, 0.1);
-        }
-
-        /* CLAY ORANGE BUTTON */
-        button {
-            width: 100%;
-            padding: 16px;
-            background: var(--clay-orange);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.3s ease;
-            margin-top: 15px;
+        .btn-submit {
+            width: 100%; padding: 16px; background: var(--clay-orange);
+            color: white; border: none; border-radius: 50px;
+            cursor: pointer; font-weight: bold; font-size: 1rem;
+            text-transform: uppercase; letter-spacing: 2px;
+            transition: 0.3s; margin-top: 15px;
             box-shadow: 0 8px 20px rgba(185, 124, 90, 0.3);
         }
+        .btn-submit:hover { background: var(--clay-dark); transform: translateY(-3px); }
 
-        button:hover {
-            background: var(--clay-dark);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(185, 124, 90, 0.4);
-        }
-
-        .footer-text {
-            margin-top: 2rem;
-            color: #777;
+        /* --- THE FIXED SINGLE LINE SECTION (Matches Signup) --- */
+        .redirect-container {
+            margin-top: 25px;
             font-size: 0.9rem;
+            color: #777;
         }
 
-        .footer-text a {
+        .signup-link {
             color: var(--clay-orange);
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 600;
+            margin-left: 5px;
+            transition: 0.3s;
         }
 
-        .footer-text a:hover {
+        .signup-link:hover {
+            color: var(--clay-dark);
             text-decoration: underline;
         }
     </style>
@@ -141,75 +100,60 @@
 <body>
 
 <div class="card">
-    <div class="brand-header">
-        <h2>Sign In</h2>
-        <p>Welcome to Kuih To You.</p>
+    <div class="card-header-bar">
+        <a href="index.jsp">
+            <img src="KuihMuihImage/kuihtoyoulogo.png" alt="Logo" class="login-logo">
+        </a>
     </div>
 
-    <form action="LoginServlet" method="POST">
-        <input type="hidden" id="redirectSource" name="redirectSource" value="menu.jsp">
-
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="Your username" required>
+    <div class="form-content">
+        <div class="brand-header">
+            <h2>Sign In</h2>
+            <p>Welcome back to the family.</p>
         </div>
 
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Your password" required>
+        <form action="LoginServlet" method="POST">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Your username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Your password" required>
+            </div>
+
+            <button type="submit" class="btn-submit">Login</button>
+        </form>
+
+        <div class="redirect-container">
+            <span>New to the family?</span>
+            <a href="signup.html" class="signup-link">Register here</a>
         </div>
-
-        <button type="submit">Login</button>
-    </form>
-
-    <p class="footer-text">
-        New to the family? <a href="signup.html">Register here</a>
-    </p>
+    </div>
 </div>
-
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Redirection Logic
-        const savedPage = sessionStorage.getItem('redirectAfterLogin');
-        if (savedPage) {
-            const redirectInput = document.getElementById('redirectSource');
-            if (redirectInput) {
-                redirectInput.value = savedPage;
-            }
-            sessionStorage.removeItem('redirectAfterLogin');
-        }
-
-        // Updated Themed SweetAlert Config
         const params = new URLSearchParams(window.location.search);
         const error = params.get('error');
         const signup = params.get('signup');
         const logout = params.get('logout');
+        const newMember = params.get('newMember');
+        const userAttempt = params.get('attempt') || params.get('user');
 
-        const toastConfig = {
-            confirmButtonColor: '#b97c5a',
-            iconColor: '#b97c5a',
-            background: '#fcfaf7'
-        };
+        const toastConfig = { confirmButtonColor: '#b97c5a', iconColor: '#b97c5a', background: '#fcfaf7' };
 
-        if (logout === 'success') {
-            Swal.fire({ ...toastConfig, title: 'Logged Out', text: 'You have been signed out safely.', icon: 'success' });
-        } else if (signup === 'success') {
-            Swal.fire({ ...toastConfig, title: 'Welcome!', text: 'Account created! Please sign in.', icon: 'success' });
+        if (signup === 'success') {
+            Swal.fire({ ...toastConfig, title: `Welcome, ${newMember}! ❤️`, text: 'Account ready!', icon: 'success' });
         } else if (error) {
-            let title = 'Error';
-            let message = 'An unexpected error occurred.';
-            let icon = 'error';
-
-            switch(error) {
-                case 'admin_fail': title = 'Access Denied'; message = 'Incorrect Admin Password!'; break;
-                case 'invalid_credentials': title = 'Login Failed'; message = 'Invalid username or password.'; break;
-                case 'empty_fields': title = 'Missing Info'; message = 'Please fill in all fields.'; icon = 'warning'; break;
-                case 'must_login': title = 'Hold on!'; message = 'You must be logged in to continue.'; icon = 'info'; break;
+            if (error === 'no_user') {
+                Swal.fire({ ...toastConfig, title: 'Unknown User', text: `Join us, ${userAttempt}?`, icon: 'question', showCancelButton: true }).then(r => { if (r.isConfirmed) location.href='signup.html'; });
+            } else if (error === 'wrong_pass') {
+                Swal.fire({ ...toastConfig, title: 'Wrong Password', text: 'Please try again!', icon: 'error' });
             }
-
-            Swal.fire({ ...toastConfig, title: title, text: message, icon: icon });
+        } else if (logout === 'success') {
+            Swal.fire({ ...toastConfig, title: 'Signed Out', text: 'Come back soon!', icon: 'success' });
         }
     });
 </script>
