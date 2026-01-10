@@ -94,10 +94,41 @@ Date: Sat Jan 10 09:57:14 GST 2026
 GRAND TOTAL: RM 0.50
 --------------------------------
 === NEW ORDER ===
+Customer: oyi
+Date: Sat Jan 10 23:41:21 GMT+08:00 2026
+- Cucur Badak (x1) : RM 0.60
+- Cucur Jawa (x2) : RM 1.00
+GRAND TOTAL: RM 1.60
+--------------------------------
+=== NEW ORDER ===
+Customer: oyi
+Date: Sat Jan 10 23:42:05 GMT+08:00 2026
+- Onde-Onde (5 pcs) (x1) : RM 1.50
+GRAND TOTAL: RM 1.50
+--------------------------------
+=== NEW ORDER ===
+Customer: oyi
+Date: Sat Jan 10 23:42:56 GMT+08:00 2026
+- Cucur Badak (x1) : RM 0.60
+GRAND TOTAL: RM 0.60
+--------------------------------
+=== NEW ORDER ===
 Customer: s
 Date: Sat Jan 10 20:26:26 GMT+08:00 2026
 - Popia Big Mac (x5) : RM 5.00
 - Kuih Bakar (x4) : RM 24.00
 - Tepung Pelita (x4) : RM 6.00
 GRAND TOTAL: RM 35.00
+--------------------------------
+=== NEW ORDER ===
+Customer: oyi
+Date: Sat Jan 10 23:47:23 GMT+08:00 2026
+- Onde-Onde (5 pcs) (x1) : RM 1.50
+GRAND TOTAL: RM 1.50
+--------------------------------
+=== NEW ORDER ===
+Customer: oyi
+Date: Sat Jan 10 23:47:40 GMT+08:00 2026
+- Cucur Jawa (x1) : RM 0.50
+GRAND TOTAL: RM 0.50
 --------------------------------

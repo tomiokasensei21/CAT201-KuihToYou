@@ -51,8 +51,16 @@
             max-width: 1200px; margin: 0 auto; display: flex;
             justify-content: space-between; align-items: center; padding: 10px 25px;
         }
+
+        /* --- LOGO STYLES UPDATED FOR NEW IMAGE --- */
         .logo-wrapper { display: flex; align-items: center; text-decoration: none; gap: 12px; }
-        .logo-img { height: 50px; width: 50px; border-radius: 50%; border: 2px solid white; background: #fff; object-fit: cover; }
+        .logo-img {
+            height: 40px;
+            width: auto;
+            border-radius: 10px;
+            background: transparent;
+            object-fit: contain;
+        }
         .logo-text { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: bold; color: white; text-transform: uppercase; letter-spacing: 1px; }
 
         .nav-actions { display: flex; gap: 20px; align-items: center; }
@@ -108,8 +116,7 @@
 <header>
     <div class="nav-container">
         <a href="index.jsp" class="logo-wrapper">
-            <img src="${pageContext.request.contextPath}/KuihMuihImage/logokuihtoyou.jpg" alt="Logo" class="logo-img">
-            <span class="logo-text">KUIH TO YOU</span>
+            <img src="${pageContext.request.contextPath}/KuihMuihImage/kuihtoyoulogo.png" alt="Logo" class="logo-img">
         </a>
         <div class="nav-actions">
             <a href="all_menu.jsp">Menu</a>
@@ -167,14 +174,11 @@
     </div>
 </section>
 
-
-
 <footer>&copy; 2026 Kuih To You. Inspired by Heritage.</footer>
 
 <script>
     let currentIndex = 0;
 
-    // REFINED SLIDING LOGIC
     function slideCarousel(direction) {
         const track = document.getElementById('featured-grid');
         const cards = document.querySelectorAll('.kuih-card');
@@ -182,19 +186,13 @@
 
         if (cards.length === 0) return;
 
-        // FIXED: Explicitly calculate visible cards based on actual width
-        const cardWidth = cards[0].offsetWidth + 30; // 320px + 30px gap
+        const cardWidth = cards[0].offsetWidth + 30;
         const viewportWidth = viewport.offsetWidth;
         const visibleCards = Math.floor(viewportWidth / cardWidth);
 
-        // Sliding is only enabled if there are more cards than space
         const maxIndex = cards.length - visibleCards;
 
-        // If your screen fits all 4 cards, maxIndex will be 0 and it won't slide
-        if (maxIndex <= 0) {
-            console.log("All items fit on screen. Sliding disabled.");
-            return;
-        }
+        if (maxIndex <= 0) return;
 
         currentIndex += direction;
 
