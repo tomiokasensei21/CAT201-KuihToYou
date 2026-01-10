@@ -3,129 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard - Kuih To You</title>
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* --- BRANDING (Matches your Homepage) --- */
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #f4f6f8; }
+        /* --- EARTH & CLAY DESIGN SYSTEM --- */
+        :root {
+            --clay-orange: #b97c5a;
+            --clay-dark: #a06648;
+            --parchment-bg: #f3ece0;
+            --espresso: #4a2c2a;
+            --warm-white: #fffcf7;
+            --warm-shadow: rgba(74, 44, 42, 0.12);
+        }
+
+        /* GLOBAL STYLES WITH FADING BATIK */
+        body {
+            margin: 0;
+            font-family: 'Lora', serif;
+            background-color: var(--parchment-bg);
+            background-image:
+                    linear-gradient(rgba(243, 236, 224, 0.94), rgba(243, 236, 224, 0.94)),
+                    url('KuihMuihImage/batik_pattern.jpg');
+            background-repeat: repeat;
+            background-size: 380px;
+            background-attachment: fixed;
+            color: var(--espresso);
+        }
+
+        /* THEMED SOLID CLAY HEADER */
         .admin-header {
-            background-color: #1b5e20; /* Pandan Green */
+            background-color: var(--clay-orange);
             color: white;
             padding: 15px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(74, 44, 42, 0.2);
+            position: sticky; top: 0; z-index: 1000;
         }
-        .admin-container { padding: 50px; font-family: sans-serif; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
-        th, td { padding: 15px; border: 1px solid #ddd; text-align: left; }
-        th { background-color: #e67e22; color: white; }
-        .btn-add { background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
-        .btn-edit { background: #2980b9; color: white; padding: 5px 10px; border: none; border-radius: 3px; margin-right: 5px; }
-        .btn-delete { background: #c0392b; color: white; padding: 5px 10px; border: none; border-radius: 3px; }
-        .btn-logout { background: #e74c3c; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; font-weight: bold; }
-        .btn-logout:hover { background: #c0392b; }
+        .admin-header h2 { font-family: 'Playfair Display', serif; margin: 0; letter-spacing: 1px; }
+
+        .admin-container { max-width: 1200px; margin: 0 auto; padding: 50px 20px; }
+
+        h1 { font-family: 'Playfair Display', serif; font-size: 36px; margin-bottom: 30px; }
+
+        /* --- THEMED DATA TABLE --- */
+        .table-wrapper {
+            background: var(--warm-white);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px var(--warm-shadow);
+            border: 1px solid rgba(185, 124, 90, 0.1);
+        }
+
+        table { width: 100%; border-collapse: collapse; background: transparent; }
+        th, td { padding: 18px; text-align: left; border-bottom: 1px solid #efe5d9; }
+
+        th {
+            background-color: transparent;
+            color: var(--clay-orange);
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            border-bottom: 2px solid var(--clay-orange);
+        }
+
+        td { font-size: 15px; color: var(--espresso); }
+        tr:last-child td { border-bottom: none; }
+
+        /* --- BUTTON STYLES --- */
+        .btn-add {
+            background: var(--clay-orange); color: white; padding: 12px 25px;
+            border: none; border-radius: 50px; cursor: pointer;
+            font-weight: bold; font-family: 'Lora', serif;
+            text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 25px; transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(185, 124, 90, 0.3);
+        }
+        .btn-add:hover { background: var(--clay-dark); transform: translateY(-2px); }
+
+        .btn-edit {
+            background: #e1f5fe; color: #0288d1; padding: 6px 15px;
+            border: 1px solid #0288d1; border-radius: 4px; cursor: pointer;
+            font-weight: 600; margin-right: 5px; transition: 0.2s;
+        }
+        .btn-edit:hover { background: #0288d1; color: white; }
+
+        .btn-delete {
+            background: #ffebee; color: #c62828; padding: 6px 15px;
+            border: 1px solid #c62828; border-radius: 4px; cursor: pointer;
+            font-weight: 600; transition: 0.2s;
+        }
+        .btn-delete:hover { background: #c62828; color: white; }
+
+        .btn-logout {
+            background: rgba(255, 255, 255, 0.2); color: white; padding: 8px 20px;
+            text-decoration: none; border-radius: 50px; font-weight: bold;
+            border: 1.5px solid white; transition: 0.3s; font-size: 13px;
+        }
+        .btn-logout:hover { background: white; color: var(--clay-orange); }
     </style>
 </head>
-<body style="display: none;"> <script>
+<body style="display: none;">
+
+<div class="admin-header">
+    <h2>KUIH TO YOU | ADMIN PORTAL</h2>
+    <div>
+        <span style="font-weight: 600; font-size: 14px; margin-right: 15px;">Administrator</span>
+        <a href="javascript:void(0)" onclick="confirmLogout()" class="btn-logout">LOGOUT</a>
+    </div>
+</div>
+
+<div class="admin-container">
+    <h1>Manage Inventory</h1>
+    <button class="btn-add" onclick="addKuih()">+ Add New Selection</button>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Kuih Name</th>
+                <th>Price (RM)</th>
+                <th>Stock Level</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="kuihTableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<script>
+    // AUTHENTICATION & LOADING LOGIC
     async function loadData() {
         try {
             const response = await fetch('admin-api');
-
             if (response.status === 401 || response.status === 403) {
-                // If unauthorized, don't show the page, go to login
                 window.location.href = 'login.html';
                 return;
             }
-
             kuihList = await response.json();
-
-            // ONLY show the body if we get a successful response
             document.body.style.display = "block";
             renderTable();
         } catch (error) {
             window.location.href = 'login.html';
         }
     }
-    loadData();
-</script>
-
-<div class="admin-header">
-    <h2>Kuih To You | Admin Panel</h2>
-    <div>
-        <span>Welcome, Administrator | </span>
-        <a href="javascript:void(0)" onclick="confirmLogout()" class="btn-logout" style="color: white; text-decoration: none; font-weight: bold;">Logout</a>
-    </div>
-</div>
-
-<div class="admin-container">
-    <h1>Manage Kuih Menu</h1>
-    <button class="btn-add" onclick="addKuih()">+ Add New Kuih</button>
-
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Price (RM)</th>
-            <th>Stock (Units)</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody id="kuihTableBody"></tbody>
-    </table>
-</div>
-
-<script>
-    // MERGED: Logout Confirmation Logic
-    function confirmLogout() {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You will need to login again to manage the menu.",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#e67e22', // Match your theme color
-            cancelButtonColor: '#7f8c8d',
-            confirmButtonText: 'Yes, Logout',
-            cancelButtonText: 'Stay here'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // If user clicks "Yes", they are sent to the Servlet
-                window.location.href = 'logout';
-            }
-        });
-    }
 
     let kuihList = [];
 
-    async function loadData() {
-        try {
-            const response = await fetch('admin-api');
-            kuihList = await response.json();
-            renderTable();
-        } catch (error) {
-            console.error("Error loading data:", error);
-        }
-    }
-
-    // MERGED: Added Empty State check
     function renderTable() {
         const tableBody = document.getElementById('kuihTableBody');
         tableBody.innerHTML = "";
 
         if (kuihList.length === 0) {
-            tableBody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding: 30px; color: #7f8c8d;'>No kuih found in database. Add some tradition!</td></tr>";
+            tableBody.innerHTML = "<tr><td colspan='5' style='text-align:center; padding: 40px; color: #888;'>The pantry is empty. Add some tradition!</td></tr>";
             return;
         }
 
         kuihList.forEach((item, index) => {
             tableBody.innerHTML += `
                 <tr>
-                    <td>${item.id}</td>
-                    <td>${item.name}</td>
-                    <td>${Number(item.price).toFixed(2)}</td>
-                    <td>${item.stock}</td>
+                    <td style="font-weight: bold; color: #888;">#${item.id}</td>
+                    <td style="font-weight: 600;">${item.name}</td>
+                    <td style="color: var(--clay-orange); font-weight: bold;">RM ${Number(item.price).toFixed(2)}</td>
+                    <td>
+                        <span style="padding: 4px 10px; border-radius: 20px; background: ${item.stock < 10 ? '#fff3e0' : '#e8f5e9'}; color: ${item.stock < 10 ? '#e65100' : '#2e7d32'}; font-size: 13px; font-weight: bold;">
+                            ${item.stock} Units
+                        </span>
+                    </td>
                     <td>
                         <button class="btn-edit" onclick="editKuih(${index})">Edit</button>
                         <button class="btn-delete" onclick="deleteKuih(${index})">Delete</button>
@@ -134,109 +182,91 @@
         });
     }
 
+    // THEMED SWEETALERT LOGIC
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Confirm Logout',
+            text: "Ready to leave the portal?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#b97c5a',
+            cancelButtonColor: '#7f8c8d',
+            confirmButtonText: 'Yes, Logout',
+            background: '#fcfaf7'
+        }).then((result) => {
+            if (result.isConfirmed) { window.location.href = 'logout'; }
+        });
+    }
+
+    // CRUD FUNCTIONS
     function validateInput(name, price, stock) {
-        if (!name || !price || !stock) {
-            Swal.showValidationMessage('All fields are required!');
-            return false;
-        }
-        if (isNaN(price) || Number(price) <= 0) {
-            Swal.showValidationMessage('Price must be a positive number!');
-            return false;
-        }
-        if (isNaN(stock) || Number(stock) < 0 || !Number.isInteger(Number(stock))) {
-            Swal.showValidationMessage('Stock must be a valid whole number!');
-            return false;
-        }
+        if (!name || !price || !stock) { Swal.showValidationMessage('All fields are required!'); return false; }
+        if (isNaN(price) || Number(price) <= 0) { Swal.showValidationMessage('Price must be a positive number!'); return false; }
+        if (isNaN(stock) || Number(stock) < 0 || !Number.isInteger(Number(stock))) { Swal.showValidationMessage('Stock must be a valid whole number!'); return false; }
         return true;
     }
 
     async function addKuih() {
         const { value: formValues } = await Swal.fire({
             title: 'Add New Kuih',
+            background: '#fcfaf7',
+            confirmButtonColor: '#b97c5a',
             html:
                 '<input id="swal-name" class="swal2-input" placeholder="Kuih Name">' +
                 '<input id="swal-price" type="number" step="0.01" class="swal2-input" placeholder="Price (RM)">' +
                 '<input id="swal-stock" type="number" class="swal2-input" placeholder="Initial Stock">',
-            focusConfirm: false,
-            showCancelButton: true,
             preConfirm: () => {
                 const name = document.getElementById('swal-name').value;
                 const price = document.getElementById('swal-price').value;
                 const stock = document.getElementById('swal-stock').value;
-                if (validateInput(name, price, stock)) {
-                    return { name, price, stock };
-                }
+                if (validateInput(name, price, stock)) return { name, price, stock };
             }
         });
-
-        if (formValues) {
-            const params = new URLSearchParams();
-            params.append('action', 'add');
-            params.append('name', formValues.name);
-            params.append('price', formValues.price);
-            params.append('stock', formValues.stock);
-
-            await fetch('admin-api', { method: 'POST', body: params });
-            loadData();
-            Swal.fire('Success!', 'New Kuih saved to text file.', 'success');
-        }
+        if (formValues) executeAction('add', formValues);
     }
 
     async function editKuih(index) {
         const item = kuihList[index];
         const { value: formValues } = await Swal.fire({
-            title: 'Edit Kuih & Stock',
+            title: 'Edit Kuih Details',
+            background: '#fcfaf7',
+            confirmButtonColor: '#b97c5a',
             html:
                 `<input id="swal-name" class="swal2-input" value="${item.name}">` +
                 `<input id="swal-price" type="number" step="0.01" class="swal2-input" value="${item.price}">` +
                 `<input id="swal-stock" type="number" class="swal2-input" value="${item.stock}">`,
-            focusConfirm: false,
-            showCancelButton: true,
             preConfirm: () => {
                 const name = document.getElementById('swal-name').value;
                 const price = document.getElementById('swal-price').value;
                 const stock = document.getElementById('swal-stock').value;
-                if (validateInput(name, price, stock)) {
-                    return { id: item.id, name, price, stock };
-                }
+                if (validateInput(name, price, stock)) return { id: item.id, name, price, stock };
             }
         });
-
-        if (formValues) {
-            const params = new URLSearchParams();
-            params.append('action', 'update');
-            params.append('id', formValues.id);
-            params.append('name', formValues.name);
-            params.append('price', formValues.price);
-            params.append('stock', formValues.stock);
-
-            await fetch('admin-api', { method: 'POST', body: params });
-            loadData();
-            Swal.fire('Updated!', 'Stock and details updated in file.', 'success');
-        }
+        if (formValues) executeAction('update', formValues);
     }
 
-    function deleteKuih(index) {
+    async function deleteKuih(index) {
         const item = kuihList[index];
-        Swal.fire({
-            title: 'Are you sure?',
-            text: `You are about to delete ${item.name}`,
+        const result = await Swal.fire({
+            title: 'Delete Item?',
+            text: `Permanently remove ${item.name}?`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete!'
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                const params = new URLSearchParams();
-                params.append('action', 'delete');
-                params.append('id', item.id);
-
-                await fetch('admin-api', { method: 'POST', body: params });
-                loadData();
-                Swal.fire('Deleted!', 'Item removed from text file.', 'success');
-            }
+            confirmButtonColor: '#c62828',
+            cancelButtonColor: '#7f8c8d',
+            confirmButtonText: 'Yes, Delete'
         });
+        if (result.isConfirmed) executeAction('delete', { id: item.id });
+    }
+
+    async function executeAction(action, data) {
+        const params = new URLSearchParams();
+        params.append('action', action);
+        for (const key in data) params.append(key, data[key]);
+
+        await fetch('admin-api', { method: 'POST', body: params });
+        loadData();
+        Swal.fire({ title: 'Success', icon: 'success', timer: 1500, showConfirmButton: false, background: '#fcfaf7' });
     }
 
     loadData();

@@ -1,9 +1,9 @@
 <%@ page import="util.DataHandler, model.Kuih, model.CartItem, java.util.List" %>
 <%
-    // Load the data
+    // 1. Load data from text file
     List<Kuih> allKuih = DataHandler.readFromFile(application);
 
-    // Calculate cart counter for the header
+    // 2. Calculate cart counter
     int totalCount = 0;
     List<CartItem> currentCart = (List<CartItem>) session.getAttribute("cart");
     if (currentCart != null) {
@@ -17,114 +17,136 @@
 <head>
     <meta charset="UTF-8">
     <title>Gallery - Kuih To You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* GLOBAL & HEADER STYLES */
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #f9f9f9; overflow-x: hidden; }
+        /* --- EARTH & CLAY DESIGN SYSTEM --- */
+        :root {
+            --clay-orange: #b97c5a;     /* Main action color */
+            --clay-dark: #a06648;       /* Button hover state */
+            --parchment-bg: #f3ece0;    /* Textured background base */
+            --espresso: #4a2c2a;        /* Typography color */
+            --warm-white: #fffcf7;      /* Card background color */
+        }
 
+        /* GLOBAL STYLES WITH BATIK BACKGROUND */
+        body {
+            margin: 0;
+            font-family: 'Lora', serif;
+            background-color: var(--parchment-bg);
+            /* Fading Batik Trick: Overlay + Image */
+            background-image:
+                    linear-gradient(rgba(243, 236, 224, 0.85), rgba(243, 236, 224, 0.85)),
+                    url('KuihMuihImage/batik_pattern.jpg');
+            background-repeat: repeat;
+            background-size: 350px;
+            background-attachment: fixed;
+            color: var(--espresso);
+        }
+
+        /* HEADER STYLING */
         header {
-            background-color: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background-color: var(--clay-orange);
+            box-shadow: 0 4px 10px rgba(74, 44, 42, 0.15);
             position: sticky; top: 0; z-index: 1000;
         }
         .nav-container {
             max-width: 1200px; margin: 0 auto; display: flex;
             justify-content: space-between; align-items: center; padding: 15px 20px;
         }
-        .logo { font-size: 24px; font-weight: bold; color: #2e7d32; text-decoration: none; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: bold; color: white; text-decoration: none; }
         .nav-links { display: flex; gap: 25px; align-items: center; }
-        .nav-links a { text-decoration: none; color: #333; font-weight: 600; font-size: 14px; text-transform: uppercase; }
-        .nav-links a:hover { color: #2e7d32; }
-        .nav-actions { display: flex; gap: 15px; align-items: center; }
+        .nav-links a { text-decoration: none; color: white; font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
 
         .btn-pill {
-            padding: 10px 25px; border-radius: 50px; text-decoration: none;
-            font-weight: bold; font-size: 13px; transition: 0.3s; cursor: pointer; border: none;
+            padding: 8px 22px; border-radius: 50px; text-decoration: none;
+            font-weight: bold; font-size: 12px; transition: 0.3s; cursor: pointer; border: 1px solid white;
+            background: rgba(255,255,255,0.2); color: white;
         }
-        .btn-secondary { background-color: white; border: 2px solid #c62828; color: #c62828; }
+        .btn-pill:hover { background: white; color: var(--clay-orange); }
 
         /* GALLERY GRID */
+        .gallery-title {
+            text-align: center; margin: 60px 0 20px;
+            font-family: 'Playfair Display', serif; font-size: 42px;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 40px;
-            padding: 50px;
-            max-width: 1200px;
-            margin: 0 auto;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px; padding: 40px 60px;
+            max-width: 1300px; margin: 0 auto;
         }
 
-        /* --- HOVER STYLES --- */
+        /* --- THE EARTHY GALLERY CARD --- */
         .gallery-card {
-            background: white; border-radius: 20px; overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05); text-align: center;
-            opacity: 0; /* Hidden initially for scroll animation */
-            transform: translateY(30px);
-            /* Smooth transition for both scroll and hover */
-            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
-            box-shadow 0.4s ease,
-            opacity 0.6s ease-out;
+            background: var(--warm-white); border-radius: 18px; overflow: hidden;
+            box-shadow: 0 10px 25px rgba(74, 44, 42, 0.1); text-align: center;
+            opacity: 0; transform: translateY(30px);
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease, opacity 0.6s ease-out;
         }
 
-        .gallery-card.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .gallery-card.show { opacity: 1; transform: translateY(0); }
 
-        /* THE LIFT EFFECT */
         .gallery-card:hover {
-            transform: translateY(-12px) scale(1.02) !important;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+            transform: translateY(-12px) !important;
+            box-shadow: 0 20px 45px rgba(185, 124, 90, 0.2);
         }
 
-        /* IMAGE CONTAINER & ZOOM EFFECT */
+        /* IMAGE ZOOM LOGIC */
         .img-container {
-            width: 100%;
-            height: 350px;
-            overflow: hidden; /* Clips the zoomed image */
-            border-radius: 20px 20px 0 0;
+            width: 90%; height: 280px; margin: 20px auto 10px;
+            overflow: hidden; border-radius: 12px;
         }
 
         .gallery-card img {
             width: 100%; height: 100%; object-fit: cover;
-            transition: transform 0.5s ease;
+            transition: transform 0.6s ease;
         }
 
-        .gallery-card:hover img {
-            transform: scale(1.1); /* Zoom in on hover */
-        }
+        .gallery-card:hover img { transform: scale(1.1); }
 
-        .gallery-card h3 { font-size: 24px; color: #2e7d32; margin: 25px 0; }
+        .gallery-card h3 {
+            font-family: 'Playfair Display', serif; font-size: 26px;
+            color: var(--espresso); margin: 20px 0 10px;
+        }
 
         .btn-order {
-            display: inline-block; background: #c62828; color: white;
-            padding: 12px 35px; border-radius: 50px; text-decoration: none;
-            margin-bottom: 30px; font-weight: bold; transition: 0.3s;
+            display: inline-block; background: var(--clay-orange); color: white;
+            padding: 12px 35px; border-radius: 8px; text-decoration: none;
+            margin-bottom: 25px; font-weight: bold; transition: 0.3s;
+            text-transform: uppercase; letter-spacing: 1px;
         }
-        .btn-order:hover { background-color: #a31f1f; transform: scale(1.05); }
+        .btn-order:hover { background-color: var(--clay-dark); transform: scale(1.03); }
     </style>
 </head>
 <body>
 
 <header>
     <div class="nav-container">
-        <a href="index.html" class="logo">Kuih To You</a>
+        <a href="index.html" class="logo">KUIH TO YOU</a>
         <nav class="nav-links">
             <a href="index.html">Home</a>
             <a href="menu.jsp">Order Now</a>
             <a href="viewCart.jsp"> Cart (<%= totalCount %>)</a>
         </nav>
-        <div class="nav-actions">
+        <div class="nav-links">
             <% if (session.getAttribute("userRole") != null) { %>
-            <a href="index.html" class="btn-pill btn-secondary">Logout</a>
+            <a href="Logout" class="btn-pill">Logout</a>
             <% } else { %>
             <a href="login.html" onclick="sessionStorage.setItem('redirectAfterLogin', 'all_menu.jsp');"
+
                style="text-decoration: none; color: #333; font-weight: 600; font-size: 14px;">Sign In</a>
+
             <a href="signup.html" class="btn-pill btn-secondary">Sign Up</a>
-            <% } %>
-        </div>
+
+            <% }%>
+        </nav>
+    </div>
     </div>
 </header>
 
-<h1 style="text-align: center; margin-top: 50px; color: #2e7d32; font-size: 36px; font-weight: 700;">Menu</h1>
+<h1 class="gallery-title">Our Menu</h1>
 
 <div class="gallery-grid">
     <% for(Kuih k : allKuih) { %>
@@ -141,7 +163,7 @@
 
 
 <script>
-    // SCROLL ENTRANCE ANIMATION
+    // SCROLL ENTRANCE ANIMATION logic
     const observerOptions = { threshold: 0.1 };
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {

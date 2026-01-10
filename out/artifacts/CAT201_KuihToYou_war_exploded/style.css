@@ -1,8 +1,23 @@
 /* This styles the whole page */
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f6f8f5;
+    /* 1. Base Earthy Parchment color */
+    background-color: #f5f0e6;
+
+    /* 2. Path to your Batik Image */
+    background-image: url('KuihMuihImage/batik_pattern.jpg');
+
+    /* 3. Logic for the "Wallpaper" effect */
+    background-repeat: repeat;       /* Pattern repeats to fill screen */
+    background-size: 350px;          /* Adjusts the scale of the flowers */
+    background-attachment: fixed;    /* Background stays still while you scroll */
+
+    /* 4. Blending for "Editorial" look */
+    background-blend-mode: multiply; /* Blends pattern into the parchment color */
+
+    /* 5. Elegant Dark Typography */
+    color: #4a2c2a;
+    font-family: 'Lora', serif;
 }
 
 /* NAVBAR */
