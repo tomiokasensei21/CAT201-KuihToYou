@@ -148,7 +148,7 @@
     <div class="nav-container">
         <a href="index.html" class="logo">KUIH TO YOU</a>
         <nav class="nav-links">
-            <a href="index.html">Home</a>
+            <a href="index.jsp">Home</a>
             <a href="all_menu.jsp">Menu</a>
             <a href="viewCart.jsp">🛒  Cart (<%= totalItems %>)</a>
 
