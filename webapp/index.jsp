@@ -1,7 +1,12 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" import="java.util.List, model.CartItem" %>
 <%
     // MEMBER 3: Check if a user session exists
     String userName = (String) session.getAttribute("user");
+
+    // MEMBER 3: Get last order info (set in CheckoutServlet)
+    List<CartItem> orderItems = (List<CartItem>) session.getAttribute("orderItems");
+    String orderUser = (String) session.getAttribute("orderUser");
+    Double orderTotal = (Double) session.getAttribute("orderTotal");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,10 +35,8 @@
         .nav-actions { display: flex; gap: 15px; align-items: center; }
         .nav-actions a, .nav-actions span { text-decoration: none; color: #333; font-weight: 600; font-size: 14px; }
 
-        .btn-pill {
-            padding: 10px 25px; border-radius: 50px; text-decoration: none;
-            font-weight: bold; font-size: 13px; transition: 0.3s; cursor: pointer; border: none;
-        }
+        .btn-pill { padding: 10px 25px; border-radius: 50px; text-decoration: none;
+            font-weight: bold; font-size: 13px; transition: 0.3s; cursor: pointer; border: none; }
         .btn-primary { background-color: #c62828; color: white; }
         .btn-secondary { background-color: white; border: 2px solid #c62828; color: #c62828; }
         .btn-admin { border: 1px solid #555; color: #555; padding: 8px 15px; font-size: 12px; }
@@ -45,13 +48,11 @@
 
         /* HERO SECTION */
         .hero-section { background-color: #e8f5e9; padding: 60px 20px; text-align: center; }
-        .hero-card {
-            max-width: 1100px; margin: 0 auto; background-color: white;
-            border-radius: 20px; overflow: hidden; display: flex;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: transform 0.5s ease;
-        }
+        .hero-card { max-width: 1100px; margin: 0 auto; background-color: white; border-radius: 20px;
+            overflow: hidden; display: flex; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: transform 0.5s ease; }
         .hero-card:hover { transform: scale(1.01); }
-        .hero-text { flex: 1; padding: 50px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; text-align: left; }
+        .hero-text { flex: 1; padding: 50px; display: flex; flex-direction: column;
+            justify-content: center; align-items: flex-start; text-align: left; }
         .hero-text h1 { font-size: 42px; color: #2e7d32; margin: 0 0 15px 0; }
         .hero-text p { font-size: 18px; color: #555; margin-bottom: 25px; }
         .hero-image { flex: 1; background-image: url('KuihMuihImage/hero.jpg'); background-size: cover; background-position: center; min-height: 400px; transition: transform 0.8s ease; }
@@ -80,7 +81,7 @@
             <a href="menu.jsp">Menu</a>
             <a href="admin_login.html" class="btn-pill btn-admin">Admin</a>
 
-            <%-- MEMBER 3: DYNAMIC AUTH BUTTONS --%>
+            <%-- DYNAMIC AUTH BUTTONS --%>
             <% if (userName != null) { %>
                 <span class="user-greeting">Hi, <%= userName %>!</span>
                 <a href="logout-action" style="color: #c62828; margin-left:10px;">Logout</a>
@@ -131,7 +132,7 @@
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // 2. DYNAMIC MENU LOADING (Safety Version)
+    // 2. DYNAMIC MENU LOADING
     document.addEventListener("DOMContentLoaded", function() {
         fetch('./GetProducts')
             .then(response => response.json())
@@ -139,12 +140,9 @@
                 const grid = document.getElementById('featured-grid');
                 grid.innerHTML = '';
 
-                // Fetch first 3 favorites
                 data.slice(0, 3).forEach(kuih => {
-                    // Fix: Explicitly map the 'image' key from Servlet and handle empty values
                     const imgFile = (kuih.image && kuih.image.trim() !== "") ? kuih.image : 'default.jpg';
                     const imagePath = "KuihMuihImage/" + imgFile;
-
                     const card = `
                         <div class="kuih-card reveal">
                             <div class="img-container">
@@ -155,7 +153,6 @@
                     grid.insertAdjacentHTML('beforeend', card);
                 });
 
-                // Observe new elements for reveal animation
                 document.querySelectorAll('#featured-grid .reveal').forEach(el => observer.observe(el));
             })
             .catch(error => {
@@ -163,16 +160,33 @@
                 document.getElementById('featured-grid').innerHTML = '<p>Fresh favorites arriving soon!</p>';
             });
 
-        // 3. TASK 2: ORDER SUCCESS NOTIFICATION
+        // 3. ORDER CONFIRMATION POPUP
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('status') === 'order_success') {
+        if (urlParams.get('status') === 'order_success' && <%= (orderItems != null) %>) {
+
+            let orderSummary = '';
+            <% if (orderItems != null) { %>
+                <% for (CartItem item : orderItems) { %>
+                    orderSummary += '<%= item.getKuih().getName() %> x <%= item.getQuantity() %> <br>';
+                <% } %>
+                orderSummary += '<hr>Total: RM <%= orderTotal %>';
+            <% } %>
+
             Swal.fire({
-                title: 'Order Placed!',
-                text: 'Your delicious kuih order has been successfully recorded.',
+                title: 'Thank You, <%= orderUser %>!',
+                html: orderSummary + '<br><br>Your order has been successfully placed.',
                 icon: 'success',
                 confirmButtonColor: '#2e7d32'
             });
-            // Clean up URL to prevent repeat alerts on refresh
+
+            // Cleanup session so popup doesn't repeat
+            <%
+                session.removeAttribute("orderItems");
+                session.removeAttribute("orderUser");
+                session.removeAttribute("orderTotal");
+            %>
+
+            // Remove URL parameter
             window.history.replaceState({}, document.title, window.location.pathname);
         }
     });
