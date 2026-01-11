@@ -30,7 +30,6 @@
             color: var(--espresso);
         }
 
-        /* Consistent Header Theme */
         header {
             background-color: var(--clay-orange);
             box-shadow: 0 4px 15px rgba(74, 44, 42, 0.25);
@@ -58,7 +57,6 @@
         .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
         .header-section h1 { font-family: 'Playfair Display', serif; font-size: 42px; margin: 0 0 30px 0; }
 
-        /* Search & Filter Styling */
         .controls-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; gap: 15px; }
         .search-bar {
             flex: 1; padding: 15px 25px; border-radius: 50px;
@@ -76,7 +74,6 @@
         .filter-btn:hover { background: #fdfaf5; transform: translateY(-1px); }
         .filter-btn.active { background: var(--clay-orange); color: white; box-shadow: 0 4px 10px rgba(185, 124, 90, 0.3); }
 
-        /* Order Cards Styling */
         .order-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 30px; }
         .order-card {
             background: var(--warm-white); border-radius: 20px; padding: 25px;
@@ -106,7 +103,6 @@
         .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; }
         .grand-total { font-weight: 800; color: var(--clay-orange); font-size: 22px; }
 
-        /* Action Buttons */
         .btn-action {
             padding: 10px 20px; border-radius: 50px; cursor: pointer;
             font-size: 11px; font-weight: bold; text-transform: uppercase;
@@ -215,29 +211,38 @@
 </div>
 
 <script>
-    // Keeping your logic exactly as before but ensuring smooth execution
-    function setFilter(m, btn) {
+    // Robust Filter Logic
+    function setFilter(type, btn) {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         filterOrders();
     }
 
     function filterOrders() {
-        const q = document.getElementById('orderSearch').value.toLowerCase();
-        const activeBtn = document.querySelector('.filter-btn.active').innerText.toUpperCase().replace(' ORDERS', '');
+        // Get query and trim whitespace
+        const query = document.getElementById('orderSearch').value.toLowerCase().trim();
 
-        document.querySelectorAll('.order-card').forEach(c => {
-            const method = c.getAttribute('data-method');
-            const name = c.getAttribute('data-search');
-            const matchSearch = name.includes(q);
-            const matchFilter = (activeBtn === 'ALL' || method === activeBtn);
+        // Find which filter is active
+        const activeBtn = document.querySelector('.filter-btn.active');
+        const filterText = activeBtn.innerText.toUpperCase();
+
+        document.querySelectorAll('.order-card').forEach(card => {
+            const method = card.getAttribute('data-method') || "";
+            const name = card.getAttribute('data-search') || "";
+
+            // Search match
+            const matchSearch = name.includes(query);
+
+            // Filter match: If 'ALL' is in the button text, show everything.
+            // Otherwise, check if the method (DELIVERY/PICKUP) matches the button text.
+            const matchFilter = (filterText.includes('ALL') || filterText.includes(method));
 
             if (matchSearch && matchFilter) {
-                c.style.display = 'flex';
-                c.classList.remove('hidden');
+                card.style.display = 'flex';
+                card.classList.remove('hidden');
             } else {
-                c.style.display = 'none';
-                c.classList.add('hidden');
+                card.style.display = 'none';
+                card.classList.add('hidden');
             }
         });
     }

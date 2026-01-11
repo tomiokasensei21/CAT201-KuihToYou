@@ -141,7 +141,6 @@
         </a>
         <div class="nav-actions">
             <a href="index.jsp">Home</a>
-            <a href="all_menu.jsp">Gallery</a>
             <a href="menu.jsp">Menu</a>
             <a href="viewCart.jsp">🛒 Cart (<%= totalItems %>)</a>
 

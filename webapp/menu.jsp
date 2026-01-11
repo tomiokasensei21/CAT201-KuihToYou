@@ -81,7 +81,7 @@
             padding: 15px; padding-bottom: 25px; box-shadow: 0 10px 25px var(--warm-shadow);
             opacity: 0; transform: translateY(30px);
             transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease, opacity 0.6s ease-out;
-            position: relative; /* For the badge positioning */
+            position: relative;
         }
         .kuih-card.show { opacity: 1; transform: translateY(0); }
 
@@ -90,7 +90,6 @@
             box-shadow: 0 20px 45px rgba(185, 124, 90, 0.25);
         }
 
-        /* NEW: STOCK VISUALS */
         .kuih-card.out-of-stock { filter: grayscale(0.7); opacity: 0.8; }
         .stock-badge {
             position: absolute; top: 25px; right: 25px;
@@ -134,7 +133,7 @@
         </a>
         <div class="nav-actions">
             <a href="index.jsp">Home</a>
-            <a href="all_menu.jsp">Gallery</a>
+            <a href="all_menu.jsp">Menu</a>
             <a href="viewCart.jsp">🛒 Cart (<%= totalCount %>)</a>
 
             <% if (userName != null) { %>
@@ -157,9 +156,7 @@
 <section class="menu-grid">
     <% if (allKuih != null) {
         for(Kuih k : allKuih) {
-            // STOCK CHECK LOGIC
             boolean isOutOfStock = (k.getStock() <= 0);
-
             String fullName = k.getName();
             String cleanTitle = fullName;
             String subDetail = "";
