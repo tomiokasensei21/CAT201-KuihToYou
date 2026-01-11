@@ -67,8 +67,7 @@ public class CheckoutServlet extends HttpServlet {
 
             // 7. Cleanup and Redirect
             session.removeAttribute("cart");
-            response.sendRedirect("index.jsp?status=order_success");
-
+            response.sendRedirect("viewCart.jsp?status=order_success");
         } else {
             response.sendRedirect("login.html?error=must_login");
         }
