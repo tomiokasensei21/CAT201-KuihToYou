@@ -1,5 +1,5 @@
 K001,Cucur Badak (5pcs),3.0,CoqBadak.jpg,0
-K002,Cucur Jawa (5pcs),2.5,CoqJawa.jpeg,34
+K002,Cucur Jawa (5pcs),2.5,CoqJawa.jpeg,27
 K003,Onde-Onde (5pcs),1.5,KuihOndeOnde.jpeg,49
 K004,Cucur Pisang (6 pcs),2.0,CoqPisang.jpg,70
 K005,Bahulu (15 pcs),10.0,KuihBahulu.jpeg,60

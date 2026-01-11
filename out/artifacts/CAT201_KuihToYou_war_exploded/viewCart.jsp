@@ -148,7 +148,7 @@
             <% if (userName != null) { %>
             <span class="user-greeting">Hi, <%= userName %>!</span>
             <% if ("admin".equals(userRole)) { %>
-            <a href="admin_dashboard.html" style="color: #ffd700 !important; border-bottom: 1px solid #ffd700;">Admin Panel</a>
+            <a href="admin_dashboard.jsp" style="color: #ffd700 !important; border-bottom: 1px solid #ffd700;">Admin Panel</a>
             <% } %>
             <a onclick="confirmLogout(event)" class="btn-pill">Logout</a>
             <% } else { %>

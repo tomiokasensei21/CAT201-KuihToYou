@@ -16,31 +16,31 @@ public class LoginServlet extends HttpServlet {
         String user = request.getParameter("username");
         String pass = request.getParameter("password");
 
-        // 1. Validation for empty fields
+        // 1. Validation for empty fields (KEPT OLD FEATURE)
         if (user == null || user.trim().isEmpty() || pass == null || pass.trim().isEmpty()) {
             response.sendRedirect("login.html?error=empty_fields");
             return;
         }
 
-        // 2. Strict Admin Check
-        // This is where the redirection to the Admin Dashboard happens
+        // 2. Strict Admin Check (KEPT OLD FEATURE)
         if ("admin".equalsIgnoreCase(user)) {
             if ("admin123".equals(pass)) {
                 setupSession(request, user, "admin");
-                // Consistent with your admin_dashboard.html filename
-                response.sendRedirect("index.jsp");
+                // ADDED status parameter to trigger popout
+                response.sendRedirect("index.jsp?status=login_success");
             } else {
                 response.sendRedirect("login.html?error=admin_fail&user=admin");
             }
             return;
         }
 
-        // 3. Customer Check (Redirects to Storefront)
+        // 3. Customer Check (KEPT OLD FEATURE)
         int status = UserManager.validateUser(user, pass, getServletContext());
 
         if (status == 0) {
             setupSession(request, user, "customer");
-            response.sendRedirect("index.jsp");
+            // ADDED status parameter to trigger popout
+            response.sendRedirect("index.jsp?status=login_success");
         }
         else if (status == 1) {
             response.sendRedirect("login.html?error=no_user&attempt=" + user);
@@ -59,6 +59,8 @@ public class LoginServlet extends HttpServlet {
         HttpSession newSession = request.getSession(true);
         newSession.setAttribute("user", username);
         newSession.setAttribute("userRole", role);
-        newSession.setMaxInactiveInterval(30 * 60); // 30 minutes session
+        // This makes sure the JSP popup logic can also see it
+        newSession.setAttribute("loginTrigger", true);
+        newSession.setMaxInactiveInterval(30 * 60);
     }
 }

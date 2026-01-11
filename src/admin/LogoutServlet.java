@@ -21,20 +21,18 @@ public class LogoutServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
 
         // 2. If a session exists, invalidate it to clear all attributes
-        // (userName, userRole, welcomeShown, etc.)
         if (session != null) {
             session.invalidate();
         }
 
-        // 3. Redirect back to index.jsp with the status parameter
-        // This parameter is detected by the JavaScript in index.jsp to show the toast
-        response.sendRedirect("index.jsp?status=logged_out");
+        // 3. Redirect back to index.jsp with the CORRECT status parameter
+        // Changed "logged_out" to "logout_success" to match your index.jsp script
+        response.sendRedirect("index.jsp?status=logout_success");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Redirect POST requests to the GET logic for consistency
         doGet(request, response);
     }
 }

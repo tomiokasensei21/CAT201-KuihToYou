@@ -147,7 +147,7 @@
             <a href="viewCart.jsp">🛒 Cart (<%= totalCount %>)</a>
             <% if (userName != null) { %>
             <span class="user-greeting">Hi, <%= userName %>!</span>
-            <% if ("admin".equals(userRole)) { %><a href="admin_dashboard.html" style="color: #ffd700 !important; border-bottom: 1px solid #ffd700;">Admin Panel</a><% } %>
+            <% if ("admin".equals(userRole)) { %><a href="admin_dashboard.jsp" style="color: #ffd700 !important; border-bottom: 1px solid #ffd700;">Admin Panel</a><% } %>
             <a onclick="confirmLogout(event)" class="btn-pill">Logout</a>
             <% } else { %>
             <a href="login.html">Sign In</a>
@@ -227,10 +227,12 @@
         const track = document.getElementById('featured-grid');
         const cards = document.querySelectorAll('.kuih-card');
         if (cards.length === 0) return;
-        const cardWidth = cards[0].offsetWidth + 30;
+
+        const cardWidth = 350;
         const viewportWidth = document.querySelector('.carousel-viewport').offsetWidth;
         const visibleCards = Math.floor(viewportWidth / cardWidth);
-        const maxIndex = cards.length - visibleCards;
+        const maxIndex = Math.max(0, cards.length - visibleCards);
+
         currentIndex = Math.max(0, Math.min(currentIndex + direction, maxIndex));
         track.style.transform = "translateX(" + (-(currentIndex * cardWidth)) + "px)";
     }
@@ -257,26 +259,28 @@
     document.addEventListener('DOMContentLoaded', function() {
         const params = new URLSearchParams(window.location.search);
 
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            background: '#fffcf7',
+            color: '#4a2c2a'
+        });
+
         if (params.get('status') === 'login_success') {
-            Swal.fire({
-                title: 'Welcome Back!',
-                text: 'Happy to see you again, <%= userName %>!',
+            Toast.fire({
                 icon: 'success',
-                timer: 2500,
-                showConfirmButton: false,
-                background: '#fcfaf7'
+                title: 'Welcome Back, <%= userName %>!'
             });
             window.history.replaceState({}, document.title, window.location.pathname);
         }
 
         if (params.get('status') === 'logout_success') {
-            Swal.fire({
-                title: 'See you soon!',
-                text: 'You have successfully logged out.',
+            Toast.fire({
                 icon: 'info',
-                timer: 2000,
-                showConfirmButton: false,
-                background: '#fcfaf7'
+                title: 'Successfully logged out.'
             });
             window.history.replaceState({}, document.title, window.location.pathname);
         }
@@ -366,10 +370,11 @@
                                         <input type="radio" name="delMethod" value="delivery" onchange="document.getElementById('address-box').style.display='block'">
                                         <span>🚚 Delivery (+RM 5.00)</span>
                                     </label>
-                                    <div id="address-box" style="display: none; margin-top: 15px; padding: 10px; background: #fffcf7; border: 1px dashed #b97c5a; border-radius: 8px;">
-                                        <label style="font-size: 13px; font-weight: bold;">Full Address:</label>
-                                        <textarea id="swal-address" class="del-input" rows="3"></textarea>
-                                        <label style="font-size: 13px; font-weight: bold; margin-top: 10px; display: block;">Phone Number:</label>
+                                    <div id="address-box" style="display: none; margin-top: 15px; padding: 15px; background: #fffcf7; border: 1px dashed #b97c5a; border-radius: 8px;">
+                                        <label style="font-size: 13px; font-weight: bold;">Full Delivery Address (incl. Postcode):</label>
+                                        <textarea id="swal-address" class="del-input" rows="3" placeholder="No. 12, Jalan Batik, 11700 Penang"></textarea>
+
+                                        <label style="font-size: 13px; font-weight: bold; margin-top: 10px; display: block;">Malaysian Phone Number:</label>
                                         <input id="swal-phone" type="text" class="del-input" placeholder="01X-XXXXXXX">
                                     </div>
                                 </div>
@@ -379,11 +384,28 @@
                         confirmButtonColor: '#b97c5a',
                         preConfirm: () => {
                             const method = document.querySelector('input[name="delMethod"]:checked').value;
-                            const addr = document.getElementById('swal-address').value;
-                            const phone = document.getElementById('swal-phone').value;
-                            if (method === 'delivery' && (!addr || !phone)) {
-                                Swal.showValidationMessage('Address and Phone are required for delivery');
-                                return false;
+                            const addr = document.getElementById('swal-address').value.trim();
+                            const phone = document.getElementById('swal-phone').value.trim();
+
+                            if (method === 'delivery') {
+                                // 1. Robust Address Validation
+                                const postcodeRegex = /\b\d{5}\b/; // Regex to find exactly 5 digits for Malaysian Postcode
+                                if (addr.length < 15) {
+                                    Swal.showValidationMessage('Address is too short. Please include house number and street.');
+                                    return false;
+                                }
+                                if (!postcodeRegex.test(addr)) {
+                                    Swal.showValidationMessage('Please include a valid 5-digit Postcode.');
+                                    return false;
+                                }
+
+                                // 2. Robust Phone Validation
+                                const phoneClean = phone.replace(/[-\s]/g, ""); // Remove dashes/spaces
+                                const phoneRegex = /^01[0-9]{8,9}$/; // Starts with 01, total 10-11 digits
+                                if (!phoneRegex.test(phoneClean)) {
+                                    Swal.showValidationMessage('Please enter a valid phone number (e.g., 0123456789).');
+                                    return false;
+                                }
                             }
                             return { method, addr, phone };
                         }
