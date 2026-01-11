@@ -120,7 +120,6 @@
         }
         .btn-solid-pop:hover { background-color: var(--clay-dark); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(185, 124, 90, 0.3); }
 
-        /* Style for the secondary Explorer button */
         .btn-outline-dark {
             display: inline-block; border: 2px solid var(--espresso); color: var(--espresso) !important;
             padding: 15px 45px; font-size: 15px; font-weight: 800; text-decoration: none;
@@ -171,7 +170,7 @@
         <span style="font-weight:bold; letter-spacing:3px; font-size: 14px; text-transform: uppercase;">Handmade Tradition</span>
         <h1>Earthy Flavors.<br>Authentic Taste.</h1>
         <p>Experience Malaysian heritage with fresh, handmade kuih delivered to your doorstep.</p>
-        <a href="all_menu.jsp" class="btn-solid-pop" style="font-size: 16px; padding: 18px 50px;">ORDER NOW</a>
+        <a href="menu.jsp" class="btn-solid-pop" style="font-size: 16px; padding: 18px 50px;">ORDER NOW</a>
     </div>
 </section>
 
@@ -210,7 +209,7 @@
                     <% if (isOutOfStock) { %>
                     <span class="btn-solid-pop btn-disabled">Sold Out</span>
                     <% } else { %>
-                    <a href="all_menu.jsp" class="btn-solid-pop">Order Now</a>
+                    <a href="menu.jsp" class="btn-solid-pop">Order Now</a>
                     <% } %>
                 </div>
                 <%
