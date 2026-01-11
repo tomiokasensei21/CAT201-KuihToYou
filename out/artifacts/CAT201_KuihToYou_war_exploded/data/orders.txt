@@ -27,3 +27,16 @@ Items     :
   - Cucur Jawa (5pcs)    (x1) : RM 2.50
 GRAND TOTAL: RM 2.50
 --------------------------------
+=== NEW ORDER ===
+Customer  : oyi
+Date      : Sun Jan 11 20:06:54 GMT+08:00 2026
+Method    : DELIVERY
+Phone     : 01113451900
+Address   : no.18, Arena ampang, 14330, Johor
+Items     :
+  - Badak Berendam       (x1) : RM 3.00
+  - Pulut Inti           (x1) : RM 2.00
+  - Kuih Keria (7pcs)    (x2) : RM 9.80
+Service   : Delivery Fee (+RM 5.00)
+GRAND TOTAL: RM 19.80
+--------------------------------

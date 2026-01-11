@@ -120,6 +120,15 @@
         }
         .btn-solid-pop:hover { background-color: var(--clay-dark); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(185, 124, 90, 0.3); }
 
+        /* Style for the secondary Explorer button */
+        .btn-outline-dark {
+            display: inline-block; border: 2px solid var(--espresso); color: var(--espresso) !important;
+            padding: 15px 45px; font-size: 15px; font-weight: 800; text-decoration: none;
+            border-radius: 50px; transition: 0.3s; margin-top: 40px; letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .btn-outline-dark:hover { background: var(--espresso); color: var(--warm-white) !important; transform: translateY(-2px); }
+
         .sold-out { filter: grayscale(0.8); opacity: 0.7; }
         .sold-out-badge {
             position: absolute; top: 15px; right: 15px; background: var(--espresso);
@@ -143,7 +152,7 @@
             <img src="${pageContext.request.contextPath}/KuihMuihImage/kuihtoyoulogo.png" alt="Logo" class="logo-img">
         </a>
         <div class="nav-actions">
-            <a href="menu.jsp">Menu</a>
+            <a href="all_menu.jsp">Menu</a>
             <a href="viewCart.jsp">🛒 Cart (<%= totalCount %>)</a>
             <% if (userName != null) { %>
             <span class="user-greeting">Hi, <%= userName %>!</span>
@@ -162,7 +171,7 @@
         <span style="font-weight:bold; letter-spacing:3px; font-size: 14px; text-transform: uppercase;">Handmade Tradition</span>
         <h1>Earthy Flavors.<br>Authentic Taste.</h1>
         <p>Experience Malaysian heritage with fresh, handmade kuih delivered to your doorstep.</p>
-        <a href="menu.jsp" class="btn-solid-pop" style="font-size: 16px; padding: 18px 50px;">ORDER NOW</a>
+        <a href="all_menu.jsp" class="btn-solid-pop" style="font-size: 16px; padding: 18px 50px;">ORDER NOW</a>
     </div>
 </section>
 
@@ -201,7 +210,7 @@
                     <% if (isOutOfStock) { %>
                     <span class="btn-solid-pop btn-disabled">Sold Out</span>
                     <% } else { %>
-                    <a href="menu.jsp" class="btn-solid-pop">Order Now</a>
+                    <a href="all_menu.jsp" class="btn-solid-pop">Order Now</a>
                     <% } %>
                 </div>
                 <%
@@ -210,6 +219,10 @@
                 %>
             </div>
         </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <a href="all_menu.jsp" class="btn-outline-dark">Explore Full Menu</a>
     </div>
 </section>
 
@@ -388,8 +401,7 @@
                             const phone = document.getElementById('swal-phone').value.trim();
 
                             if (method === 'delivery') {
-                                // 1. Robust Address Validation
-                                const postcodeRegex = /\b\d{5}\b/; // Regex to find exactly 5 digits for Malaysian Postcode
+                                const postcodeRegex = /\b\d{5}\b/;
                                 if (addr.length < 15) {
                                     Swal.showValidationMessage('Address is too short. Please include house number and street.');
                                     return false;
@@ -399,9 +411,8 @@
                                     return false;
                                 }
 
-                                // 2. Robust Phone Validation
-                                const phoneClean = phone.replace(/[-\s]/g, ""); // Remove dashes/spaces
-                                const phoneRegex = /^01[0-9]{8,9}$/; // Starts with 01, total 10-11 digits
+                                const phoneClean = phone.replace(/[-\s]/g, "");
+                                const phoneRegex = /^01[0-9]{8,9}$/;
                                 if (!phoneRegex.test(phoneClean)) {
                                     Swal.showValidationMessage('Please enter a valid phone number (e.g., 0123456789).');
                                     return false;
