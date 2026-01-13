@@ -120,6 +120,14 @@
         }
         .btn-solid-pop:hover { background-color: var(--clay-dark); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(185, 124, 90, 0.3); }
 
+        .btn-outline-dark {
+            display: inline-block; border: 2px solid var(--espresso); color: var(--espresso) !important;
+            padding: 15px 45px; font-size: 15px; font-weight: 800; text-decoration: none;
+            border-radius: 50px; transition: 0.3s; margin-top: 40px; letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .btn-outline-dark:hover { background: var(--espresso); color: var(--warm-white) !important; transform: translateY(-2px); }
+
         .sold-out { filter: grayscale(0.8); opacity: 0.7; }
         .sold-out-badge {
             position: absolute; top: 15px; right: 15px; background: var(--espresso);
@@ -143,11 +151,11 @@
             <img src="${pageContext.request.contextPath}/KuihMuihImage/kuihtoyoulogo.png" alt="Logo" class="logo-img">
         </a>
         <div class="nav-actions">
-            <a href="menu.jsp">Menu</a>
+            <a href="all_menu.jsp">Menu</a>
             <a href="viewCart.jsp">🛒 Cart (<%= totalCount %>)</a>
             <% if (userName != null) { %>
             <span class="user-greeting">Hi, <%= userName %>!</span>
-            <% if ("admin".equals(userRole)) { %><a href="admin_dashboard.html" style="color: #ffd700 !important; border-bottom: 1px solid #ffd700;">Admin Panel</a><% } %>
+            <% if ("admin".equals(userRole)) { %><a href="admin_dashboard.jsp" style="color: #ffd700 !important; border-bottom: 1px solid #ffd700;">Admin Panel</a><% } %>
             <a onclick="confirmLogout(event)" class="btn-pill">Logout</a>
             <% } else { %>
             <a href="login.html">Sign In</a>
@@ -211,13 +219,13 @@
             </div>
         </div>
     </div>
+
+    <div style="margin-top: 20px;">
+        <a href="all_menu.jsp" class="btn-outline-dark">Explore Full Menu</a>
+    </div>
 </section>
 
-<form id="hiddenCheckoutForm" action="CheckoutServlet" method="POST" style="display:none;">
-    <input type="hidden" name="method" id="formMethod">
-    <input type="hidden" name="address" id="formAddress">
-    <input type="hidden" name="phone" id="formPhone">
-</form>
+
 
 <footer>&copy; 2026 Kuih To You.</footer>
 
@@ -227,10 +235,12 @@
         const track = document.getElementById('featured-grid');
         const cards = document.querySelectorAll('.kuih-card');
         if (cards.length === 0) return;
-        const cardWidth = cards[0].offsetWidth + 30;
+
+        const cardWidth = 350;
         const viewportWidth = document.querySelector('.carousel-viewport').offsetWidth;
         const visibleCards = Math.floor(viewportWidth / cardWidth);
-        const maxIndex = cards.length - visibleCards;
+        const maxIndex = Math.max(0, cards.length - visibleCards);
+
         currentIndex = Math.max(0, Math.min(currentIndex + direction, maxIndex));
         track.style.transform = "translateX(" + (-(currentIndex * cardWidth)) + "px)";
     }
@@ -257,148 +267,33 @@
     document.addEventListener('DOMContentLoaded', function() {
         const params = new URLSearchParams(window.location.search);
 
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            background: '#fffcf7',
+            color: '#4a2c2a'
+        });
+
         if (params.get('status') === 'login_success') {
-            Swal.fire({
-                title: 'Welcome Back!',
-                text: 'Happy to see you again, <%= userName %>!',
+            Toast.fire({
                 icon: 'success',
-                timer: 2500,
-                showConfirmButton: false,
-                background: '#fcfaf7'
+                title: 'Welcome Back, <%= userName %>!'
             });
             window.history.replaceState({}, document.title, window.location.pathname);
         }
 
         if (params.get('status') === 'logout_success') {
-            Swal.fire({
-                title: 'See you soon!',
-                text: 'You have successfully logged out.',
+            Toast.fire({
                 icon: 'info',
-                timer: 2000,
-                showConfirmButton: false,
-                background: '#fcfaf7'
+                title: 'Successfully logged out.'
             });
             window.history.replaceState({}, document.title, window.location.pathname);
         }
 
-        if (params.get('status') === 'order_success') {
-            <%
-                List<CartItem> orderItems = (List<CartItem>) session.getAttribute("orderItems");
-                Double totalFromSession = (Double) session.getAttribute("orderTotal");
-                double itemsOnlySubtotal = 0;
-                if (orderItems != null) {
-                    for (CartItem item : orderItems) {
-                        itemsOnlySubtotal += (item.getKuih().getPrice() * item.getQuantity());
-                    }
-                }
-                double finalDeliveryFee = 0.0;
-                String finalMethod = "Self-Pickup";
-                if (totalFromSession != null && totalFromSession > itemsOnlySubtotal) {
-                    finalDeliveryFee = 5.0;
-                    finalMethod = "Delivery";
-                }
-                String orderDate = new java.text.SimpleDateFormat("dd MMM yyyy, HH:mm:ss").format(new java.util.Date());
-            %>
 
-            <% if (orderItems != null) { %>
-            Swal.fire({
-                title: '<span style="font-family: Playfair Display;">Payment Successful</span>',
-                html: `
-                        <div style='text-align: left; font-family: Lora, serif; background: #fff; padding: 25px; border: 1px solid #ddd; border-radius: 4px;'>
-                            <div style='text-align: center; border-bottom: 2px dashed #eee; padding-bottom: 20px; margin-bottom: 20px;'>
-                                <h2 style='font-family: Playfair Display; color: #4a2c2a; margin: 0;'>KUIH TO YOU</h2>
-                                <p style='font-size: 10px; color: #999; margin: 5px 0;'>ESTABLISHED 2026 • OFFICIAL RECEIPT</p>
-                            </div>
-                            <div style='font-size: 12px; line-height: 1.6; color: #555;'>
-                                <p><b>Order ID:</b> #KTU-${Math.floor(Math.random() * 90000 + 10000)}</p>
-                                <p><b>Customer:</b> <%= userName %></p>
-                                <p><b>Date:</b> <%= orderDate %></p>
-                                <p><b>Method:</b> <span style="color: #b97c5a; font-weight: bold;"><%= finalMethod %></span></p>
-                            </div>
-                            <table style='width: 100%; font-size: 13px; margin-top: 20px; border-collapse: collapse;'>
-                                <thead><tr style='border-bottom: 1px solid #eee;'><th style='text-align: left; padding: 8px 0;'>Item</th><th style='text-align: right; padding: 8px 0;'>Amount</th></tr></thead>
-                                <tbody>
-                                    <% for (CartItem item : orderItems) { %>
-                                    <tr><td style='padding: 8px 0;'><%= item.getKuih().getName() %> x <%= item.getQuantity() %></td><td style='text-align: right;'>RM <%= String.format("%.2f", item.getKuih().getPrice() * item.getQuantity()) %></td></tr>
-                                    <% } %>
-                                    <% if (finalDeliveryFee > 0) { %>
-                                    <tr style='border-top: 1px dashed #eee;'><td style='padding: 8px 0; color: #666;'>Delivery Service Fee</td><td style='text-align: right; color: #666;'>RM <%= String.format("%.2f", finalDeliveryFee) %></td></tr>
-                                    <% } %>
-                                </tbody>
-                            </table>
-                            <div style='margin-top: 20px; padding-top: 15px; border-top: 2px solid #4a2c2a;'>
-                                <div style='display: flex; justify-content: space-between; font-weight: bold; font-size: 18px; color: #b97c5a;'>
-                                    <span>GRAND TOTAL</span>
-                                    <span>RM <%= String.format("%.2f", totalFromSession) %></span>
-                                </div>
-                            </div>
-                        </div>
-                    `,
-                icon: 'success',
-                confirmButtonText: 'Back to Home',
-                confirmButtonColor: '#b97c5a',
-                width: '550px',
-                background: '#fcfaf7'
-            }).then(() => {
-                <% session.removeAttribute("orderItems"); session.removeAttribute("orderTotal"); %>
-                window.history.replaceState({}, document.title, window.location.pathname);
-            });
-            <% } else { %>
-            Swal.fire({
-                title: 'Finalize Your Order',
-                text: "Would you like to proceed to payment?",
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Next',
-                confirmButtonColor: '#b97c5a',
-                background: '#fcfaf7'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: '<span style="font-family: Playfair Display;">Delivery Method</span>',
-                        html: `
-                                <div style="text-align: left; font-family: Lora, serif;">
-                                    <label class="del-option">
-                                        <input type="radio" name="delMethod" value="pickup" checked onchange="document.getElementById('address-box').style.display='none'">
-                                        <span>🏠 Self-Pickup (Free)</span>
-                                    </label>
-                                    <label class="del-option">
-                                        <input type="radio" name="delMethod" value="delivery" onchange="document.getElementById('address-box').style.display='block'">
-                                        <span>🚚 Delivery (+RM 5.00)</span>
-                                    </label>
-                                    <div id="address-box" style="display: none; margin-top: 15px; padding: 10px; background: #fffcf7; border: 1px dashed #b97c5a; border-radius: 8px;">
-                                        <label style="font-size: 13px; font-weight: bold;">Full Address:</label>
-                                        <textarea id="swal-address" class="del-input" rows="3"></textarea>
-                                        <label style="font-size: 13px; font-weight: bold; margin-top: 10px; display: block;">Phone Number:</label>
-                                        <input id="swal-phone" type="text" class="del-input" placeholder="01X-XXXXXXX">
-                                    </div>
-                                </div>
-                            `,
-                        showCancelButton: true,
-                        confirmButtonText: 'Confirm & Pay',
-                        confirmButtonColor: '#b97c5a',
-                        preConfirm: () => {
-                            const method = document.querySelector('input[name="delMethod"]:checked').value;
-                            const addr = document.getElementById('swal-address').value;
-                            const phone = document.getElementById('swal-phone').value;
-                            if (method === 'delivery' && (!addr || !phone)) {
-                                Swal.showValidationMessage('Address and Phone are required for delivery');
-                                return false;
-                            }
-                            return { method, addr, phone };
-                        }
-                    }).then((delResult) => {
-                        if (delResult.isConfirmed) {
-                            document.getElementById('formMethod').value = delResult.value.method;
-                            document.getElementById('formAddress').value = delResult.value.addr;
-                            document.getElementById('formPhone').value = delResult.value.phone;
-                            document.getElementById('hiddenCheckoutForm').submit();
-                        }
-                    });
-                }
-            });
-            <% } %>
-        }
     });
 </script>
 </body>

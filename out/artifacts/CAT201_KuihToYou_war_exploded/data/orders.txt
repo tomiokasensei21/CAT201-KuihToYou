@@ -1,17 +1,16 @@
 === NEW ORDER ===
-Date: Fri Jan 09 13:57:09 GST 2026
-Customer: Check2
-- Cucur Jawa (x1) : RM 0.50
-Total Amount: RM 0.50
------------------------------
-=== NEW ORDER ===
-Customer: Check2
-Date: Fri Jan 09 14:00:21 GST 2026
-- Onde-Onde (5 pcs) (x1) : RM 1.50
-- Cucur Badak (x1) : RM 0.60
-GRAND TOTAL: RM 2.10
+Customer  : admin
+Date      : Sun Jan 11 19:16:27 GMT+08:00 2026
+Method    : DELIVERY
+Phone     : 01110001000
+Address   : AA mall, 13000, kl
+Items     :
+  - Cucur Jawa (5pcs)    (x1) : RM 2.50
+Service   : Delivery Fee (+RM 5.00)
+GRAND TOTAL: RM 7.50
 --------------------------------
 === NEW ORDER ===
+<<<<<<< HEAD
 Customer: Check2
 Date: Fri Jan 09 14:01:07 GST 2026
 - Cucur Jawa (x1) : RM 0.50
@@ -92,4 +91,35 @@ Customer: Check2
 Date: Sat Jan 10 09:57:14 GST 2026
 - Cucur Jawa (x1) : RM 0.50
 GRAND TOTAL: RM 0.50
+=======
+Customer  : admin
+Date      : Sun Jan 11 19:16:45 GMT+08:00 2026
+Method    : PICKUP
+Location  : Self-Pickup at HQ
+Items     :
+  - Cucur Jawa (5pcs)    (x1) : RM 2.50
+GRAND TOTAL: RM 2.50
+--------------------------------
+=== NEW ORDER ===
+Customer  : admin
+Date      : Sun Jan 11 19:41:03 GMT+08:00 2026
+Method    : PICKUP
+Location  : Self-Pickup at HQ
+Items     :
+  - Cucur Jawa (5pcs)    (x1) : RM 2.50
+GRAND TOTAL: RM 2.50
+--------------------------------
+=== NEW ORDER ===
+Customer  : oyi
+Date      : Sun Jan 11 20:06:54 GMT+08:00 2026
+Method    : DELIVERY
+Phone     : 01113451900
+Address   : no.18, Arena ampang, 14330, Johor
+Items     :
+  - Badak Berendam       (x1) : RM 3.00
+  - Pulut Inti           (x1) : RM 2.00
+  - Kuih Keria (7pcs)    (x2) : RM 9.80
+Service   : Delivery Fee (+RM 5.00)
+GRAND TOTAL: RM 19.80
+>>>>>>> 4f78eec77ae6bafbf6632dbde7688cbde16f6a85
 --------------------------------

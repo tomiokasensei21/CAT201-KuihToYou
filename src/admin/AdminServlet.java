@@ -123,6 +123,6 @@ public class AdminServlet extends HttpServlet {
         }
 
         DataHandler.saveToFile(list, getServletContext());
-        response.sendRedirect("admin_dashboard.html?status=updated");
+        response.sendRedirect("admin_dashboard.jsp?status=updated");
     }
 }

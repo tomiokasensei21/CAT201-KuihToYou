@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 K001,Cucur Badak (5pcs),3.00,CoqBadak.jpg,50
 K002,Cucur Jawa (5pcs),2.50,CoqJawa.jpeg,40
 K003,Onde-Onde (5pcs),1.50,KuihOndeOnde.jpeg,50
@@ -16,3 +17,23 @@ K015,Bingka Ubi (2pcs),3.00,ubi.jpg,50
 K016,Tepung Pelita (2pcs),3.00,tepungpelita.jpg,60
 K017,Kuih Bakar,6.00,bakar.jpg,40
 K018,Karipap(4pcs),2.40,karipap.jpg,50
+=======
+K001,Cucur Badak (5pcs),3.0,CoqBadak.jpg,0
+K002,Cucur Jawa (5pcs),2.5,CoqJawa.jpeg,27
+K003,Onde-Onde (5pcs),1.5,KuihOndeOnde.jpeg,49
+K004,Cucur Pisang (6 pcs),2.0,CoqPisang.jpg,70
+K005,Bahulu (15 pcs),10.0,KuihBahulu.jpeg,60
+K006,Kuih Cara (5pcs),3.0,KuihCara.jpeg,9
+K007,Kuih Keria (7pcs),4.9,KuihKeria.jpeg,43
+K008,Kuih Ketayap (5pcs),5.0,KuihKetayap.jpeg,30
+K009,Kuih Koci (5pcs),5.0,KuihKoci.jpeg,15
+K010,Kuih Nona Manis (4pcs),2.4,KuihNonaManis.jpeg,5
+K011,Badak Berendam,3.0,BadakBerendam.jpg,59
+K012,Pulut Inti,2.0,PulutInti.jpg,39
+K013,Popia (4pcs),2.4,Popia.jpg,60
+K014,Popia Big Mac (4pcs),4.0,Bigmac.jpg,80
+K015,Bingka Ubi (2pcs),3.0,ubi.jpg,50
+K016,Tepung Pelita (2pcs),3.0,tepungpelita.jpg,60
+K017,Kuih Bakar,6.0,bakar.jpg,40
+K018,Karipap(4pcs),2.4,karipap.jpg,50
+>>>>>>> 4f78eec77ae6bafbf6632dbde7688cbde16f6a85

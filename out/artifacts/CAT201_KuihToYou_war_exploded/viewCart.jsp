@@ -141,14 +141,13 @@
         </a>
         <div class="nav-actions">
             <a href="index.jsp">Home</a>
-            <a href="all_menu.jsp">Gallery</a>
             <a href="menu.jsp">Menu</a>
             <a href="viewCart.jsp">🛒 Cart (<%= totalItems %>)</a>
 
             <% if (userName != null) { %>
             <span class="user-greeting">Hi, <%= userName %>!</span>
             <% if ("admin".equals(userRole)) { %>
-            <a href="admin_dashboard.html" style="color: #ffd700 !important; border-bottom: 1px solid #ffd700;">Admin Panel</a>
+            <a href="admin_dashboard.jsp" style="color: #ffd700 !important; border-bottom: 1px solid #ffd700;">Admin Panel</a>
             <% } %>
             <a onclick="confirmLogout(event)" class="btn-pill">Logout</a>
             <% } else { %>

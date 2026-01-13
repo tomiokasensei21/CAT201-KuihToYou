@@ -1,8 +1,16 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" import="java.io.*, java.util.*" %>
+<%
+    String userRole = (String) session.getAttribute("userRole");
+    if (!"admin".equals(userRole)) {
+        response.sendRedirect("index.jsp");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard - Kuih To You</title>
+    <title>Inventory Admin - Kuih To You</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lora:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
@@ -23,7 +31,6 @@
             color: var(--espresso);
         }
 
-        /* --- HEADER --- */
         header {
             background-color: var(--clay-orange);
             box-shadow: 0 4px 15px rgba(74, 44, 42, 0.25);
@@ -36,6 +43,10 @@
         }
         .logo-img { height: 45px; width: auto; }
 
+        .nav-actions { display: flex; align-items: center; gap: 20px; }
+        .nav-link { color: white; text-decoration: none; font-weight: 600; font-size: 14px; transition: 0.3s; }
+        .nav-link:hover { opacity: 0.8; }
+
         .btn-pill {
             text-decoration: none; color: white; border: 1.5px solid white;
             padding: 8px 20px; border-radius: 50px; font-size: 12px; font-weight: bold;
@@ -43,8 +54,7 @@
         }
         .btn-pill:hover { background: white; color: var(--clay-orange); }
 
-        /* --- CONTENT --- */
-        .admin-container { max-width: 1100px; margin: 60px auto; padding: 0 20px; }
+        .admin-container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
 
         .header-section {
             display: flex; justify-content: space-between; align-items: center;
@@ -72,7 +82,6 @@
             box-sizing: border-box; outline: none;
         }
 
-        /* --- TABLE STYLING --- */
         table { width: 100%; border-collapse: collapse; }
         th {
             text-align: left; padding: 15px; border-bottom: 2px solid var(--parchment-bg);
@@ -86,25 +95,17 @@
         .stock-low { background: #fff1f0; color: #cf1322; border: 1px solid #ffa39e; }
         .stock-normal { background: #f6ffed; color: #389e0d; border: 1px solid #b7eb8f; }
 
-        /* --- ACTION BUTTONS --- */
         .action-btn {
             padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: bold;
             cursor: pointer; text-decoration: none; transition: 0.2s; border: none;
             text-transform: uppercase; margin-right: 5px;
         }
         .edit-btn { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; }
-        .edit-btn:hover { background: #1890ff; color: white; }
-
         .delete-btn { background: #fff1f0; color: #f5222d; border: 1px solid #ffa39e; }
-        .delete-btn:hover { background: #f5222d; color: white; }
 
-        /* --- FORM STYLING FOR SWAL --- */
         .swal-form-group { text-align: left; margin-bottom: 15px; }
         .swal-label { display: block; font-weight: bold; color: var(--espresso); margin-bottom: 5px; font-size: 14px; }
-        .swal-input-custom {
-            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;
-            font-family: 'Lora'; box-sizing: border-box; font-size: 16px;
-        }
+        .swal-input-custom { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Lora'; box-sizing: border-box; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -113,7 +114,8 @@
     <div class="nav-container">
         <a href="index.jsp"><img src="KuihMuihImage/kuihtoyoulogo.png" alt="Logo" class="logo-img"></a>
         <div class="nav-actions">
-            <a href="index.jsp" style="color:white; text-decoration:none; margin-right:20px; font-weight:600;">Storefront</a>
+            <a href="index.jsp" class="nav-link">Storefront</a>
+            <a href="admin_orders.jsp" class="nav-link">Order Delivery</a>
             <a href="LogoutServlet" class="btn-pill">Logout</a>
         </div>
     </div>
@@ -160,50 +162,49 @@
         const tableBody = document.getElementById('kuihTableBody');
         tableBody.innerHTML = data.map(item => `
             <tr>
-                <td><img src="KuihMuihImage/${item.image}" class="img-preview" onerror="this.src='KuihMuihImage/placeholder.jpg'"></td>
+                <td><img src="KuihMuihImage/\${item.image}" class="img-preview" onerror="this.src='KuihMuihImage/placeholder.jpg'"></td>
                 <td>
-                    <div style="font-weight: 600; font-size: 17px; color: var(--espresso);">${item.name}</div>
-                    <div style="font-size: 11px; color: #999; font-family: monospace;">${item.id}</div>
+                    <div style="font-weight: 600; font-size: 17px; color: var(--espresso);">\${item.name}</div>
+                    <div style="font-size: 11px; color: #999; font-family: monospace;">\${item.id}</div>
                 </td>
-                <td style="font-weight: bold; color: var(--clay-orange);">RM ${parseFloat(item.price).toFixed(2)}</td>
+                <td style="font-weight: bold; color: var(--clay-orange);">RM \${parseFloat(item.price).toFixed(2)}</td>
                 <td>
-                    <span class="stock-badge ${item.stock < 10 ? 'stock-low' : 'stock-normal'}">
-                        ${item.stock} Units
+                    <span class="stock-badge \${item.stock < 10 ? 'stock-low' : 'stock-normal'}">
+                        \${item.stock} Units
                     </span>
                 </td>
                 <td>
-                    <button class="action-btn edit-btn" onclick="openKuihModal('${item.id}')">Edit</button>
-                    <button class="action-btn delete-btn" onclick="deleteKuih('${item.id}')">Delete</button>
+                    <button class="action-btn edit-btn" onclick="openKuihModal('\${item.id}')">Edit</button>
+                    <button class="action-btn delete-btn" onclick="deleteKuih('\${item.id}')">Delete</button>
                 </td>
             </tr>
         `).join('');
     }
 
-    // Professional Modal for both Add and Edit
     async function openKuihModal(id = null) {
         const isEdit = id !== null;
         const k = isEdit ? kuihList.find(x => x.id === id) : { name: '', price: '', image: '', stock: '' };
 
         const { value: formValues } = await Swal.fire({
-            title: `<span style="font-family:'Playfair Display'">${isEdit ? 'Update Kuih Details' : 'Add Heritage Kuih'}</span>`,
+            title: `<span style="font-family:'Playfair Display'">\${isEdit ? 'Update Kuih Details' : 'Add Heritage Kuih'}</span>`,
             html: `
                 <div class="swal-form-group">
                     <label class="swal-label">Product Name</label>
-                    <input id="swal-n" class="swal-input-custom" value="${k.name}" placeholder="e.g. Onde-Onde">
+                    <input id="swal-n" class="swal-input-custom" value="\${k.name}" placeholder="e.g. Onde-Onde">
                 </div>
                 <div class="swal-form-group">
                     <label class="swal-label">Price (RM)</label>
-                    <input id="swal-p" type="number" step="0.1" class="swal-input-custom" value="${k.price}" placeholder="0.00">
+                    <input id="swal-p" type="number" step="0.1" class="swal-input-custom" value="\${k.price}" placeholder="0.00">
                 </div>
                 <div class="swal-form-group">
                     <label class="swal-label">Select Image</label>
                     <select id="swal-i" class="swal-input-custom">
-                        ${availableImages.map(img => `<option value="${img}" ${img === k.image ? 'selected' : ''}>${img}</option>`).join('')}
+                        \${availableImages.map(img => `<option value="\${img}" \${img === k.image ? 'selected' : ''}>\${img}</option>`).join('')}
                     </select>
                 </div>
                 <div class="swal-form-group">
                     <label class="swal-label">Stock Quantity</label>
-                    <input id="swal-s" type="number" class="swal-input-custom" value="${k.stock}" placeholder="0">
+                    <input id="swal-s" type="number" class="swal-input-custom" value="\${k.stock}" placeholder="0">
                 </div>
             `,
             focusConfirm: false,
@@ -212,20 +213,18 @@
             confirmButtonColor: '#b97c5a',
             cancelButtonColor: '#4a2c2a',
             preConfirm: () => {
-                const name = document.getElementById('swal-n').value;
-                const price = document.getElementById('swal-p').value;
-                const image = document.getElementById('swal-i').value;
-                const stock = document.getElementById('swal-s').value;
-                if (!name || !price || !stock) {
-                    Swal.showValidationMessage('Please fill in all fields');
-                }
-                return { id: id, name, price, image, stock };
+            const name = document.getElementById('swal-n').value;
+            const price = document.getElementById('swal-p').value;
+            const image = document.getElementById('swal-i').value;
+            const stock = document.getElementById('swal-s').value;
+            if (!name || !price || !stock) {
+                Swal.showValidationMessage('Please fill in all fields');
             }
-        });
-
-        if (formValues) {
-            send(isEdit ? 'update' : 'add', formValues);
+            return { id: id, name, price, image, stock };
         }
+    });
+
+        if (formValues) { send(isEdit ? 'update' : 'add', formValues); }
     }
 
     async function deleteKuih(id) {
